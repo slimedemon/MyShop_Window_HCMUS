@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Background Colors -->
+    <SolidColorBrush x:Key="PrimaryBackgroundColor" Color="#ECEDF3"/>
+    <SolidColorBrush x:Key="SecundaryBackgroundColor" Color="#1d2335"/>
+
+    <!-- Primary Colors -->
+    <SolidColorBrush x:Key="PrimaryBlueColor" Color="#0072b8"/>
+    <SolidColorBrush x:Key="SecundaryBlueColor" Color="#009fc2"/>
+    <SolidColorBrush x:Key="TertiaryBlueColor" Color="#004787"/>
+    <SolidColorBrush x:Key="FourthBlueColor" Color="#ffffff"/>
+
+    <!-- Typograhy Colors -->
+    <SolidColorBrush x:Key="PrimaryTextColor" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TextSecundaryColor" Color="#B0B7C3"/>
+    <SolidColorBrush x:Key="TextTertiaryColor" Color="#8A94A6"/>
+    <SolidColorBrush x:Key="TextFourthColor" Color="#4B5D78"/>
+
+    <!-- Icon Colors -->
+    <SolidColorBrush x:Key="PrimaryIconColor" Color="#B0B7C3"/>
+    <SolidColorBrush x:Key="SecundaryIconColor" Color="#8A94A6"/>
+    <SolidColorBrush x:Key="TertiarIconyColor" Color="#4B5D78"/>
+    <SolidColorBrush x:Key="FourthIconColor" Color="#323B4B"/>
+
+    <SolidColorBrush x:Key="btnClose" Color="#F72626"/>
+</ResourceDictionary>
