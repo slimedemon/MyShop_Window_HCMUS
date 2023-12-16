@@ -22,5 +22,12 @@
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_WindowsAppSDK Condition=" '$(PkgMicrosoft_WindowsAppSDK)' == '' ">C:\Users\nguye\.nuget\packages\microsoft.windowsappsdk\1.4.230913002</PkgMicrosoft_WindowsAppSDK>
     <PkgMicrosoft_Web_WebView2 Condition=" '$(PkgMicrosoft_Web_WebView2)' == '' ">C:\Users\nguye\.nuget\packages\microsoft.web.webview2\1.0.864.35</PkgMicrosoft_Web_WebView2>
+    <PkgCommunityToolkit_WinUI_UI_Controls_Primitives Condition=" '$(PkgCommunityToolkit_WinUI_UI_Controls_Primitives)' == '' ">C:\Users\nguye\.nuget\packages\communitytoolkit.winui.ui.controls.primitives\7.1.2</PkgCommunityToolkit_WinUI_UI_Controls_Primitives>
+    <PkgCommunityToolkit_WinUI_UI_Controls_Media Condition=" '$(PkgCommunityToolkit_WinUI_UI_Controls_Media)' == '' ">C:\Users\nguye\.nuget\packages\communitytoolkit.winui.ui.controls.media\7.1.2</PkgCommunityToolkit_WinUI_UI_Controls_Media>
+    <PkgCommunityToolkit_WinUI_UI_Controls_Core Condition=" '$(PkgCommunityToolkit_WinUI_UI_Controls_Core)' == '' ">C:\Users\nguye\.nuget\packages\communitytoolkit.winui.ui.controls.core\7.1.2</PkgCommunityToolkit_WinUI_UI_Controls_Core>
+    <PkgCommunityToolkit_WinUI_UI_Controls_Markdown Condition=" '$(PkgCommunityToolkit_WinUI_UI_Controls_Markdown)' == '' ">C:\Users\nguye\.nuget\packages\communitytoolkit.winui.ui.controls.markdown\7.1.2</PkgCommunityToolkit_WinUI_UI_Controls_Markdown>
+    <PkgCommunityToolkit_WinUI_UI_Controls_Layout Condition=" '$(PkgCommunityToolkit_WinUI_UI_Controls_Layout)' == '' ">C:\Users\nguye\.nuget\packages\communitytoolkit.winui.ui.controls.layout\7.1.2</PkgCommunityToolkit_WinUI_UI_Controls_Layout>
+    <PkgCommunityToolkit_WinUI_UI_Controls_Input Condition=" '$(PkgCommunityToolkit_WinUI_UI_Controls_Input)' == '' ">C:\Users\nguye\.nuget\packages\communitytoolkit.winui.ui.controls.input\7.1.2</PkgCommunityToolkit_WinUI_UI_Controls_Input>
+    <PkgCommunityToolkit_WinUI_UI_Controls_DataGrid Condition=" '$(PkgCommunityToolkit_WinUI_UI_Controls_DataGrid)' == '' ">C:\Users\nguye\.nuget\packages\communitytoolkit.winui.ui.controls.datagrid\7.1.2</PkgCommunityToolkit_WinUI_UI_Controls_DataGrid>
   </PropertyGroup>
 </Project>

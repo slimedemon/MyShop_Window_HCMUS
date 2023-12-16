@@ -85,7 +85,7 @@
 
         </Grid>
 
-        <Grid Grid.Column="1"  Background="#1d2335">
+        <Grid Grid.Column="1"  Background="{StaticResource SecundaryBackgroundColor}">
             <Image Grid.Column="1" Source="{Binding LogoPath, Converter={StaticResource RelativeToAbsoluteConverter}}" Stretch="Uniform" ></Image>
         </Grid>
     </Grid>

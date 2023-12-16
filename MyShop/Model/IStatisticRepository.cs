@@ -20,12 +20,10 @@ namespace MyShop.Model
 
         Task<List<Tuple<string, int>>> GetProductStatistic(DateTime startDate, DateTime endDate);
 
-        Task<int> GetWeeklyNumberOfSoldBookStatistic(DateTime startDate, DateTime endDate);
-        Task<int> GetWeeklyNumberOfOrderStatistic(DateTime startDate, DateTime endDate);
+        Task<int> GetCurrentMonthlyNumberOfSoldBookStatistic();
+        Task<int> GetNumberOfBooks();
         Task<List<Tuple<string, int>>> GetTop5ProductStatistic(DateTime startDate, DateTime endDate);
-
         Task<List<Tuple<string, int>>> GetProductQuantityStatistic();
-
-
+        Task<List<Tuple<DateTime, int>>> GetMonthRevenuesOfYear();
     }
 }

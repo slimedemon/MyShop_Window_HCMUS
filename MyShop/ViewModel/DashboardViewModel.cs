@@ -24,6 +24,7 @@ using SkiaSharp;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Measure;
 using LiveChartsCore.Drawing;
+using System.Windows.Markup;
 
 namespace MyShop.ViewModel
 {
@@ -34,51 +35,26 @@ namespace MyShop.ViewModel
         {
             public string Name { get; set; }
             public int Quantity { get; set; }
-            public string Status { get; set; }
-            public string ColorStatus { get; set; }
-
+            public int Rank  { get; set; }
            
-            public BookQuantity(string name,int quantity,string status,string colorStatus)
+            public BookQuantity(string name,int quantity, int rank)
             {
                 Name= name;
                 Quantity= quantity;
-                Status= status;
-                ColorStatus= colorStatus;
+                Rank = rank;
             }
         }
 
-        public ObservableCollection<BookQuantity> BookQuantityList { get; private set; }
-        public ObservableCollection<BookQuantity> allBookQuantity { get; private set; }
+        public ObservableCollection<BookQuantity> AllBookQuantity { get; private set; }
         private List<Tuple<string,int>> bookQuantityList;
         public ICommand Load_page { get; set; }
-        public ICommand OnFilterChanged { get; set; }
 
         private IStatisticRepository _statisticRepository;
         public IEnumerable<ISeries> TopMonthlyBestSellerSeries { get; set; }
-
+        public ISeries[] MonthRevenuesOfYearSeries { get; set; }
         public string MonthlyRevenue { get; set; }
-        public string WeeklyRevenue { get; set; }
-        public int NumberOfSoldBook { get; set; }
-        public int NumberOfOrder { get; set; }
-
-        private ObservableCollection<Tuple<string, int>> displayBookQuantityCollection;
-        public ListView FilteredListView { get; set; }
-
-        public ISeries[] TopWeeklyBestSellerSeries { get; set; }
-        public string filterContent { get; set; }
-
-
-        [ObservableProperty]
-        private Axis[] _xAxes = {
-            new Axis {
-                        SeparatorsPaint = new SolidColorPaint(new SKColor(220, 220, 220)),
-                        Name="Top 5 best selling books of the week",
-                        NameTextSize=15},
-
-        };
-
-        [ObservableProperty]
-        private Axis[] _yAxes = { new Axis { IsVisible = false } };
+        public int NumberOfSoldBooks { get; set; }
+        public int NumberOfBooks { get; set; }
 
         public LabelVisual TopMonthlyBestSellerTitle { get; set; } =
             new LabelVisual
@@ -90,44 +66,11 @@ namespace MyShop.ViewModel
                 Paint = new SolidColorPaint(SKColors.DarkSlateGray)
             };
 
-        public List<ISeries> TopYearlyBestSellerSeries { get; set; }
-
-        public Axis[] YearlyXAxes { get; set; } =
-        {
-            new Axis
-            {
-                Name = "Top 5 best selling books of the year",
-                NameTextSize=15,
-               Labels = null,
-                TextSize=10
-            }
-        };
-
-        public Axis[] YearlyYAxes { get; set; } =
-        {
-            new Axis
-            {
-                Name = "",
-                NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
-                LabelsPaint = new SolidColorPaint
-                {
-                    Color = SKColors.Blue,
-                    FontFamily = "Times New Roman",
-                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
-                },
-            }
-        };
-
         [Obsolete]
         public DashboardViewModel()
         {
             _statisticRepository = new StatisticRepository();
-            BookQuantityList = new ObservableCollection<BookQuantity>();
-            allBookQuantity = new ObservableCollection<BookQuantity>();
-            filterContent = "";
-            displayBookQuantityCollection = new ObservableCollection<Tuple<string, int>>();
-            OnFilterChanged = new RelayCommand<TextChangedEventArgs>(FilterChanged);
+            AllBookQuantity = new ObservableCollection<BookQuantity>();
             Load_page = new RelayCommand<RoutedEventArgs>(Load_Dashboard);
         }
 
@@ -152,45 +95,11 @@ namespace MyShop.ViewModel
             var getWeekTask = await _statisticRepository.GetListOfWeeks();
             startWeeklyDate = getWeekTask[getWeekTask.Count - 2].Item2;
 
-            var weeklyRevenueTask = await _statisticRepository.GetWeeklyStatistic(startWeeklyDate.Date, DateTimeOffset.Now.Date);
-            WeeklyRevenue = weeklyRevenueTask.Last().Item2.ToString("C", CultureInfo.GetCultureInfo("vi-VN"));
-
             //daily number of sold books
-            NumberOfSoldBook = await _statisticRepository.GetWeeklyNumberOfSoldBookStatistic(startWeeklyDate.Date, DateTimeOffset.Now.Date);
+            NumberOfSoldBooks = await _statisticRepository.GetCurrentMonthlyNumberOfSoldBookStatistic();
 
             //daily number of orders
-            NumberOfOrder = await _statisticRepository.GetWeeklyNumberOfOrderStatistic(startWeeklyDate.Date, DateTimeOffset.Now.Date);
-
-            //top 5 best selling books of the week
-            var top5WeeklyBook = await _statisticRepository.GetTop5ProductStatistic(startWeeklyDate.Date, DateTimeOffset.Now.Date);
-
-            if (top5WeeklyBook == null)
-            {
-                top5WeeklyBook = new List<Tuple<string, int>>();
-                top5WeeklyBook.Add(new Tuple<string, int>("Book 1", 1));
-                top5WeeklyBook.Add(new Tuple<string, int>("Book 2", 1));
-                top5WeeklyBook.Add(new Tuple<string, int>("Book 3", 1));
-                top5WeeklyBook.Add(new Tuple<string, int>("Book 4", 1));
-                top5WeeklyBook.Add(new Tuple<string, int>("Book 5", 1));
-            }
-
-            TopWeeklyBestSellerSeries = top5WeeklyBook
-                .Select(x => new RowSeries<ObservableValue>
-                {
-                    Values = new[] { new ObservableValue(x.Item2) },
-                    Name = x.Item1,
-                    Stroke = null,
-                    MaxBarWidth = 80,
-                    DataLabelsSize = 10,
-                    DataLabelsPaint = new SolidColorPaint(new SKColor(245, 245, 245)),
-                    DataLabelsPosition = DataLabelsPosition.Right,
-                    DataLabelsTranslate = new LvcPoint(-1, 0),
-                    DataLabelsFormatter = point => $"{point.Context.Series.Name} {point.PrimaryValue}"
-                })
-                .OrderByDescending(x => ((ObservableValue[])x.Values!)[0].Value)
-                .ToArray();
-
-
+            NumberOfBooks = await _statisticRepository.GetNumberOfBooks();
 
             //top 5 best selling books of the month
             var top5MonthlyBook = await _statisticRepository.GetTop5ProductStatistic(startMonthlyDate.Date, DateTimeOffset.Now.Date);
@@ -208,126 +117,45 @@ namespace MyShop.ViewModel
                 series.DataLabelsPaint = new SolidColorPaint(new SKColor(30, 30, 30));
                 series.DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Outer;
                 series.DataLabelsSize = 10;
-                //series.DataLabelsRotation = LiveCharts.TangentAngle + 90;
-                series.Mapping = (value, p) =>
-                {
-                    p.PrimaryValue = value.Item2;
-                };
+                series.Mapping = (value, point) => { point.PrimaryValue = value.Item2; };
                 series.LegendShapeSize = 40;
                 series.DataLabelsFormatter = p => $"{value.Item1} {p.StackedValue.Share:P2}";
             });
 
-            //top 5 best selling books of the year
-            month = 1;
-            year_month_day = new StringBuilder().Append(year).Append(seperator).Append(month).Append(seperator).Append(day).ToString();
-            DateTime startYearlyDate = DateTime.Parse(year_month_day);
-            var top5YearlyBook = await _statisticRepository.GetTop5ProductStatistic(startYearlyDate.Date, DateTimeOffset.Now.Date);
-
-            if (top5YearlyBook == null)
+            // Statistic about the revenue of this year.
+            var monthRevenues = await _statisticRepository.GetMonthRevenuesOfYear();
+            if (monthRevenues == null)
             {
-                top5YearlyBook = new List<Tuple<string, int>>();
-                top5YearlyBook.Add(new Tuple<string, int>("Book 1", 0));
-                top5YearlyBook.Add(new Tuple<string, int>("Book 2", 0));
-                top5YearlyBook.Add(new Tuple<string, int>("Book 3", 0));
-                top5YearlyBook.Add(new Tuple<string, int>("Book 4", 0));
-                top5YearlyBook.Add(new Tuple<string, int>("Book 5", 0));
+                for (int i = 1; i <= DateTime.Now.Month; i++) {
+                    monthRevenues.Add(new Tuple<DateTime, int>(new DateTime(DateTime.Now.Year, i, 1, 0, 0, 0), 0));
+                }
             }
 
-            List<string> labels = new List<string>();
-
-            top5YearlyBook.ForEach(book =>
+            Collection<ObservablePoint> collection = new Collection<ObservablePoint>();
+            monthRevenues.ForEach(item =>
             {
-                labels.Add(book.Item1);
+                collection.Add(new ObservablePoint(item.Item1.Month, item.Item2));
             });
 
-            YearlyXAxes[0].Labels = labels;
-            TopYearlyBestSellerSeries = new List<ISeries>();
-
-            TopYearlyBestSellerSeries.Add(new ColumnSeries<Tuple<string, int>>
-            {
-                Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },
-                Values = top5YearlyBook,
-
-                Fill = new SolidColorPaint(SKColors.Blue),
-
-                Mapping = (taskItem, point) =>
-                {
-                    point.PrimaryValue = (int)taskItem.Item2;
-                    point.SecondaryValue = point.Context.Index;
-                },
-                TooltipLabelFormatter = point => $"{point.Model.Item1.ToString()}: {point.PrimaryValue.ToString()}"
-            });
+            MonthRevenuesOfYearSeries = new ISeries[] {
+                 new LineSeries<ObservablePoint>
+                    {
+                        Values = collection
+                    }
+            };
 
             //books running out of stock
             updateBookQuantityList();
         }
 
 
-        private void FilterChanged(TextChangedEventArgs newText)
-        {
-            
-            BookQuantityList = new ObservableCollection<BookQuantity>( allBookQuantity);
-            var filtered = allBookQuantity.Where(book => book.Name.Contains(filterContent, StringComparison.InvariantCultureIgnoreCase));
-            Remove_NonMatching(filtered);
-            AddBack_Contacts(filtered);
-
-        }
-
-        private void Remove_NonMatching(IEnumerable<BookQuantity> filteredData)
-        {
-            for (int i = BookQuantityList.Count - 1; i >= 0; i--)
-            {
-                var item = BookQuantityList[i];
-                // If contact is not in the filtered argument list, remove it from the ListView's source.
-                if (!filteredData.Contains(item))
-                {
-                    BookQuantityList.Remove(item);
-                }
-            }
-        }
-
-        private void AddBack_Contacts(IEnumerable<BookQuantity> filteredData)
-        {
-            foreach (var item in filteredData)
-            {
-                // If item in filtered list is not currently in ListView's source collection, add it back in
-                if (!BookQuantityList.Contains(item))
-                {
-                    BookQuantityList.Add(item);
-                }
-            }
-        }
-
-
         private async void updateBookQuantityList()
         {
             bookQuantityList = await _statisticRepository.GetProductQuantityStatistic();
-            displayBookQuantityCollection.Clear();
-
-            bookQuantityList.ForEach(book =>
-            {
-                string status = "";
-                string colorStatus = "";
-
-                if (book.Item2 == 0)
-                {
-                    status = "Out of stock";
-                    colorStatus = "Red";
-                }
-                else if (book.Item2 <= 5)
-                {
-                    status = "Low stock";
-                    colorStatus = "Yellow";
-                }
-                else
-                {
-                    status = "In stock";
-                    colorStatus = "Green";
-                }
-
-                allBookQuantity.Add(new BookQuantity(book.Item1, book.Item2, status, colorStatus));
-            });
-            BookQuantityList = new ObservableCollection<BookQuantity>(allBookQuantity);
+            bookQuantityList = bookQuantityList.OrderBy(x => x.Item2).Take(5).ToList(); ;
+            for (int i = 0; i < bookQuantityList.Count(); i++) {
+                AllBookQuantity.Add(new BookQuantity(bookQuantityList[i].Item1, bookQuantityList[i].Item2, i + 1));
+            }
         }
     }
 }

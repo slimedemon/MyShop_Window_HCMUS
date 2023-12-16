@@ -27,5 +27,10 @@ namespace MyShop.View
         {
             this.InitializeComponent();
         }
+
+        private void DataGrid_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
+        {
+
+        }
     }
 }

@@ -12,7 +12,8 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:i="using:Microsoft.Xaml.Interactivity" 
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"  
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:ctWinUI ="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     d:DataContext="{d:DesignInstance Type=viewmodel:DashboardViewModel}">
@@ -29,9 +30,190 @@
         </core:EventTriggerBehavior>
     </i:Interaction.Behaviors>
 
-    <Grid Margin="20, 20, 20, 20">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+            <ResourceDictionary>
+                <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent"/>
+                <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="Transparent"/>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <!--Show simple information-->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <!--Show monthly revenue-->
+            <StackPanel Grid.Column="0" Margin="10">
+                <Border Background="#4e73df"  
+                        Width="200" 
+             Height="80" 
+             Padding="10" 
+             CornerRadius="10"
+             HorizontalAlignment="Center" 
+             VerticalAlignment="Center" >
+                    <TextBlock  
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            Foreground="White">
+             <Run Text="REVENUE (MONTHLY)"/>
+             <LineBreak/>
+             <Run Text="{Binding MonthlyRevenue, Mode=OneWay}" FontSize="22" FontWeight="Bold" >
+                 
+             </Run>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+
+            <!--Show sold books(monthly)-->
+            <StackPanel Grid.Column="1" Margin="10">
+                <Border Background="#36b9cc" 
+             Width="200" 
+             Height="80"  
+             CornerRadius="10"
+             Padding="10"
+             HorizontalAlignment="Center" 
+             VerticalAlignment="Center" >
+
+                    <TextBlock  
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            Foreground="White">
+             <Run Text="SOLD BOOKS (MONTHLY)" />
+             <LineBreak/>
+             <Run Text="{Binding NumberOfSoldBooks, Mode=OneWay}" FontSize="22" FontWeight="Bold" >
+                 
+             </Run>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+
+            <!--Show number of books in the store-->
+            <StackPanel Grid.Column="2" Margin="10">
+                <Border Background="#de3f62" 
+             Width="200" 
+             Height="80"                    
+             CornerRadius="10"
+              Padding="10"
+             HorizontalAlignment="Center" 
+             VerticalAlignment="Center" >
+
+                    <TextBlock  
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            Foreground="White">
+             <Run Text="NUMBER OF BOOKS"/>
+             <LineBreak/>
+             <Run Text="{Binding NumberOfBooks, Mode=OneWay}" FontSize="22" FontWeight="Bold"/>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+
+        </Grid>
+
+        <!--Show chart and top book-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <!--List top 5 best seller book and pie chart of monthly revenue-->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <!-- TOP 5 BOOKS ARE RUNNING OUT OF STOCK SOON-->                
+                <Border 
+                    Grid.Column="0"
+                    BorderBrush="LightGray" 
+                    BorderThickness="1"
+                    Padding="10" 
+                    CornerRadius="10"
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
+                    Margin="10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Margin="10" Text="TOP 5 BOOKS ARE RUNNING OUT OF STOCK SOON"
+                                   HorizontalAlignment="Center"
+                                   FontWeight="Bold"/>
+                            <ctWinUI:DataGrid Grid.Row="1" x:Name="DataGrid" VerticalAlignment="Stretch"
+                   AutoGenerateColumns="False"
+                   ItemsSource="{Binding AllBookQuantity}"
+                   CanUserSortColumns="True"
+                   IsReadOnly="True" AllowFocusOnInteraction="False" AllowDrop="False" AllowFocusWhenDisabled="False"
+                   BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0">
+                                <ctWinUI:DataGrid.Columns>
+                                    <ctWinUI:DataGridTextColumn Header="Rank"
+                                         Binding="{Binding Rank}"
+                                         Tag="Rank"
+                                                                Width="1*"/>
+
+                                    <ctWinUI:DataGridTextColumn Header="Name"
+                                         Binding="{Binding Name}"
+                                         Tag="Name"
+                                                                Width="2*"/>
+
+                                    <ctWinUI:DataGridTextColumn Header="Quantity"
+                                         Binding="{Binding Quantity}"
+                                         Tag="Quantity" Width="1*"/>
+                                </ctWinUI:DataGrid.Columns>
+                            </ctWinUI:DataGrid>
+                    </Grid>
+                </Border>
+
+                <!--Pie chart of top 5 book best seller-->
+                <Border Grid.Row="1"          
+                        BorderBrush="LightGray" 
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Margin="10">
+                    <Grid>
+                        <lvc:PieChart 
+                            Series="{Binding TopMonthlyBestSellerSeries}"
+                            Title="{Binding TopMonthlyBestSellerTitle}">
+                        </lvc:PieChart>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!--Line chart of the revenue of this month-->
+            <Border Grid.Column="1"
+                    BorderBrush="LightGray" 
+                    BorderThickness="1"
+                    MinWidth="450"
+                    CornerRadius="10"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Margin="10"
+                    Padding="10">
+                <Grid
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                    <lvc:CartesianChart Series="{Binding MonthRevenuesOfYearSeries}"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+
+    <!--<Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -42,8 +224,8 @@
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0">
-            <Border Background="#4e73df" 
+        <StackPanel Grid.Column="0" Margin="10">
+            <Border Background="#4e73df"  
                     Width="200" 
                     Height="80" 
                     Padding="10" 
@@ -64,29 +246,7 @@
             </Border>
         </StackPanel>
 
-        <StackPanel Grid.Column="1">
-            <Border Background="#1cc88a" 
-                    Width="200" 
-                    Height="80" 
-                    Padding="10" 
-                    CornerRadius="10"
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" >
-
-                <TextBlock  
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"
-                   Foreground="White">
-                    <Run Text="REVENUE (WEEKLY)"/>
-                    <LineBreak/>
-                    <Run Text="{Binding WeeklyRevenue, Mode=OneWay}" FontSize="22" FontWeight="Bold" >
-                        
-                    </Run>
-                </TextBlock>
-            </Border>
-        </StackPanel>
-
-        <StackPanel Grid.Column="2">
+        <StackPanel Grid.Column="1" Margin="10">
             <Border Background="#36b9cc" 
                     Width="200" 
                     Height="80"  
@@ -108,7 +268,7 @@
             </Border>
         </StackPanel>
 
-        <StackPanel Grid.Column="3">
+        <StackPanel Grid.Column="2" Margin="10">
             <Border Background="#de3f62" 
                     Width="200" 
                     Height="80"                    
@@ -126,7 +286,6 @@
                     <Run Text="{Binding NumberOfOrder, Mode=OneWay}" FontSize="22" FontWeight="Bold"/>
                 </TextBlock>
             </Border>
-
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -190,6 +349,7 @@
                 </StackPanel>
             </Border>
         </StackPanel>
+    
         <Border Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
             BorderBrush="LightGray" 
                     BorderThickness="1"
@@ -210,6 +370,8 @@
 
 
         </Border>
+    
+    
         <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
             BorderBrush="LightGray" 
                     BorderThickness="1"
@@ -242,5 +404,5 @@
             </lvc:CartesianChart>
         </Border>
 
-    </Grid>
+    </Grid>-->
 </Page>
