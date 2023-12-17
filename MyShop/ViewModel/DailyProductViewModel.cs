@@ -43,7 +43,7 @@ namespace MyShop.ViewModel
                 {
                     Color = SKColors.Blue,
                     FontFamily = "Times New Roman",
-                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
                 },
                 Labeler = (value) => { String name = null; if(NameBookDic.TryGetValue((int)value,out name)) return name; return "No name"; }
             }
@@ -55,7 +55,7 @@ namespace MyShop.ViewModel
         {
             Name = "Books",
             NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
+            MinLimit=0,
             LabelsPaint = new SolidColorPaint
             {
                 Color = SKColors.Blue,

@@ -11,6 +11,9 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore;
 using SkiaSharp;
 using LiveChartsCore.SkiaSharpView;
+using System.Collections.ObjectModel;
+using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
+using Windows.UI.Shell;
 
 namespace MyShop.ViewModel
 {
@@ -25,15 +28,24 @@ namespace MyShop.ViewModel
         DateTime SelectedStartDate;
         DateTime SelectedEndDate;
         private StatisticRepository _statisticRepository;
+        static public Dictionary<int, String> NameBookDic;
 
-        public List<ISeries> MonthlyProductSeries { get; set; } 
+        public ObservableCollection<ISeries> MonthlyProductSeries { get; set; } 
 
         public Axis[] XAxes { get; set; } =
         {
             new Axis
             {
-                Name = "",            
-               Labels = null
+                Name = "",
+                NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
+
+                LabelsPaint = new SolidColorPaint
+                {
+                    Color = SKColors.Blue,
+                    FontFamily = "Times New Roman",
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                },
+                Labeler = (value) => { String name = null; if(NameBookDic.TryGetValue((int)value,out name)) return name; return "No name"; }
             }
         };
 
@@ -43,56 +55,52 @@ namespace MyShop.ViewModel
         {
             Name = "",
             NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
+            MinLimit=0,
             LabelsPaint = new SolidColorPaint
             {
                 Color = SKColors.Blue,
                 FontFamily = "Times New Roman",
                 SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
-            },
+            }
         }
     };
 
         public MonthlyProductViewModel()
         {
-            MonthlyProductSeries = new List<ISeries>();
-            List<Tuple<string, int>> list = new List<Tuple<string, int>>();
-            for (int i = 0; i < 50; i++)
-            {
-                list.Add(new Tuple<string, int>($"Book {i}", 1)); 
-            }
+            NameBookDic = new Dictionary<int, String>();
+            MonthlyProductSeries = new ObservableCollection<ISeries>();
+            _statisticRepository = new StatisticRepository();
 
-            MonthlyProductSeries.Add(new ColumnSeries<Tuple<string, int>>
+            var date = DateTimeOffset.Now;
+            StartDate = new DateTimeOffset(new DateTime(date.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            EndDate = DateTimeOffset.Now;
+
+            SelectedStartDate = new DateTime(date.Year, 1, 1, 0, 0 ,0);
+            SelectedEndDate = DateTime.Now;
+            StartDateChangeCommand = new RelayCommand<DatePickerValueChangedEventArgs>(OnStartDateChange);
+            EndDateChangeCommand = new RelayCommand<DatePickerValueChangedEventArgs>(OnEndDateChange);
+
+            DisplayChart();
+        }
+
+        private async void DisplayChart()
+        {
+            NameBookDic.Clear();
+            var task = await _statisticRepository.GetProductStatistic(SelectedStartDate.Date, SelectedEndDate.Date);
+            var series = new ColumnSeries<Tuple<string, int>>()
             {
                 Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },
-                Values = list,
-
                 Fill = new SolidColorPaint(SKColors.Blue),
 
                 Mapping = (taskItem, point) =>
                 {
                     point.PrimaryValue = (int)taskItem.Item2;
                     point.SecondaryValue = point.Context.Index;
+                    NameBookDic.TryAdd(point.Context.Index, taskItem.Item1);
                 },
                 TooltipLabelFormatter = point => $"{point.Model.Item1.ToString()}: {point.PrimaryValue.ToString()}"
-            });
+            };
 
-            _statisticRepository = new StatisticRepository();
-
-            StartDate = DateTimeOffset.Now;
-            EndDate = DateTimeOffset.Now;
-
-            SelectedStartDate = DateTime.Now;
-            SelectedEndDate = DateTime.Now;
-            StartDateChangeCommand = new RelayCommand<DatePickerValueChangedEventArgs>(OnStartDateChange);
-            EndDateChangeCommand = new RelayCommand<DatePickerValueChangedEventArgs>(OnEndDateChange);
-        }
-
-        private async void DisplayChart()
-        {
-            var task = await _statisticRepository.GetProductStatistic(SelectedStartDate.Date, SelectedEndDate.Date);
-            var series = new ColumnSeries<Tuple<string, int>>();
-            series = (ColumnSeries<Tuple<string, int>>)MonthlyProductSeries.ElementAt(0);
             series.Values = task;
             MonthlyProductSeries.Clear();
             MonthlyProductSeries.Add(series);

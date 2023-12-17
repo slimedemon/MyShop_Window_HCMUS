@@ -1,15 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Web.WebView2.Core;
 using MyShop.Model;
 using MyShop.Repository;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -28,7 +31,7 @@ namespace MyShop.ViewModel
 
         private IStatisticRepository _statisticRepository;
 
-        public List<ISeries> WeeklyRevenueSeries { get; private set; }
+        public ObservableCollection<ISeries> WeeklyRevenueSeries { get; private set; }
 
         public ICommand Load_page { get; set; }
 
@@ -44,58 +47,46 @@ namespace MyShop.ViewModel
             new Axis
             {
                 Name = "Weeks",
-                // Use the labels property for named or static labels 
+                MinStep = TimeSpan.TicksPerDay*7,
+                LabelsPaint = new SolidColorPaint
+                    {
+                        Color = SKColors.Blue,
+                        FontFamily = "Times New Roman",
+                        SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                    },
+                Labeler = (value) => {
+                    long v = (long) value;
+                    if( v < DateTime.MinValue.Ticks || v > DateTime.MaxValue.Ticks) return "";
+                    var date = (new DateTime(v)); 
+                    return $"{date.Day}.{date.Month}.{date.Year}"; 
+                }
             }
         };
 
         public Axis[] YAxes { get; set; } =
         {
-        new Axis
-        {
-            Name = "Revenue (VND)",
-            NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
-            LabelsPaint = new SolidColorPaint
+            new Axis
             {
-                Color = SKColors.Blue,
-                FontFamily = "Times New Roman",
-                SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
-            },
+                Name = "Revenue (VND)",
+                MinLimit = 0,
+                NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
+                LabelsPaint = new SolidColorPaint
+                {
+                    Color = SKColors.Blue,
+                    FontFamily = "Times New Roman",
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                },
 
-            // Use the Labeler property to give format to the axis values 
-            // Now the Y axis we will display it as currency
-            // LiveCharts provides some common formatters
-            // in this case we are using the currency formatter.
-            Labeler = (value) => value.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))
-
-            // you could also build your own currency formatter
-            // for example:
-            // Labeler = (value) => value.ToString("C")
-
-            // But the one that LiveCharts provides creates shorter labels when
-            // the amount is in millions or trillions
-        }
-    };
+                Labeler = (value) => value.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))
+            }
+        };
 
         public WeeklyRevenueViewModel()
         {
-            _statisticRepository= new StatisticRepository();
-            WeeklyRevenueSeries = new List<ISeries>();
+            _statisticRepository = new StatisticRepository();
+            WeeklyRevenueSeries = new ObservableCollection<ISeries>();
 
-            WeeklyRevenueSeries.Add(new LineSeries<Tuple<DateTime, int>>
-            {
-                Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },
-                Values = new List<Tuple<DateTime, int>>() { new Tuple<DateTime, int>(DateTime.Now, 1), new Tuple<DateTime, int>(DateTime.Now, 1), new Tuple<DateTime, int>(DateTime.Now, 1), new Tuple<DateTime, int>(DateTime.Now, 1), new Tuple<DateTime, int>(DateTime.Now, 1) },
-
-                GeometryStroke = null,
-                GeometryFill = null,
-                Mapping = (taskItem, point) =>
-                {
-                    point.PrimaryValue = (int)taskItem.Item2;
-                    point.SecondaryValue = point.Context.Index;
-                },
-                TooltipLabelFormatter = point => $"{point.Model.Item1.ToShortDateString()} revenue: {point.PrimaryValue.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))}"
-            });
+           
             SelectedIndex_StartDate = 0;
             SelectedIndex_EndDate = 0;
             ListOfWeeks = new ObservableCollection<Tuple<int, DateTime>>();
@@ -112,17 +103,23 @@ namespace MyShop.ViewModel
 
             var task = await _statisticRepository.GetWeeklyStatistic(startDate.Date, endDate.Date);
 
-            var series = new LineSeries<Tuple<DateTime, int>>();
-
-            series = (LineSeries<Tuple<DateTime, int>>)WeeklyRevenueSeries.ElementAt(0);
+            var series = new LineSeries<Tuple<DateTime, int>>()
+            {
+                GeometryStroke = null,
+                GeometryFill = null,
+                Mapping = (taskItem, point) =>
+                {
+                    point.PrimaryValue = (int)taskItem.Item2;
+                    point.SecondaryValue = taskItem.Item1.Ticks;
+                },
+                TooltipLabelFormatter = point => $"{point.Model.Item1.ToShortDateString()} revenue: {point.PrimaryValue.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))}"
+            };
             series.Values = task;
-          
+
             WeeklyRevenueSeries.Clear();
             WeeklyRevenueSeries.Add(series);
 
             XAxes[0].Name = $"Revenue from {startDate.Date.ToShortDateString()} to {endDate.Date.ToShortDateString()}";
-
-            XAxes[0].Labels = null;
         }
 
         private async void Load_ListOfWeeks(RoutedEventArgs e)
@@ -134,12 +131,15 @@ namespace MyShop.ViewModel
             {
                 ListOfWeeks.Add(taskItem);
             });
+
+            SelectedIndex_StartDate = 0;
+            SelectedIndex_EndDate = ListOfWeeks.Count() - 1;
         }
 
         private void SelectionChangedOfStartDate(SelectionChangedEventArgs e)
         {
-/*            MessageBox.Show("Selected Item: " + ListOfWeeks[SelectedIndex_StartDate].Item2);*/
-            if(SelectedIndex_StartDate < SelectedIndex_EndDate)
+            /*            MessageBox.Show("Selected Item: " + ListOfWeeks[SelectedIndex_StartDate].Item2);*/
+            if (SelectedIndex_StartDate < SelectedIndex_EndDate)
             {
                 DisplayChart();
             }
@@ -147,7 +147,7 @@ namespace MyShop.ViewModel
 
         private void SelectionChangedOfEndDate(SelectionChangedEventArgs e)
         {
-/*            MessageBox.Show("Selected Item: " + ListOfWeeks[SelectedIndex_EndDate].Item2);*/
+            /*            MessageBox.Show("Selected Item: " + ListOfWeeks[SelectedIndex_EndDate].Item2);*/
             if (SelectedIndex_StartDate < SelectedIndex_EndDate)
             {
                 DisplayChart();

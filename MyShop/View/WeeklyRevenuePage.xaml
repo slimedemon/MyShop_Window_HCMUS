@@ -13,8 +13,7 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:i="using:Microsoft.Xaml.Interactivity" xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    d:DataContext="{d:DesignInstance Type=viewmodel:WeeklyRevenueViewModel}"
-    >
+    d:DataContext="{d:DesignInstance Type=viewmodel:WeeklyRevenueViewModel}">
 
     <Page.DataContext>
         <viewmodel:WeeklyRevenueViewModel x:Name="RevenueViewModel"/>
@@ -36,6 +35,8 @@
 
 
         <StackPanel Padding="20" Orientation="Vertical" Grid.Column="0">
+            <TextBlock FontSize="20" FontWeight="Bold" Margin="10">Revenue Statistics</TextBlock>
+            
             <TextBlock Text="Start week: week - start date" Padding="0,10,0,0"/>
             <ComboBox x:Name="Start_Week" Text="Pick the start week" ItemsSource="{Binding ListOfWeeks, Mode=OneWay}" SelectedIndex="{Binding SelectedIndex_StartDate, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
@@ -43,7 +44,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="{Binding Item1, Mode=OneWay}"/>
                             <TextBlock Text=" - "/>
-                            <TextBlock Text="{Binding Item2, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding Item2, Mode=OneWay, Converter={StaticResource FormatDate}}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -65,7 +66,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="{Binding Item1, Mode=OneWay}"/>
                             <TextBlock Text=" - "/>
-                            <TextBlock Text="{Binding Item2, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding Item2, Mode=OneWay, Converter={StaticResource FormatDate}}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

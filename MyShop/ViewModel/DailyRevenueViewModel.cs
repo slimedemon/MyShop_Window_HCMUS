@@ -41,13 +41,20 @@ namespace MyShop.ViewModel
             {
                 Name = "Date",
                 MinStep = TimeSpan.TicksPerDay,
+                
                 LabelsPaint = new SolidColorPaint
-                    {
-                        Color = SKColors.Blue,
-                        FontFamily = "Times New Roman",
-                        SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
-                    },
-                Labeler = (value) => { var date = (new DateTime((long)value)); return $"{date.Day}.{date.Month}.{date.Year}"; }
+                {
+                    Color = SKColors.Blue,
+                    FontFamily = "Times New Roman",
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                },
+
+                Labeler = (value) => {
+                    long v = (long) value;
+                    if( v < DateTime.MinValue.Ticks || v > DateTime.MaxValue.Ticks) return "";
+                    var date = (new DateTime(v));
+                    return $"{date.Day}.{date.Month}.{date.Year}";
+                }
             }
         };
 
@@ -58,7 +65,6 @@ namespace MyShop.ViewModel
                 MinLimit = 0,
                 Name = "Revenue (VND)",
                 NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
                 LabelsPaint = new SolidColorPaint
                 {
                     Color = SKColors.Blue,
@@ -95,6 +101,8 @@ namespace MyShop.ViewModel
             DailyRevenueSeries.Add(new LineSeries<DateTimePoint>()
             {
                 Values = collection,
+                GeometryStroke = null,
+                GeometryFill = null,
                 TooltipLabelFormatter = point => $"{point.Model.DateTime.ToShortDateString()} revenue: {point.PrimaryValue.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))}"
             });
 

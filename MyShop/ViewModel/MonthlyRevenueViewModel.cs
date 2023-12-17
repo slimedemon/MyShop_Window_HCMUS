@@ -7,6 +7,7 @@ using MyShop.Repository;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -26,15 +27,28 @@ namespace MyShop.ViewModel
         public ICommand StartDateChangeCommand { get; set; }
         public ICommand EndDateChangeCommand { get; set; }
 
-        public List<ISeries> MonthlyRevenueSeries { get; set; }
+        public ObservableCollection<ISeries> MonthlyRevenueSeries { get; set; }
 
         public Axis[] XAxes { get; set; } =
        {
             new Axis
             {
-                Name = "Month",
-                // Use the labels property for named or static labels 
-               Labels = null
+                Name = "Date",
+                MinStep = TimeSpan.TicksPerDay*30,
+
+                LabelsPaint = new SolidColorPaint
+                {
+                    Color = SKColors.Blue,
+                    FontFamily = "Times New Roman",
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                },
+
+                Labeler = (value) => {
+                    long v = (long) value;
+                    if( v < DateTime.MinValue.Ticks || v > DateTime.MaxValue.Ticks) return "";
+                    var date = (new DateTime(v));
+                    return $"{date.Month}.{date.Year}";
+                }
             }
         };
 
@@ -44,7 +58,7 @@ namespace MyShop.ViewModel
         {
             Name = "Revenue (VND)",
             NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
+            MinLimit=0,
             LabelsPaint = new SolidColorPaint
             {
                 Color = SKColors.Blue,
@@ -52,18 +66,7 @@ namespace MyShop.ViewModel
                 SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
             },
 
-            // Use the Labeler property to give format to the axis values 
-            // Now the Y axis we will display it as currency
-            // LiveCharts provides some common formatters
-            // in this case we are using the currency formatter.
             Labeler = (value) => value.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))
-
-            // you could also build your own currency formatter
-            // for example:
-            // Labeler = (value) => value.ToString("C")
-
-            // But the one that LiveCharts provides creates shorter labels when
-            // the amount is in millions or trillions
         }
     };
 
@@ -73,39 +76,36 @@ namespace MyShop.ViewModel
         public MonthlyRevenueViewModel()
         {
             _statisticRepository = new StatisticRepository();
-            MonthlyRevenueSeries = new List<ISeries>();
+            MonthlyRevenueSeries = new ObservableCollection<ISeries>();
 
-            MonthlyRevenueSeries.Add(new LineSeries<Tuple<DateTime, int>>
-            {
-                Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },
-                Values = new List<Tuple<DateTime, int>>() { new Tuple<DateTime, int>(DateTime.Now, 1), new Tuple<DateTime, int>(DateTime.Now, 1), new Tuple<DateTime, int>(DateTime.Now, 1), new Tuple<DateTime, int>(DateTime.Now, 1), new Tuple<DateTime, int>(DateTime.Now, 1) },
-                
-                GeometryStroke = null,
-                GeometryFill = null,
-                Mapping = (taskItem, point) =>
-                {
-                    point.PrimaryValue = (int)taskItem.Item2;
-                    point.SecondaryValue = point.Context.Index;
-                },
-                TooltipLabelFormatter = point => $"{point.Model.Item1.ToShortDateString()} revenue: {point.PrimaryValue.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))}"
-            });
-
-            StartDate = DateTimeOffset.Now;
+            var date = DateTimeOffset.Now;
+            StartDate = new DateTimeOffset(new DateTime(date.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             EndDate = DateTimeOffset.Now;
 
-            SelectedStartDate = DateTime.Now;
+            SelectedStartDate = new DateTime(date.Year, 1, 1, 0, 0, 0);
             SelectedEndDate = DateTime.Now;
             StartDateChangeCommand = new RelayCommand<DatePickerValueChangedEventArgs>(OnStartDateChange);
             EndDateChangeCommand = new RelayCommand<DatePickerValueChangedEventArgs>(OnEndDateChange);
+
+            DisplayChart();
         }
 
         private async void DisplayChart()
         {
             var task = await _statisticRepository.GetMonthlyStatistic(SelectedStartDate.Date, SelectedEndDate.Date);
 
-            var series = new LineSeries<Tuple<DateTime, int>>();
-
-            series = (LineSeries<Tuple<DateTime, int>>)MonthlyRevenueSeries.ElementAt(0);
+            var series = new LineSeries<Tuple<DateTime, int>>()
+            {
+                GeometryStroke = null,
+                GeometryFill = null,
+                Mapping = (taskItem, point) =>
+                {
+                    point.PrimaryValue = (int)taskItem.Item2;
+                    point.SecondaryValue = taskItem.Item1.Ticks;
+                },
+                TooltipLabelFormatter = point => $"{point.Model.Item1.ToShortDateString()} revenue: {point.PrimaryValue.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))}"
+            };
+           
             series.Values = task;
 
             MonthlyRevenueSeries.Clear();

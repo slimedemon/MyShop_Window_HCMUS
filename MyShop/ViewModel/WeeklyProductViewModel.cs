@@ -15,6 +15,7 @@ using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore;
 using SkiaSharp;
 using LiveChartsCore.SkiaSharpView;
+using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 
 namespace MyShop.ViewModel
 {
@@ -33,14 +34,29 @@ namespace MyShop.ViewModel
 
         public int SelectedIndex_EndDate { get; set; }
 
-        public List<ISeries> WeeklyProductSeries { get; set; }
+        public ObservableCollection<ISeries> WeeklyProductSeries { get; set; }
+        static public Dictionary<int, string> NameBookDic;
 
         public Axis[] XAxes { get; set; } =
         {
             new Axis
             {
-                Name = "",               
-               Labels = null
+                Name = "",
+                NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
+
+                LabelsPaint = new SolidColorPaint
+                {
+                    Color = SKColors.Blue,
+                    FontFamily = "Times New Roman",
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                },
+
+                Labeler = (value) => {
+                    String name = null;
+                    if(NameBookDic.TryGetValue((int)value,out name)) 
+                        return name; 
+                    return "No name"; 
+                }
             }
         };
 
@@ -50,7 +66,7 @@ namespace MyShop.ViewModel
         {
             Name = "",
             NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
+            MinLimit=0,
             LabelsPaint = new SolidColorPaint
             {
                 Color = SKColors.Blue,
@@ -62,27 +78,8 @@ namespace MyShop.ViewModel
 
         public WeeklyProductViewModel()
         {
-            WeeklyProductSeries = new List<ISeries>();
-            List<Tuple<string, int>> list = new List<Tuple<string, int>>();
-            for (int i = 0; i < 50; i++)
-            {
-                list.Add(new Tuple<string, int>($"Book {i}", 1)); 
-            }
-
-            WeeklyProductSeries.Add(new ColumnSeries<Tuple<string, int>>
-            {
-                Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },
-                Values = list,
-
-                Fill = new SolidColorPaint(SKColors.Blue),
-
-                Mapping = (taskItem, point) =>
-                {
-                    point.PrimaryValue = (int)taskItem.Item2;
-                    point.SecondaryValue = point.Context.Index;
-                },
-                TooltipLabelFormatter = point => $"{point.Model.Item1.ToString()}: {point.PrimaryValue.ToString()}"
-            });
+            WeeklyProductSeries = new ObservableCollection<ISeries>();
+            NameBookDic = new Dictionary<int, string>();
             _statisticRepository = new StatisticRepository();
            
             SelectedIndex_StartDate = 0;
@@ -96,13 +93,25 @@ namespace MyShop.ViewModel
 
         private async void DisplayChart()
         {
+            NameBookDic.Clear();
             DateTime startDate = ListOfWeeks[SelectedIndex_StartDate].Item2;
             DateTime endDate = ListOfWeeks[SelectedIndex_EndDate].Item2;
 
             var task = await _statisticRepository.GetProductStatistic(startDate.Date, endDate.Date);
-            var series = new ColumnSeries<Tuple<string, int>>();
+            var series = new ColumnSeries<Tuple<string, int>>()
+            {
+                Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },
+                Fill = new SolidColorPaint(SKColors.Blue),
 
-            series = (ColumnSeries<Tuple<string, int>>)WeeklyProductSeries.ElementAt(0);
+                Mapping = (taskItem, point) =>
+                {
+                    point.PrimaryValue = (int)taskItem.Item2;
+                    point.SecondaryValue = point.Context.Index;
+                    NameBookDic.TryAdd(point.Context.Index, taskItem.Item1);
+                },
+                TooltipLabelFormatter = point => $"{point.Model.Item1.ToString()}: {point.PrimaryValue.ToString()}"
+            };
+
             series.Values = task;
             WeeklyProductSeries.Clear();
             WeeklyProductSeries.Add(series);
@@ -121,6 +130,9 @@ namespace MyShop.ViewModel
             {
                 ListOfWeeks.Add(taskItem);
             });
+
+            SelectedIndex_StartDate = 0;
+            SelectedIndex_EndDate = ListOfWeeks.Count()-1;
         }
 
         private void SelectionChangedOfStartDate(SelectionChangedEventArgs e)

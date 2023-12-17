@@ -15,6 +15,7 @@
             <!-- Other app resources here -->
             <service:ViewModelToView x:Key="ViewModelToView"/>
             <service:RelativeToAbsoluteConverter x:Key="RelativeToAbsoluteConverter"/>
+            <service:FormatDate x:Key="FormatDate"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

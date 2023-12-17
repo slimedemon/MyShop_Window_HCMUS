@@ -29,8 +29,8 @@
 
 
         <StackPanel Padding="20" Orientation="Vertical" Grid.Column="0">
-            <TextBlock>Product Statistics</TextBlock>
-            
+            <TextBlock FontSize="20" FontWeight="Bold" Margin="10">Revenue Statistics</TextBlock>
+
             <CalendarDatePicker Padding="20" PlaceholderText="Pick a date" Header="Start date" Date="{Binding StartDate, Mode=TwoWay}"
                                 DateFormat="{}{year.full}/{month.integer}/{day.integer}">
                 <i:Interaction.Behaviors>

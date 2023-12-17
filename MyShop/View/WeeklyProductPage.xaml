@@ -36,6 +36,8 @@
 
 
         <StackPanel Padding="20" Orientation="Vertical" Grid.Column="0">
+            <TextBlock FontSize="20" FontWeight="Bold" Margin="10">Product Statistics</TextBlock>
+
             <TextBlock Text="Start week: week - start date" Padding="0,10,0,0"/>
             <ComboBox x:Name="Start_Week" Text="Pick the start week" ItemsSource="{Binding ListOfWeeks, Mode=OneWay}" SelectedIndex="{Binding SelectedIndex_StartDate, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
@@ -43,7 +45,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="{Binding Item1, Mode=OneWay}"/>
                             <TextBlock Text=" - "/>
-                            <TextBlock Text="{Binding Item2, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding Item2, Mode=OneWay, Converter={StaticResource FormatDate}}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -65,7 +67,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="{Binding Item1, Mode=OneWay}"/>
                             <TextBlock Text=" - "/>
-                            <TextBlock Text="{Binding Item2, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding Item2, Mode=OneWay, Converter={StaticResource FormatDate}}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
