@@ -34,14 +34,14 @@ namespace MyShop.ViewModel
         {
             // could also use a converter on the command parameter if you don't like
             // the idea of passing in a NavigationViewItemInvokedEventArgs
-            //if (args.InvokedItem.ToString().Equals("Dashboard"))
-            //{
-            //    ChildPageNavigation.ViewModel = new DashboardViewModel();
-            //}
-            //else if (args.InvokedItem.ToString().Equals("Statistic")) 
-            //{
-            //    ChildPageNavigation.ViewModel = new StatisticViewModel();
-            //}
+            if (args.InvokedItem.ToString().Equals("Dashboard"))
+            {
+                ChildPageNavigation.ViewModel = new DashboardViewModel();
+            }
+            else if (args.InvokedItem.ToString().Equals("Statistic"))
+            {
+                ChildPageNavigation.ViewModel = new StatisticViewModel();
+            }
             //else if (args.InvokedItem.ToString().Equals("Book")) 
             //{
             //    ChildPageNavigation.ViewModel = new BookViewModel();

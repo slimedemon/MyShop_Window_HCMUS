@@ -17,6 +17,33 @@
     <None Update="Styles\UIColors.xaml">
       <SubType>Designer</SubType>
     </None>
+    <Page Update="View\WeeklyProductPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\WeeklyRevenuePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\YearlyRevenuePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\YearlyProductPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\MonthlyRevenuePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\MonthlyProductPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\DailyRevenuePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\DailyProductPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\StatisticPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Themes\LightTheme.xaml">
       <SubType>Designer</SubType>
     </Page>

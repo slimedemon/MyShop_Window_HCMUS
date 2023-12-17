@@ -17,12 +17,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Themes\LightTheme.xaml" />
+    <None Remove="View\DailyProductPage.xaml" />
+    <None Remove="View\DailyRevenuePage.xaml" />
     <None Remove="View\DashboardPage.xaml" />
     <None Remove="View\HomePage.xaml" />
     <None Remove="View\LoginDatabasePage.xaml" />
     <None Remove="View\LoginPage.xaml" />
+    <None Remove="View\MonthlyProductPage.xaml" />
+    <None Remove="View\MonthlyRevenuePage.xaml" />
     <None Remove="View\RegisterPage.xaml" />
     <None Remove="View\RootPage.xaml" />
+    <None Remove="View\StatisticPage.xaml" />
+    <None Remove="View\WeeklyProductPage.xaml" />
+    <None Remove="View\WeeklyRevenuePage.xaml" />
+    <None Remove="View\YearlyProductPage.xaml" />
+    <None Remove="View\YearlyRevenuePage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="Styles\ButtonStyles.xaml" />
@@ -88,6 +97,33 @@
     <None Update="Styles\UIColors.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Update="View\WeeklyProductPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\WeeklyRevenuePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\YearlyRevenuePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\YearlyProductPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\MonthlyRevenuePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\MonthlyProductPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\DailyRevenuePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\DailyProductPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\StatisticPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Themes\LightTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
