@@ -1361,6 +1361,47 @@
           }
         }
       },
+      "Syncfusion.Core.WinUI/21.1.41": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
+          "Microsoft.WindowsAppSDK": "1.2.230217.4"
+        },
+        "compile": {
+          "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll": {
+            "related": ".pri;.xml"
+          },
+          "lib/net6.0-windows10.0/Syncfusion.Licensing.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll": {
+            "related": ".pri;.xml"
+          },
+          "lib/net6.0-windows10.0/Syncfusion.Licensing.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Syncfusion.Sliders.WinUI/21.1.41": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
+          "Microsoft.WindowsAppSDK": "1.2.230217.4",
+          "Syncfusion.Core.WinUI": "21.1.41"
+        },
+        "compile": {
+          "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll": {
+            "related": ".pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll": {
+            "related": ".pri;.xml"
+          }
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4212,6 +4253,47 @@
           }
         }
       },
+      "Syncfusion.Core.WinUI/21.1.41": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
+          "Microsoft.WindowsAppSDK": "1.2.230217.4"
+        },
+        "compile": {
+          "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll": {
+            "related": ".pri;.xml"
+          },
+          "lib/net6.0-windows10.0/Syncfusion.Licensing.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll": {
+            "related": ".pri;.xml"
+          },
+          "lib/net6.0-windows10.0/Syncfusion.Licensing.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Syncfusion.Sliders.WinUI/21.1.41": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
+          "Microsoft.WindowsAppSDK": "1.2.230217.4",
+          "Syncfusion.Core.WinUI": "21.1.41"
+        },
+        "compile": {
+          "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll": {
+            "related": ".pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll": {
+            "related": ".pri;.xml"
+          }
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -7010,6 +7092,47 @@
           }
         }
       },
+      "Syncfusion.Core.WinUI/21.1.41": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
+          "Microsoft.WindowsAppSDK": "1.2.230217.4"
+        },
+        "compile": {
+          "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll": {
+            "related": ".pri;.xml"
+          },
+          "lib/net6.0-windows10.0/Syncfusion.Licensing.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll": {
+            "related": ".pri;.xml"
+          },
+          "lib/net6.0-windows10.0/Syncfusion.Licensing.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Syncfusion.Sliders.WinUI/21.1.41": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
+          "Microsoft.WindowsAppSDK": "1.2.230217.4",
+          "Syncfusion.Core.WinUI": "21.1.41"
+        },
+        "compile": {
+          "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll": {
+            "related": ".pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll": {
+            "related": ".pri;.xml"
+          }
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -9805,6 +9928,47 @@
         "runtime": {
           "lib/net6.0-windows10.0.19041.0/SkiaSharp.Views.Windows.dll": {
             "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Syncfusion.Core.WinUI/21.1.41": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
+          "Microsoft.WindowsAppSDK": "1.2.230217.4"
+        },
+        "compile": {
+          "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll": {
+            "related": ".pri;.xml"
+          },
+          "lib/net6.0-windows10.0/Syncfusion.Licensing.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll": {
+            "related": ".pri;.xml"
+          },
+          "lib/net6.0-windows10.0/Syncfusion.Licensing.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Syncfusion.Sliders.WinUI/21.1.41": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
+          "Microsoft.WindowsAppSDK": "1.2.230217.4",
+          "Syncfusion.Core.WinUI": "21.1.41"
+        },
+        "compile": {
+          "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll": {
+            "related": ".pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll": {
+            "related": ".pri;.xml"
           }
         }
       },
@@ -14478,6 +14642,52 @@
         "skiasharp.views.winui.nuspec"
       ]
     },
+    "Syncfusion.Core.WinUI/21.1.41": {
+      "sha512": "oR1pUUo3w15Qxkv2PlNFNxTMRMMQvQBpJWeNSYmy/kkHY81lHUipC8Xzjv2cPKgFmVVhwtUxvu+D6wc7id/MVA==",
+      "type": "package",
+      "path": "syncfusion.core.winui/21.1.41",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.dll",
+        "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.pri",
+        "lib/net6.0-windows10.0/Syncfusion.Core.WinUI.xml",
+        "lib/net6.0-windows10.0/Syncfusion.Licensing.dll",
+        "lib/net6.0-windows10.0/Syncfusion.Licensing.xml",
+        "syncfusion.core.winui.21.1.41.nupkg.sha512",
+        "syncfusion.core.winui.nuspec",
+        "syncfusion_logo.png"
+      ]
+    },
+    "Syncfusion.Sliders.WinUI/21.1.41": {
+      "sha512": "VMhz5RagLCcoMJ2XZanBVNCK7xlXQYE7b6GBa7BueaXgW9FQyWomLjF2ujNyEQtoD4CVkl8A27vu0GkBNFgvrA==",
+      "type": "package",
+      "path": "syncfusion.sliders.winui/21.1.41",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.dll",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.pri",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI.xml",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/common.xaml",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/common.xbf",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/generic.xaml",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/generic.xbf",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/sfrangeslider.xaml",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/sfrangeslider.xbf",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/sfslider.xaml",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/sfslider.xbf",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/themeresources.xaml",
+        "lib/net6.0-windows10.0/Syncfusion.Sliders.WinUI/Themes/themeresources.xbf",
+        "syncfusion.sliders.winui.21.1.41.nupkg.sha512",
+        "syncfusion.sliders.winui.nuspec",
+        "syncfusion_logo.png"
+      ]
+    },
     "System.AppContext/4.3.0": {
       "sha512": "fKC+rmaLfeIzUhagxY17Q9siv/sPrjjKcfNg1Ic8IlQkZLipo8ljcaZQu4VtI4Jqbzjc2VTjzGLF6WmsRXAEgA==",
       "type": "package",
@@ -18189,7 +18399,8 @@
       "Microsoft.Windows.SDK.BuildTools >= 10.0.22621.755",
       "Microsoft.WindowsAppSDK >= 1.4.230913002",
       "Microsoft.Xaml.Behaviors.WinUI.Managed >= 2.0.9",
-      "PropertyChanged.Fody >= 4.1.0"
+      "PropertyChanged.Fody >= 4.1.0",
+      "Syncfusion.Sliders.WinUI >= 21.1.41"
     ]
   },
   "packageFolders": {
@@ -18272,6 +18483,10 @@
           "PropertyChanged.Fody": {
             "target": "Package",
             "version": "[4.1.0, )"
+          },
+          "Syncfusion.Sliders.WinUI": {
+            "target": "Package",
+            "version": "[21.1.41, )"
           }
         },
         "imports": [

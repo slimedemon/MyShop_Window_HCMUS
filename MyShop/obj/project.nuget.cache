@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "feO3buNI9I4P45iPI2q56wBklEIYW+reDjpcKLNYCiWr2ek7Ae8ITWKZNoHrdj7SImpVMX9/LEKcHa0351holQ==",
+  "dgSpecHash": "BNi9Syb4vNoqx4lqdkGpbGxNBljs6ohHoMhyrn2WT7v1/wWakii2NXklVJem17VXoV6+RxmtOwqKRekaxlLocA==",
   "success": true,
   "projectFilePath": "E:\\University\\ThirdYear\\HK1\\Window\\DoAn\\MyShop\\MyShop\\MyShop\\MyShop.csproj",
   "expectedPackageFiles": [
@@ -109,6 +109,8 @@
     "C:\\Users\\nguye\\.nuget\\packages\\skiasharp.nativeassets.macos\\2.88.3\\skiasharp.nativeassets.macos.2.88.3.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\skiasharp.nativeassets.win32\\2.88.3\\skiasharp.nativeassets.win32.2.88.3.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\skiasharp.views.winui\\2.88.3\\skiasharp.views.winui.2.88.3.nupkg.sha512",
+    "C:\\Users\\nguye\\.nuget\\packages\\syncfusion.core.winui\\21.1.41\\syncfusion.core.winui.21.1.41.nupkg.sha512",
+    "C:\\Users\\nguye\\.nuget\\packages\\syncfusion.sliders.winui\\21.1.41\\syncfusion.sliders.winui.21.1.41.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\system.appcontext\\4.3.0\\system.appcontext.4.3.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\system.buffers\\4.3.0\\system.buffers.4.3.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",

@@ -17,6 +17,24 @@
     <None Update="Styles\UIColors.xaml">
       <SubType>Designer</SubType>
     </None>
+    <Page Update="View\EditBookPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\ContentDialogContent.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\AddBookPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\BookTypePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\BooksPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\BookPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\WeeklyProductPage.xaml">
       <SubType>Designer</SubType>
     </Page>

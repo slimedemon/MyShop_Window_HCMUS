@@ -42,10 +42,10 @@ namespace MyShop.ViewModel
             {
                 ChildPageNavigation.ViewModel = new StatisticViewModel();
             }
-            //else if (args.InvokedItem.ToString().Equals("Book")) 
-            //{
-            //    ChildPageNavigation.ViewModel = new BookViewModel();
-            //}
+            else if (args.InvokedItem.ToString().Equals("Book"))
+            {
+                ChildPageNavigation.ViewModel = new BookViewModel();
+            }
             //else if (args.InvokedItem.ToString().Equals("Statistic")) 
             //{
             //    ChildPageNavigation.ViewModel = new StatisticViewModel();

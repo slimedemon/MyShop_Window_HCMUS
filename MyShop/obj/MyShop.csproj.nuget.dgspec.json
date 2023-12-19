@@ -80,6 +80,10 @@
             "PropertyChanged.Fody": {
               "target": "Package",
               "version": "[4.1.0, )"
+            },
+            "Syncfusion.Sliders.WinUI": {
+              "target": "Package",
+              "version": "[21.1.41, )"
             }
           },
           "imports": [
