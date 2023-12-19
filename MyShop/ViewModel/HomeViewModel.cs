@@ -46,22 +46,18 @@ namespace MyShop.ViewModel
             {
                 ChildPageNavigation.ViewModel = new BookViewModel();
             }
-            //else if (args.InvokedItem.ToString().Equals("Statistic")) 
-            //{
-            //    ChildPageNavigation.ViewModel = new StatisticViewModel();
-            //}
-            //else if (args.InvokedItem.ToString().Equals("Order History")) 
-            //{
-            //    ChildPageNavigation.ViewModel = new OrderHistoryViewModel();
-            //}
-            //else if (args.InvokedItem.ToString().Equals("Account")) 
-            //{
-            //    ChildPageNavigation.ViewModel = new AccountViewModel(Account);
-            //}
-            //else if (args.InvokedItem.ToString().Equals("Settings"))
-            //{
-            //    ChildPageNavigation.ViewModel = new SettingViewModel();
-            //}
+            else if (args.InvokedItem.ToString().Equals("Order History"))
+            {
+                ChildPageNavigation.ViewModel = new OrderHistoryViewModel();
+            }
+            else if (args.InvokedItem.ToString().Equals("Account"))
+            {
+                ChildPageNavigation.ViewModel = new AccountViewModel(Account);
+            }
+            else if (args.InvokedItem.ToString().Equals("Settings"))
+            {
+                ChildPageNavigation.ViewModel = new SettingViewModel();
+            }
 
         }
         public PageNavigation ChildPageNavigation { get; set; }

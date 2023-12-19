@@ -17,6 +17,21 @@
     <None Update="Styles\UIColors.xaml">
       <SubType>Designer</SubType>
     </None>
+    <Page Update="View\SettingPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\AccountPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\AddOrderPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\OrderHistoryPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\EditOrderPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\EditBookPage.xaml">
       <SubType>Designer</SubType>
     </Page>

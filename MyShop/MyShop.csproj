@@ -17,7 +17,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Themes\LightTheme.xaml" />
+    <None Remove="View\AccountPage.xaml" />
     <None Remove="View\AddBookPage.xaml" />
+    <None Remove="View\AddOrderPage.xaml" />
     <None Remove="View\BookPage.xaml" />
     <None Remove="View\BooksPage.xaml" />
     <None Remove="View\BookTypePage.xaml" />
@@ -26,13 +28,16 @@
     <None Remove="View\DailyRevenuePage.xaml" />
     <None Remove="View\DashboardPage.xaml" />
     <None Remove="View\EditBookPage.xaml" />
+    <None Remove="View\EditOrderPage.xaml" />
     <None Remove="View\HomePage.xaml" />
     <None Remove="View\LoginDatabasePage.xaml" />
     <None Remove="View\LoginPage.xaml" />
     <None Remove="View\MonthlyProductPage.xaml" />
     <None Remove="View\MonthlyRevenuePage.xaml" />
+    <None Remove="View\OrderHistoryPage.xaml" />
     <None Remove="View\RegisterPage.xaml" />
     <None Remove="View\RootPage.xaml" />
+    <None Remove="View\SettingPage.xaml" />
     <None Remove="View\StatisticPage.xaml" />
     <None Remove="View\WeeklyProductPage.xaml" />
     <None Remove="View\WeeklyRevenuePage.xaml" />
@@ -255,6 +260,21 @@
     <None Update="Styles\UIColors.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Update="View\SettingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\AccountPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\AddOrderPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\OrderHistoryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\EditOrderPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="View\EditBookPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
