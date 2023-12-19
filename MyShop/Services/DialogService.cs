@@ -82,7 +82,7 @@ namespace MyShop.Services
             ContentDialog contentDialog = new ContentDialog()
             {
                 Title = title,
-                CloseButtonText = "Cancel",
+                CloseButtonText = "OK",
                 DefaultButton = ContentDialogButton.Close,
                 Content = content,
 

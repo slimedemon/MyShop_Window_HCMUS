@@ -4,13 +4,91 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MyShop.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="using:MyShop.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:LoginDatabaseViewModel}"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="using:MyShop.ViewModel" 
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core" xmlns:i="using:Microsoft.Xaml.Interactivity"
+    d:DataContext="{d:DesignInstance Type=viewmodel:LoginDatabaseViewModel}"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    
-    
 
-    <Grid MaxWidth="300">
+    <i:Interaction.Behaviors>
+        <ic:EventTriggerBehavior EventName="Loaded">
+            <ic:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </ic:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!--Show logo-->
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="Configuration database" HorizontalAlignment="Center" Margin="20" FontSize="30" FontWeight="Bold"></TextBlock>
+            </StackPanel>
+
+
+            <!--Select connection string-->
+            <StackPanel Grid.Row="1" Padding="20">
+                <TextBlock Text="Connection String: "></TextBlock>
+                <TextBox x:Name="connectionStringTextBox" 
+                         Text="{Binding ConnectionString, Mode=TwoWay}"
+                         Margin="0 0 0 20" IsEnabled="False"/>
+                <TextBlock Text="Database Name: "></TextBlock>
+                <TextBlock Text="Server Address: "></TextBlock>
+                <TextBox x:Name="serverAddressTextBox" 
+                         Text="{Binding ServerAddress, Mode=TwoWay}"
+                         Margin="0 0 0 20"/>
+                <TextBlock Text="Database Name: "></TextBlock>
+                <TextBox x:Name="databaseNameTextBox"
+                         Text="{Binding DatabaseName, Mode=TwoWay}"
+                         Margin="0 0 0 20"/>
+
+                <TextBlock Text="SELECT CONNECTION" FontSize="15" FontWeight="Bold" Margin="0 0 0 0"></TextBlock>
+                <StackPanel>
+                    <RadioButton Content="Trusted Connection" Command="{Binding TrustedConnectionCommand}" IsChecked="True"></RadioButton>
+
+                    <RadioButton Content="Standard Security" Command="{Binding StandardSecurityCommand}"></RadioButton>
+
+                    <StackPanel Margin="40 0 0 0">
+                        <TextBox x:Name="usernameTextBox" 
+                                 PlaceholderText="Username"
+                                 Text="{Binding DbUsername}"
+                                 Margin="0 5 0 0"/>
+                        <TextBox x:Name="passwordTextBox"
+                                 PlaceholderText="Password"
+                                 Text="{Binding DbPassword}"
+                                 Margin="0 20 0 0"/>
+                    </StackPanel>
+
+                    <RadioButton Content="Custom Connection" Command="{Binding CustomConnectionCommand}"></RadioButton>
+                    <StackPanel Margin="40 0 0 0">
+                        <TextBlock Text="Custom Connection String" Margin="0 0 0 5"/>
+                        <TextBox x:Name="customConnectionString" Text="{Binding CustomConnectionString, Mode=TwoWay}"/>
+                    </StackPanel>
+                </StackPanel>
+
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Back" Margin="10" Padding="20 5 20 5" Command="{Binding BackCommand}"></Button>
+                    <Button Content="Save" Margin="10" Padding="20 5 20 5" Command="{Binding SaveCommand}"></Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1"  Background="{StaticResource SecundaryBackgroundColor}">
+            <Image Grid.Column="1" Source="/Assets/bg_home.png" Stretch="Uniform" ></Image>
+        </Grid>
+    </Grid>
+
+
+    <!--<Grid MaxWidth="300">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
 
             <TextBlock Text="Database Login" 
@@ -48,5 +126,5 @@
                 </Button.Resources>
             </Button>
         </StackPanel>
-    </Grid>
+    </Grid>-->
 </Page>

@@ -80,7 +80,12 @@
                     
                 </Grid>
 
-                <HyperlinkButton Content="Configurate database" Grid.Column="2" x:Name="btnConfiguration" Margin="0 20 20 0" HorizontalAlignment="Center"/>
+                <HyperlinkButton Content="Configurate database" 
+                                 Grid.Column="2" 
+                                 x:Name="btnConfiguration" 
+                                 Margin="0 20 20 0" 
+                                 HorizontalAlignment="Center"
+                                 Command="{Binding ConfigurationCommand}"/>
             </StackPanel>
 
         </Grid>

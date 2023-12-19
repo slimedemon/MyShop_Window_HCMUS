@@ -12,10 +12,10 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Assets\bg_home.png" />
     <Content Remove="Assets\logo_bookit.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\bg_home.png" />
     <None Remove="Themes\LightTheme.xaml" />
     <None Remove="View\AccountPage.xaml" />
     <None Remove="View\AddBookPage.xaml" />
@@ -251,9 +251,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Update="Assets\bg_home.png">
+    <Content Update="Assets\bg_home.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Update="Styles\ButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>

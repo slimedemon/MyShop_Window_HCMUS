@@ -38,6 +38,12 @@ namespace MyShop.ViewModel
             LoginCommand = new RelayCommand(ExecuteLoginCommand);
             RememberAccountCommand = new RelayCommand<bool>(ExecuteRememberAccountCommand);
             ResetCommand = new RelayCommand(ExecuteResetCommand);
+            ConfigurationCommand = new RelayCommand(ExecuteConfigurationCommand);
+        }
+
+        private void ExecuteConfigurationCommand()
+        {
+            ParentPageNavigation.ViewModel = new LoginDatabaseViewModel();
         }
 
         private void ExecuteResetCommand()
@@ -154,6 +160,7 @@ namespace MyShop.ViewModel
         }
 
         //-> Commands
+        public RelayCommand ConfigurationCommand { get; }
         public RelayCommand LoginCommand { get; }
         public RelayCommand LoadedCommand { get; }
         public RelayCommand ResetCommand { get; }
