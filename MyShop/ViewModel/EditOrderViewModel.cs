@@ -16,14 +16,14 @@ namespace MyShop.ViewModel
 
         private IBillRepository _billRepository;
         private IBookRepository _bookRepository;
-        private IAccountRepository _accountRepository;
+        private ICustomerRepository _customerRepository;
 
         private Bill _currentBill;
 
         private ObservableCollection<Book> _books;
-        private ObservableCollection<Account> _customers;
+        private ObservableCollection<Customer> _customers;
 
-        private Account _selectedCustomer;
+        private Customer _selectedCustomer;
         private BillDetail _selectedBillDetail;
 
         private int _currentTotalPrice;
@@ -41,8 +41,8 @@ namespace MyShop.ViewModel
         public Bill CurrentBill { get => _currentBill; set => _currentBill = value; }
         public ObservableCollection<Book> Books { get => _books; set => _books = value; }
         public ObservableCollection<BillDetail> BillDetailList { get => _billDetailList; set => _billDetailList = value; }
-        public ObservableCollection<Account> Customers { get => _customers; set => _customers = value; }
-        public Account SelectedCustomer { get => _selectedCustomer; set => _selectedCustomer = value; }
+        public ObservableCollection<Customer> Customers { get => _customers; set => _customers = value; }
+        public Customer SelectedCustomer { get => _selectedCustomer; set => _selectedCustomer = value; }
         public BillDetail SelectedBillDetail { get => _selectedBillDetail; set => _selectedBillDetail = value; }
         public Book SelectedBook
         {
@@ -70,8 +70,8 @@ namespace MyShop.ViewModel
             Books = new ObservableCollection<Book>();
             task.ForEach(book => Books.Add(book));
 
-            var task2 = await _accountRepository.GetCustomers();
-            Customers = new ObservableCollection<Account>();
+            var task2 = await _customerRepository.GetAll();
+            Customers = new ObservableCollection<Customer>();
             task2.ForEach(customer => Customers.Add(customer));
 
             var task3 = await _billRepository.GetBillDetailById(CurrentBill.Id);
@@ -97,7 +97,7 @@ namespace MyShop.ViewModel
                 }
             }
 
-            SelectedCustomer = await _accountRepository.GetById(CurrentBill.CustomerId);
+            SelectedCustomer = await _customerRepository.GetById(CurrentBill.CustomerId);
         }
 
         // Edit bill details
@@ -233,7 +233,7 @@ namespace MyShop.ViewModel
         {
             _billRepository = new BillRepository();
             _bookRepository = new BookRepository();
-            _accountRepository = new AccountRepository();
+            _customerRepository = new CustomerRepository();
 
             CurrentBill = currentBill;
             _selectedBookIds = new ObservableCollection<int>();

@@ -105,32 +105,5 @@ namespace MyShop.ViewModel
         public string Password { get => _password; set => _password = value; }
         public string RetypePassword { get => _retypePassword; set => _retypePassword = value; }
         public string ErrorMessage { get => _errorMessage; set => _errorMessage = value; }
-
-        //private Account _account;
-        //private string _retypePassword;
-        //private string _errorMessage;
-        //private IAccountRepository _accountRepository;
-
-        //public RegisterViewModel()
-        //{
-        //    _accountRepository = new AccountRepository();
-        //    Account = new Account();
-        //    ResetCommand = new RelayCommand(ExecuteResetCommand);
-        //}
-
-        //private void ExecuteResetCommand()
-        //{
-        //    if (!Account.Password.Equals(RetypePassword)) 
-        //    { ErrorMessage = "The passwords you entered do not match. Please try again";
-        //        return;
-        //    }
-        //    _accountRepository.Edit(Account);
-        //    ParentPageNavigation.ViewModel = new LoginViewModel();
-        //}
-
-        //public RelayCommand ResetCommand { get; }
-        //public Account Account { get => _account; set => _account = value; }
-        //public string RetypePassword { get => _retypePassword; set => _retypePassword = value; }
-        //public string ErrorMessage { get => _errorMessage; set => _errorMessage = value; }
     }
 }

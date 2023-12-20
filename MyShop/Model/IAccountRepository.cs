@@ -15,7 +15,5 @@ namespace MyShop.Model
         void Remove(int id);
         Task<Account> GetById(int id);
         Task<Account> GetByUsername(string username);
-        Task<List<Account>> GetCustomers();
-
     }
 }

@@ -31,10 +31,9 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0">
-                <Image Source="/Assets/br_home.png" Stretch="Uniform" Height="100" Width="auto" HorizontalAlignment="Center"></Image>
+                <Image Source="/Assets/bg_home.png" Stretch="Uniform" Height="100" Width="auto" HorizontalAlignment="Center"></Image>
                 <TextBlock Text="Log in to your account" HorizontalAlignment="Center" Margin="20" FontSize="30" FontWeight="Bold"></TextBlock>
             </StackPanel>
-
 
             <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" Width="300">
                 <TextBlock Text="{Binding ErrorMessage}"
@@ -91,7 +90,7 @@
         </Grid>
 
         <Grid Grid.Column="1"  Background="{StaticResource SecundaryBackgroundColor}">
-            <Image Grid.Column="1" Source="/Assets/br_home.png}" Stretch="Uniform" ></Image>
+            <Image Grid.Column="1" Source="/Assets/bg_home.png" Stretch="Uniform" ></Image>
         </Grid>
     </Grid>
 </Page>

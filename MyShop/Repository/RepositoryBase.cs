@@ -71,7 +71,7 @@ namespace MyShop.Repository
             //    _connectionString = _connectionString.Replace("@password", _dbPassword);
             //}
             //_connectionString = _connectionString.Replace("@database", _dbName);
-            _connectionString = "Server=.\\SQLEXPRESS;Database=db_book;Trusted_Connection=True;TrustServerCertificate=true;";
+            _connectionString = "Server=.\\SQLEXPRESS;Database=MyShopDB;Trusted_Connection=True;TrustServerCertificate=true;";
         }
         protected SqlConnection GetConnection()
         {

@@ -1,0 +1,174 @@
+﻿using Microsoft.Data.SqlClient;
+using MyShop.Model;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyShop.Repository
+{
+    public class CustomerRepository: RepositoryBase, ICustomerRepository
+    {
+        public async Task<bool> Add(Customer customer)
+        {
+            bool isSuccessful = false;
+            var connection = GetConnection();
+
+            await Task.Run(() =>
+            {
+                connection.Open();
+            }).ConfigureAwait(false);
+
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                string sql = "insert into CUSTOMER (name,phone,address)" +
+                    "values (@name, @phone, @address)";
+                var command = new SqlCommand(sql, connection);
+
+                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name;
+                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber;
+                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address;
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0) { isSuccessful = true; }
+                else { isSuccessful = false; }
+
+
+                connection.Close();
+            }
+            return isSuccessful;
+        }
+
+        public async Task<bool> Edit(Customer customer)
+        {
+            bool isSuccessful = false;
+            var connection = GetConnection();
+
+            await Task.Run(() =>
+            {
+                connection.Open();
+            }).ConfigureAwait(false);
+
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                string sql = "update CUSTOMER set name=@name,phone=@phone,address=@address " +
+                    "where id = @id";
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name;
+                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber;
+                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address;
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0) { isSuccessful = true; }
+                else { isSuccessful = false; }
+
+                connection.Close();
+            }
+            return isSuccessful;
+        }
+
+        public async Task<List<Customer>> GetAll()
+        {
+            List<Customer> customers = new List<Customer>();
+            var connection = GetConnection();
+
+            await Task.Run(() =>
+            {
+                connection.Open();
+            }).ConfigureAwait(false);
+
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                string sql = "select id,name,phone,address from CUSTOMER";
+                var command = new SqlCommand(sql, connection);
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int id = Convert.ToInt32(reader["id"]);
+                    string name = Convert.ToString(reader["name"]);
+                    string phone = Convert.ToString(reader["phone"]);
+                    string address = Convert.ToString(reader["address"]);
+                  
+                    customers.Add(new Customer
+                    {
+                        Id = id,
+                        Name = name,
+                        PhoneNumber = phone,
+                        Address = address,
+                    });
+                }
+                reader.Close();
+
+                connection.Close();
+            }
+
+            return customers;
+        }
+
+        public async Task<Customer> GetById(int id)
+        {
+            Customer customer = null;
+            var connection = GetConnection();
+
+            await Task.Run(() =>
+            {
+                connection.Open();
+            }).ConfigureAwait(false);
+
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                string sql = "select name,phone,address from CUSTOMER " +
+                    "where id = @id";
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    string name = Convert.ToString(reader["name"]);
+                    string phone = Convert.ToString(reader["phone"]);
+                    string address = Convert.ToString(reader["address"]);
+
+                    customer = new Customer
+                    {
+                        Id = id,
+                        Name = name,
+                        PhoneNumber = phone,
+                        Address = address,
+                    };
+
+                }
+                connection.Close();
+            }
+            return customer;
+        }
+
+        public async Task<bool> Remove(int id)
+        {
+            bool isSuccessful = false;
+            var connection = GetConnection();
+
+            await Task.Run(() =>
+            {
+                connection.Open();
+            }).ConfigureAwait(false);
+
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                string sql = "delete from CUSTOMER where id = @id";
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0) { isSuccessful = true; }
+                else { isSuccessful = false; }
+
+                connection.Close();
+            }
+            return isSuccessful;
+        }
+    }
+}

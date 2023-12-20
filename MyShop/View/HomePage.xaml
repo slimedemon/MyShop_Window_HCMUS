@@ -11,31 +11,10 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-        </Grid.RowDefinitions>
-
-        <Grid
-            Grid.Row="0"
-            x:Name="AppTitleBar"
-            Height="48"
-            Margin="48,0,0,0"
-            VerticalAlignment="Top"
-            Padding="0">
-            
-            <TextBlock
-                Margin="12,0,0,0"
-                VerticalAlignment="Center"
-                Style="{StaticResource CaptionTextBlockStyle}"
-                Text="My Shop"/>
-        </Grid>
-
         <NavigationView x:Name="nvHomePage"
                         PaneDisplayMode="Left"
                         IsSettingsVisible="False"
-                        IsBackButtonVisible="Collapsed"
-                        Grid.Row="1">
+                        IsBackButtonVisible="Collapsed">
 
             <i:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="ItemInvoked">
@@ -45,7 +24,7 @@
                 </core:EventTriggerBehavior>
             </i:Interaction.Behaviors>
 
-            <NavigationView.MenuItems>
+            <NavigationView.MenuItems >
                 <NavigationViewItem Content="Dashboard" Icon="SolidStar" IsSelected="True"/>
                 <NavigationViewItem Content="Statistic" Icon="Shop"/>
                 <NavigationViewItem Content="Book" Icon="Library" />
@@ -55,9 +34,10 @@
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem Content="Settings" Icon="Setting" />
             </NavigationView.FooterMenuItems>
-            <Frame x:Name="contentFrame"
-                   Content="{Binding ChildPageNavigation.ViewModel,Converter={StaticResource ViewModelToView}}"/>
 
+            <Frame x:Name="contentFrame"
+                    Content="{Binding ChildPageNavigation.ViewModel,Converter={StaticResource ViewModelToView}}"/>
         </NavigationView>
+        
     </Grid>
 </Page>

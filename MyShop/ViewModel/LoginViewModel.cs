@@ -99,12 +99,6 @@ namespace MyShop.ViewModel
                 var passwordIn64 = Convert.ToBase64String(cypherText);
                 var entropyIn64 = Convert.ToBase64String(entropy);
 
-                //MessageBox.Show("passwordInBytes: " + passwordInBytes.Length + "\n"
-                //                + "entropy: " + entropy.Length + "\n"
-                //                + "cypherText: " + cypherText.Length + "\n"
-                //                + "passwordIn64: " + passwordIn64.Length + "\n"
-                //                + "entropyIn64: " + entropyIn64.Length + "\n");
-
                 sysconfig.AppSettings.Settings["Password"].Value = passwordIn64;
                 sysconfig.AppSettings.Settings["Entropy"].Value = entropyIn64;
 

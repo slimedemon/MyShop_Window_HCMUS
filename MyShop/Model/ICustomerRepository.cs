@@ -1,0 +1,19 @@
+﻿using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyShop.Model
+{
+    public interface ICustomerRepository
+    {
+        Task<bool> Add(Customer customer);
+        Task<bool> Edit(Customer customer);
+        Task<List<Customer>> GetAll();
+        Task<Customer> GetById(int id);
+        Task<bool> Remove(int id);
+    }
+}

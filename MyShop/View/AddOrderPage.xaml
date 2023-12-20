@@ -13,9 +13,145 @@
     d:DataContext="{d:DesignInstance Type=viewmodel:AddOrderViewModel}"
     xmlns:services="using:MyShop.Services"
     mc:Ignorable="d"
+    xmlns:ctWinUI ="using:CommunityToolkit.WinUI.UI.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
-    <ScrollViewer>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Create Order" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
+
+        <!--Input book information for bill-->
+        <Border
+            Grid.Row="1" Grid.Column="0"
+            BorderBrush="LightGray" 
+            BorderThickness="1"
+            Padding="10" 
+            Margin="20 20 0 20"
+            CornerRadius="10"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <!-- search box-->
+                <AutoSuggestBox Grid.Row="0" PlaceholderText="Type a book name" HorizontalAlignment="Left" QueryIcon="Find" Width="250" Margin="0 0 0 20"/>
+
+                <!-- small controls -->
+                <ctWinUI:WrapPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 0 0 20">
+                    <TextBlock Text="Number: " VerticalAlignment="Center"></TextBlock>
+                    <NumberBox PlaceholderText="Number" Margin="5 0 20 0" Width="80" VerticalAlignment="Center"/>
+                    <TextBlock Text="Discount (%): " VerticalAlignment="Center"></TextBlock>
+                    <TextBox PlaceholderText="Discount (%)" Margin="5 0 20 0" Width="100" VerticalAlignment="Center"/>
+                    <Button Content="Add" Margin="0 0 20 0" Width="100" VerticalAlignment="Center"/>
+                    <Button Content="Remove" Width="100" VerticalAlignment="Center"/>
+                </ctWinUI:WrapPanel>
+
+                <!-- info box and control box-->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <!--info box-->
+                    <ctWinUI:DataGrid Grid.Row="1" x:Name="DataGrid" VerticalAlignment="Stretch"
+                                      AutoGenerateColumns="False"
+                                      CanUserSortColumns="True"
+                                      IsReadOnly="True" AllowFocusOnInteraction="False" AllowDrop="False" AllowFocusWhenDisabled="False"
+                                      BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0">
+                        <ctWinUI:DataGrid.Columns>
+                            <ctWinUI:DataGridTextColumn Header="#" Tag="#" Width="1*"/>
+
+                            <ctWinUI:DataGridTextColumn Header="Book" Tag="Book" Width="2*"/>
+
+                            <ctWinUI:DataGridTextColumn Header="Number" Tag="Number" Width="1*"/>
+
+                            <ctWinUI:DataGridTextColumn Header="Price" Tag="Price" Width="1*"/>
+                        </ctWinUI:DataGrid.Columns>
+                    </ctWinUI:DataGrid>
+
+                    <!--control box-->
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!--Input customer information for bill-->
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border
+                Grid.Row="0"
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                Padding="10" 
+                Margin="20"
+                CornerRadius="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Customer information" Margin="0 0 0 20"/>
+                    <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="Full Name: "/>
+                        <TextBox PlaceholderText="Full Name" Margin="0 0 0 20"/>
+                        <TextBlock Text="Phone Number: "/>
+                        <TextBox PlaceholderText="Phone Number" Margin="0 0 0 20"/>
+                        <TextBlock Text="Address: "/>
+                        <TextBox PlaceholderText="Address" Margin="0 0 0 20"/>
+                    </StackPanel>
+                   
+                </Grid>
+            </Border>
+
+            <Border
+                Grid.Row="1"
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                Padding="10" 
+                Margin="20 0 20 20"
+                CornerRadius="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Summary" Margin="0 0 0 20"/>
+                    <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="Customer: " Margin="0 0 0 20"/>
+                        <TextBlock Text="Date: " Margin="0 0 0 20"/>
+                        <TextBlock Text="Total: " Margin="0 0 0 20"></TextBlock>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <Button Content="Back" Margin="20 10 20 20" Padding="40 5 40 5"></Button>
+            <Button Content="Save" Margin="20 10 20 20" Padding="40 5 40 5"></Button>
+        </StackPanel>
+    </Grid>
+    <!--<ScrollViewer>
         <Grid VerticalAlignment="Center" Margin="10,10,10,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -34,13 +170,13 @@
             </Grid.RowDefinitions>
 
             <TextBlock Text="Customer" VerticalAlignment="Center" FontWeight="Bold"/>
-            <!--ComboBox of customers-->
+            --><!--ComboBox of customers--><!--
             <ComboBox Grid.Column="1" 
                       ItemsSource="{Binding Customers}"
                       DisplayMemberPath="Name"
                       SelectedValue="{Binding SelectedCustomer, Mode=TwoWay}"/>
 
-            <!--Display but not editable-->
+            --><!--Display but not editable--><!--
             <TextBlock Grid.Row="1" Text="Total Price" VerticalAlignment="Center" FontWeight="Bold"/>
             <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center" Text="{Binding CurrentTotalPrice, Mode=TwoWay}"/>
@@ -109,7 +245,7 @@
             </ListView>
 
             <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" >
-                <!--Choose book before adding-->
+                --><!--Choose book before adding--><!--
                 <TextBlock Text="Select Book " FontSize="13" VerticalAlignment="Center"/>
                 <ComboBox VerticalAlignment="Center" 
                                       ItemsSource="{Binding Books}"
@@ -126,5 +262,5 @@
             </StackPanel>
         </Grid>
 
-    </ScrollViewer>
+    </ScrollViewer>-->
 </Page>

@@ -35,7 +35,7 @@ namespace MyShop.ViewModel
         private Dictionary<int, List<BillDetail>> _billDetailDict; //int <<billId>> respective to the bill's list of <<billDetail>>
 
         private IBillRepository _billRepository;
-        private IAccountRepository _accountRepository;
+        private ICustomerRepository _customerRepository;
 
         private Bill _selectedBill;
         private List<BillDetail> _selectedBillDetailList;
@@ -44,7 +44,7 @@ namespace MyShop.ViewModel
         // Constructor
         public OrderHistoryViewModel() {
             _billRepository = new BillRepository();
-            _accountRepository = new AccountRepository();
+            _customerRepository = new CustomerRepository();
             _billDetailDict = new Dictionary<int, List<BillDetail>>();
             BillList = new List<Bill>();
             DisplayBillList = new ObservableCollection<Bill>();
@@ -71,31 +71,31 @@ namespace MyShop.ViewModel
 
         public async void ExecuteCreateOrderCommand()
         {
-            var task = await _billRepository.GetEmptyBillId();
-            int newId;
+            //var task = await _billRepository.GetEmptyBillId();
+            //int newId;
 
-            if (task.Count > 0)
-            {
-                newId = task[0];
-            }
-            else
-            {
-                string username = ConfigurationManager.AppSettings["Username"]!;
-                Account customer = await _accountRepository.GetByUsername(username);
+            //if (task.Count > 0)
+            //{
+            //    newId = task[0];
+            //}
+            //else
+            //{
+            //    string username = ConfigurationManager.AppSettings["Username"]!;
+            //    Account customer = await _customerRepository.GetByUsername(username);
 
-                Bill newBill = new Bill
-                {
-                    CustomerId = customer.Id,
-                    TotalPrice = 0,
-                    TransactionDate = DateOnly.FromDateTime(DateTime.Now),
-                };
-                await _billRepository.Add(newBill);
+            //    Bill newBill = new Bill
+            //    {
+            //        CustomerId = customer.Id,
+            //        TotalPrice = 0,
+            //        TransactionDate = DateOnly.FromDateTime(DateTime.Now),
+            //    };
+            //    await _billRepository.Add(newBill);
 
-                task = await _billRepository.GetEmptyBillId();
-                newId = task[0];
-            }
+            //    task = await _billRepository.GetEmptyBillId();
+            //    newId = task[0];
+            //}
 
-            ParentPageNavigation.ViewModel = new AddOrderViewModel(newId);
+            ParentPageNavigation.ViewModel = new AddOrderViewModel(3);
         }
 
         public async void ExecuteDeleteOrderCommand()
@@ -298,7 +298,7 @@ namespace MyShop.ViewModel
 
         private string getCustomerName(int id)
         {
-            var task = _accountRepository.GetById(id);
+            var task = _customerRepository.GetById(id);
 
             return task.Result.Name;
         }
