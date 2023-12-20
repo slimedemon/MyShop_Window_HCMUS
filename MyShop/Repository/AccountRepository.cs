@@ -20,12 +20,56 @@ namespace MyShop.Repository
 {
     public class AccountRepository : RepositoryBase, IAccountRepository
     {
-        public void Add(Account account)
+        public async Task<bool> Add(Account account)
         {
-            throw new NotImplementedException();
+            bool isSuccessful = true;
+            var connection = GetConnection();
+
+            await Task.Run(() =>
+            {
+                connection.Open();
+            }).ConfigureAwait(false);
+
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                string sql = "insert into Account (fullname, phone, address, username, password) " +
+                    "Values(@fullname, @phone, @address, @username, @password)";
+
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add("@fullname", SqlDbType.NVarChar).Value = account.Name;
+                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = account.PhoneNumber;
+                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = account.Address;
+                command.Parameters.Add("@username", SqlDbType.NVarChar).Value = account.Username;
+
+                // Encrypt password
+                var passwordInBytes = Encoding.UTF8.GetBytes(account.Password);
+                var entropy = new byte[20];
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(entropy);
+                }
+
+                var cypherText = ProtectedData.Protect(
+                    passwordInBytes,
+                    entropy,
+                    DataProtectionScope.CurrentUser
+                );
+
+                var passwordIn64 = Convert.ToBase64String(cypherText);
+                command.Parameters.Add("@password", SqlDbType.VarChar).Value = passwordIn64;
+
+                var result = command.ExecuteNonQuery();
+
+                if (result > 0) isSuccessful = true;
+                else isSuccessful = false;
+
+                connection.Close();
+            }
+
+            return isSuccessful;
         }
 
-        public async Task<string> AuthenticateAccount(NetworkCredential credentical)
+        public async Task<string> AuthenticateAccount(NetworkCredential credential)
         {
             int role_id = 0;
             bool isValidAccount = false;
@@ -45,7 +89,7 @@ namespace MyShop.Repository
             {
                 string sql = "select password, entropy, role_id from ACCOUNT where username = @username";
                 var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@username", SqlDbType.NVarChar).Value = credentical.UserName;
+                command.Parameters.Add("@username", SqlDbType.NVarChar).Value = credential.UserName;
 
                 var reader = command.ExecuteReader();
                 while (reader.Read())
@@ -71,7 +115,7 @@ namespace MyShop.Repository
                     password = String.Empty;
                 }
 
-                if (role_id == 1 && password.Equals(credentical.Password))
+                if (role_id == 1 && password.Equals(credential.Password))
                 {
                     isValidAccount = true;
                 }
@@ -85,94 +129,6 @@ namespace MyShop.Repository
 
 
             return message;
-
-        }
-
-
-        public async Task<string> AuthenticateDbAccount(NetworkCredential credentical)
-        {
-            bool isValidAccount = false;
-            string message = string.Empty;
-
-            string password = string.Empty, passwordIn64 = string.Empty, entropyIn64 = string.Empty;
-            var sysconfig = System.Configuration.ConfigurationManager.OpenExeConfiguration(
-                ConfigurationUserLevel.None);
-            
-            try
-            {
-                sysconfig.AppSettings.Settings["dbConnectStatus"].Value = "Unsigned";
-                sysconfig.Save(ConfigurationSaveMode.Full);
-                System.Configuration.ConfigurationManager.RefreshSection("appSettings");
-                var connection = GetConnection();
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        connection.Open();
-                    }
-                    catch (SqlException ex)
-                    {
-                        if (ex.Number == -2)
-                        {
-                            // Connection timed out exception
-                            message = "Connection timed out!";
-                        }
-                        else
-                        {
-                            // Other login exception
-                            message = "Login exception!";
-                        }
-
-                        connection.Close();
-
-                    }
-                });
-                if (message.Equals("Connection timed out!")) return message;
-                else if (message.Equals("Login exception!")) throw new Exception();
-                //MessageBox.Show("Connection succeeded. No sign-in required.");
-                message = "TRUE";
-                connection.Close();
-                return message;
-            }
-            catch (Exception)
-            {
-                //MessageBox.Show("Connection failed. Sign-in required.");
-                setDbAccountInfo(credentical.UserName, credentical.Password, true);
-
-                sysconfig.AppSettings.Settings["dbConnectStatus"].Value = "Signed";
-                sysconfig.Save(ConfigurationSaveMode.Full);
-                System.Configuration.ConfigurationManager.RefreshSection("appSettings");
-                var connection = GetConnection();
-                
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        connection.Open();
-                        isValidAccount = true;
-                    }
-                    catch (SqlException ex)
-                    {
-                        if (ex.Number == -2)
-                        {
-                            // Connection timed out exception
-                            message = "Connection timed out!";
-                            
-                        }
-                        else
-                        {
-                            // Other login exception
-                            isValidAccount = false;
-                        }
-                    }
-                });
-                if (message.Equals("Connection timed out!")) return message;
-                connection.Close();
-
-                message = isValidAccount ? "TRUE" : "* Invalid username or password!";
-
-                return message;
-            }
         }
 
         public async void Edit(Account account)
@@ -236,11 +192,7 @@ namespace MyShop.Repository
 
             await Task.Run(() =>
             {
-                try
-                {
-                    connection.Open();
-                }
-                catch (Exception ex) { }
+                connection.Open();
             }).ConfigureAwait(false);
 
             if (connection != null && connection.State == ConnectionState.Open)

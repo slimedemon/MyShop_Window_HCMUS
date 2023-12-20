@@ -10,8 +10,100 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="using:MyShop.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:RegisterViewModel}"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
-    <Grid MaxWidth="300">
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="Sign Up" HorizontalAlignment="Center" Margin="20" FontSize="30" FontWeight="Bold"></TextBlock>
+            </StackPanel>
+
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Width="350">
+                
+                <TextBlock Text="{Binding ErrorMessage}"
+                          TextWrapping="WrapWholeWords"
+                          TextAlignment="Center"
+                          FontSize="15"
+                          Foreground="Red" 
+                          Margin="0 20 0 0"></TextBlock>
+
+                <TextBox x:Name="fullNameTextBox" 
+                        PlaceholderText="Full Name"
+                        Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="0 20 0 0"/>
+
+
+                <TextBox x:Name="phoneNumberTextBox" 
+                        PlaceholderText="Phone Number"
+                        Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="0 20 0 0"/>
+
+                <TextBox x:Name="usernameTextBox" 
+                        PlaceholderText="Username"
+                        Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="0 20 0 0"/>
+
+                <PasswordBox x:Name="passwordBox" 
+                            PasswordRevealMode="Hidden" 
+                            PlaceholderText="Password"
+                            Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="0 20 0 0"/>
+
+                <PasswordBox x:Name="retypeBox" 
+                             PasswordRevealMode="Hidden" 
+                             PlaceholderText="Retype password"
+                             Password="{Binding RetypePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0 20 0 0"/>
+
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox 
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        Name="revealModeCheckBox" 
+                        Content="Show password" 
+                        IsChecked="False"
+                        Checked="RevealModeCheckbox_Changed" 
+                        Unchecked="RevealModeCheckbox_Changed"  
+                        Margin="0 20 0 0"/>
+
+                    <HyperlinkButton Grid.Column="1"
+                                     HorizontalAlignment="Right"
+                                     Content="Login Account"
+                                     Margin="0 20 0 0"
+                                     Command="{Binding LoginAccountCommand}"/>
+                </Grid>
+             
+
+                <Button Margin="0 20 0 0" 
+                        HorizontalAlignment="Stretch" 
+                        Style="{StaticResource AccentButtonStyle}"
+                        Content="Sign up"
+                        Command="{Binding SignupCommand}">
+                </Button>
+
+            </StackPanel>
+
+        </Grid>
+
+        <Grid Grid.Column="1"  Background="{StaticResource SecundaryBackgroundColor}">
+            <Image Grid.Column="1" Source="/Assets/bg_home.png" Stretch="Uniform" ></Image>
+        </Grid>
+    </Grid>
+
+    <!--<Grid MaxWidth="300">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
 
             <TextBlock Text="Reset Password" 
@@ -55,5 +147,5 @@
                 </Button.Resources>
             </Button>
         </StackPanel>
-    </Grid>
+    </Grid>-->
 </Page>

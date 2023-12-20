@@ -27,8 +27,6 @@ namespace MyShop.ViewModel
         private bool _isRememberAccount;
         private IAccountRepository _accountRepository;
 
-        public String LogoPath => "Assets/bg_home.png";
-
         //-> Constructor
         public LoginViewModel()
         {
@@ -39,6 +37,12 @@ namespace MyShop.ViewModel
             RememberAccountCommand = new RelayCommand<bool>(ExecuteRememberAccountCommand);
             ResetCommand = new RelayCommand(ExecuteResetCommand);
             ConfigurationCommand = new RelayCommand(ExecuteConfigurationCommand);
+            SignupCommand = new RelayCommand(ExecuteSignupCommand);
+        }
+
+        private void ExecuteSignupCommand()
+        {
+            ParentPageNavigation.ViewModel = new RegisterViewModel();
         }
 
         private void ExecuteConfigurationCommand()
@@ -159,7 +163,8 @@ namespace MyShop.ViewModel
             }
         }
 
-        //-> Commands
+        //-> Commands]
+        public RelayCommand SignupCommand { get;}
         public RelayCommand ConfigurationCommand { get; }
         public RelayCommand LoginCommand { get; }
         public RelayCommand LoadedCommand { get; }

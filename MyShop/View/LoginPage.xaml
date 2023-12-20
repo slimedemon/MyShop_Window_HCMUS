@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0">
-                <Image Source="{Binding LogoPath, Converter={StaticResource RelativeToAbsoluteConverter}}" Stretch="Uniform" Height="100" Width="auto" HorizontalAlignment="Center"></Image>
+                <Image Source="/Assets/br_home.png" Stretch="Uniform" Height="100" Width="auto" HorizontalAlignment="Center"></Image>
                 <TextBlock Text="Log in to your account" HorizontalAlignment="Center" Margin="20" FontSize="30" FontWeight="Bold"></TextBlock>
             </StackPanel>
 
@@ -75,9 +75,9 @@
                         <ColumnDefinition Width="2*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <HyperlinkButton Content="Sign up" Grid.Column="0" x:Name="btnSignup" Margin="0 20 20 0" HorizontalAlignment="Left"/>
+                    <HyperlinkButton Content="Sign up" Grid.Column="0" x:Name="btnSignup" Margin="0 20 20 0" HorizontalAlignment="Left" Command="{Binding SignupCommand}"/>
                     <HyperlinkButton Content="Forgetten password" Grid.Column="1" x:Name="btnForgotten" Margin="0 20 0 0" HorizontalAlignment="Right"/>
-                    
+
                 </Grid>
 
                 <HyperlinkButton Content="Configurate database" 
@@ -91,73 +91,7 @@
         </Grid>
 
         <Grid Grid.Column="1"  Background="{StaticResource SecundaryBackgroundColor}">
-            <Image Grid.Column="1" Source="{Binding LogoPath, Converter={StaticResource RelativeToAbsoluteConverter}}" Stretch="Uniform" ></Image>
+            <Image Grid.Column="1" Source="/Assets/br_home.png}" Stretch="Uniform" ></Image>
         </Grid>
     </Grid>
-
-    <!--<Grid MaxWidth="300">
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-
-            <TextBlock Text="Login Account" 
-                       FontWeight="SemiBold"
-                       FontSize="25"
-                       TextAlignment="Center"></TextBlock>
-
-            <TextBlock Text="{Binding ErrorMessage}"
-                       TextWrapping="WrapWholeWords"
-                       TextAlignment="Center"
-                       FontSize="10"></TextBlock>
-
-            <TextBox x:Name="usernameTextBox" 
-                     PlaceholderText="Username"
-                     Text="{Binding Account.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-            <PasswordBox x:Name="passwordBox" 
-                         PasswordRevealMode="Hidden" 
-                         PlaceholderText="Password"
-                         Password="{Binding Account.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Button Content="Reset password?"
-                        Grid.Column="1"
-                    Command="{Binding ResetCommand}"
-                    HorizontalAlignment="Stretch"
-                    x:Name="resetButton">
-
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10">
-                            </Setter>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </Grid>
-            <CheckBox Name="revealModeCheckBox" Content="Show password" IsChecked="False"
-            Checked="RevealModeCheckbox_Changed" Unchecked="RevealModeCheckbox_Changed"/>
-
-
-            <CheckBox VerticalAlignment="Center" 
-                      Content="Keep me signed in"
-                      x:Name="keepLoginCheckBox"
-                      Command="{Binding RememberAccountCommand}"
-                      CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
-
-
-            <Button Content="SIGN IN"
-                    Command="{Binding LoginCommand}"
-                    HorizontalAlignment="Stretch"
-                    x:Name="loginButton">
-
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="10">
-                        </Setter>
-                    </Style>
-                </Button.Resources>
-            </Button>
-        </StackPanel>
-    </Grid>-->
 </Page>
