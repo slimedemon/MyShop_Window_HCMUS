@@ -54,7 +54,7 @@ namespace MyShop.ViewModel
         {
         new Axis
         {
-            Name = "",
+            Name = "Books",
             NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
             MinLimit=0,
             LabelsPaint = new SolidColorPaint

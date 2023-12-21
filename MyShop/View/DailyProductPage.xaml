@@ -23,40 +23,65 @@
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
 
+        <Border Grid.Column="0"        
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                CornerRadius="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
 
-        <StackPanel Padding="20" Orientation="Vertical" Grid.Column="0">
-            <TextBlock FontSize="20" FontWeight="Bold" Margin="10">Product Statistics</TextBlock>
+                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="10" >Product Statistics</TextBlock>
 
-            <CalendarDatePicker Padding="20" PlaceholderText="Pick a date" Header="Start date" Date="{Binding StartDate, Mode=TwoWay}"
+                <StackPanel Grid.Row="1" Padding="20" Orientation="Vertical">
+
+                    <CalendarDatePicker HorizontalAlignment="Stretch" Padding="20" PlaceholderText="Pick a date" Header="Start date" Date="{Binding StartDate, Mode=TwoWay}"
                                 DateFormat="{}{year.full}/{month.integer}/{day.integer}">
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="DateChanged">
-                        <core:EventTriggerBehavior.Actions>
-                            <core:InvokeCommandAction Command="{Binding DateChangeCommand}" />
-                        </core:EventTriggerBehavior.Actions>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </CalendarDatePicker>
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="DateChanged">
+                                <core:EventTriggerBehavior.Actions>
+                                    <core:InvokeCommandAction Command="{Binding DateChangeCommand}" />
+                                </core:EventTriggerBehavior.Actions>
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </CalendarDatePicker>
 
 
-            <CalendarDatePicker Padding="20" PlaceholderText="Pick a date" Header="End date" Date="{Binding EndDate, Mode=TwoWay}"
+                    <CalendarDatePicker HorizontalAlignment="Stretch" Padding="20" PlaceholderText="Pick a date" Header="End date" Date="{Binding EndDate, Mode=TwoWay}"
                                 DateFormat="{}{year.full}/{month.integer}/{day.integer}">
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="DateChanged">
-                        <core:EventTriggerBehavior.Actions>
-                            <core:InvokeCommandAction Command="{Binding DateChangeCommand}" />
-                        </core:EventTriggerBehavior.Actions>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </CalendarDatePicker>
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="DateChanged">
+                                <core:EventTriggerBehavior.Actions>
+                                    <core:InvokeCommandAction Command="{Binding DateChangeCommand}" />
+                                </core:EventTriggerBehavior.Actions>
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </CalendarDatePicker>
 
-        </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
 
-        <lvc:CartesianChart Grid.Column="1"
-            Series="{Binding DailyProductSeries}"
-            ZoomMode="X"
-            XAxes="{Binding XAxes}"
-            YAxes="{Binding YAxes}">
-        </lvc:CartesianChart>
+        <Border Grid.Column="1"     
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                CornerRadius="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="10">
+            <lvc:CartesianChart
+                Series="{Binding DailyProductSeries}"
+                ZoomMode="X"
+                XAxes="{Binding XAxes}"
+                YAxes="{Binding YAxes}">
+            </lvc:CartesianChart>
+
+        </Border>
+
     </Grid>
 </Page>

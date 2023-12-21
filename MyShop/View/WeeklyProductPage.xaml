@@ -34,59 +34,84 @@
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
 
+        <Border Grid.Column="0"        
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                CornerRadius="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
 
-        <StackPanel Padding="20" Orientation="Vertical" Grid.Column="0">
-            <TextBlock FontSize="20" FontWeight="Bold" Margin="10">Product Statistics</TextBlock>
+                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="10" >Product Statistics</TextBlock>
 
-            <TextBlock Text="Start week: week - start date" Padding="0,10,0,0"/>
-            <ComboBox x:Name="Start_Week" Text="Pick the start week" ItemsSource="{Binding ListOfWeeks, Mode=OneWay}" SelectedIndex="{Binding SelectedIndex_StartDate, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Item1, Mode=OneWay}"/>
-                            <TextBlock Text=" - "/>
-                            <TextBlock Text="{Binding Item2, Mode=OneWay, Converter={StaticResource FormatDate}}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
+                <StackPanel Grid.Row="1" Padding="20" Orientation="Vertical" >
 
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="SelectionChanged">
-                        <core:EventTriggerBehavior.Actions>
-                            <core:InvokeCommandAction Command="{Binding OnSelectionChangedOfStartDate}" />
-                        </core:EventTriggerBehavior.Actions>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </ComboBox>
+                    <TextBlock Text="Start week: week - start date" Padding="0,10,0,0"/>
+                    <ComboBox HorizontalAlignment="Stretch" x:Name="Start_Week" Text="Pick the start week" ItemsSource="{Binding ListOfWeeks, Mode=OneWay}" SelectedIndex="{Binding SelectedIndex_StartDate, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Item1, Mode=OneWay}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding Item2, Mode=OneWay, Converter={StaticResource FormatDate}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="SelectionChanged">
+                                <core:EventTriggerBehavior.Actions>
+                                    <core:InvokeCommandAction Command="{Binding OnSelectionChangedOfStartDate}" />
+                                </core:EventTriggerBehavior.Actions>
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
 
 
-            <TextBlock Text="End week: Week - start date" Padding="0,10,0,0"/>
-            <ComboBox x:Name="End_Week" Text="Pick the start week" ItemsSource="{Binding ListOfWeeks, Mode=OneWay}" SelectedIndex="{Binding SelectedIndex_EndDate, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Item1, Mode=OneWay}"/>
-                            <TextBlock Text=" - "/>
-                            <TextBlock Text="{Binding Item2, Mode=OneWay, Converter={StaticResource FormatDate}}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
+                    <TextBlock Text="End week: Week - start date" Padding="0,10,0,0"/>
+                    <ComboBox HorizontalAlignment="Stretch" x:Name="End_Week" Text="Pick the start week" ItemsSource="{Binding ListOfWeeks, Mode=OneWay}" SelectedIndex="{Binding SelectedIndex_EndDate, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Item1, Mode=OneWay}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding Item2, Mode=OneWay, Converter={StaticResource FormatDate}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
 
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="SelectionChanged">
-                        <core:EventTriggerBehavior.Actions>
-                            <core:InvokeCommandAction Command="{Binding OnSelectionChangedOfEndDate}" />
-                        </core:EventTriggerBehavior.Actions>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </ComboBox>
-        </StackPanel>
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="SelectionChanged">
+                                <core:EventTriggerBehavior.Actions>
+                                    <core:InvokeCommandAction Command="{Binding OnSelectionChangedOfEndDate}" />
+                                </core:EventTriggerBehavior.Actions>
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+        </Border>
 
-        <lvc:CartesianChart Grid.Column="1"
-            Series="{Binding WeeklyProductSeries}"
-            ZoomMode="X"
-            XAxes="{Binding XAxes}"
-            YAxes="{Binding YAxes}">
-        </lvc:CartesianChart>
+        <Border Grid.Column="1"     
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                CornerRadius="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="10">
+            <lvc:CartesianChart
+                Series="{Binding WeeklyProductSeries}"
+                ZoomMode="X"
+                XAxes="{Binding XAxes}"
+                YAxes="{Binding YAxes}">
+            </lvc:CartesianChart>
+
+        </Border>
+
     </Grid>
 </Page>

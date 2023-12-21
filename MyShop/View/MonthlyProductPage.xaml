@@ -21,45 +21,72 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Padding="20" Orientation="Vertical" Grid.Column="0">
-            <TextBlock FontSize="20" FontWeight="Bold" Margin="10">Product Statistics</TextBlock>
-            
-            <TextBlock Text="From" Padding="0,10,0,0"/>
-            <DatePicker DayFormat="{}{day.integer} {dayofweek.abbreviated}" DayVisible="False" Date="{Binding StartDate, Mode=TwoWay}">
+        <Border Grid.Column="0"        
+         BorderBrush="LightGray" 
+         BorderThickness="1"
+         CornerRadius="10"
+         HorizontalAlignment="Stretch"
+         VerticalAlignment="Stretch"
+         Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
 
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="DateChanged">
-                        <core:EventTriggerBehavior.Actions>
-                            <core:InvokeCommandAction Command="{Binding StartDateChangeCommand}" />
-                        </core:EventTriggerBehavior.Actions>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </DatePicker>
+                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="10">Product Statistics</TextBlock>
 
+                <StackPanel Grid.Row="1" Padding="20" Orientation="Vertical" >
+                    <TextBlock Text="From" Padding="0,10,0,0"/>
+                    <Viewbox HorizontalAlignment="Stretch"  Stretch="Fill">
+                        <DatePicker FontSize="20" DayFormat="{}{day.integer} {dayofweek.abbreviated}" DayVisible="False" Date="{Binding StartDate, Mode=TwoWay}">
 
-            <TextBlock Text="To" Padding="0,20,0,0"/>
-            <DatePicker DayFormat="{}{day.integer} {dayofweek.abbreviated}" DayVisible="False" Date="{Binding EndDate, Mode=TwoWay}">
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="DateChanged">
-                        <core:EventTriggerBehavior.Actions>
-                            <core:InvokeCommandAction Command="{Binding EndDateChangeCommand}" />
-                        </core:EventTriggerBehavior.Actions>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </DatePicker>
-        </StackPanel>
+                            <i:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="DateChanged">
+                                    <core:EventTriggerBehavior.Actions>
+                                        <core:InvokeCommandAction Command="{Binding StartDateChangeCommand}" />
+                                    </core:EventTriggerBehavior.Actions>
+                                </core:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                        </DatePicker>
+                    </Viewbox>
 
-        <lvc:CartesianChart Grid.Column="1"
+                    <TextBlock Text="To" Padding="0,20,0,0"/>
+                    <Viewbox HorizontalAlignment="Stretch"  Stretch="Fill">
+                        <DatePicker FontSize="20" DayFormat="{}{day.integer} {dayofweek.abbreviated}" DayVisible="False" Date="{Binding EndDate, Mode=TwoWay}">
+                            <i:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="DateChanged">
+                                    <core:EventTriggerBehavior.Actions>
+                                        <core:InvokeCommandAction Command="{Binding EndDateChangeCommand}" />
+                                    </core:EventTriggerBehavior.Actions>
+                                </core:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                        </DatePicker>
+                    </Viewbox>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1"     
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                CornerRadius="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="10">
+
+            <lvc:CartesianChart
             Series="{Binding MonthlyProductSeries}"
             ZoomMode="X"
             XAxes="{Binding XAxes}"
             YAxes="{Binding YAxes}">
-
-        </lvc:CartesianChart>
+            </lvc:CartesianChart>
+        </Border>
+       
     </Grid>
 </Page>
 
