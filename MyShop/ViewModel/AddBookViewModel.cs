@@ -11,6 +11,7 @@ using System.Linq;
 using MyShop.Services;
 using Windows.Storage.Pickers;
 using Windows.Storage;
+using System.ComponentModel;
 
 namespace MyShop.ViewModel
 {
@@ -25,6 +26,7 @@ namespace MyShop.ViewModel
         private RelayCommand _browseCommand;
         private FileInfo _selectedImage;
         private string _errorMessage;
+        private string _defaultPicturePath;
 
         public AddBookViewModel() {
             _bookRepository = new BookRepository();
@@ -35,6 +37,8 @@ namespace MyShop.ViewModel
             BrowseCommand = new RelayCommand(ExecuteBrowseCommand);
             BackCommand = new RelayCommand(ExecuteBackCommand);
             ConfirmCommand = new RelayCommand(ExecuteConfirmCommand);
+
+            DefaultPicturePath = "/Assets/DefaultPicture.png";
         }
 
         public async void PageLoaded()
@@ -73,7 +77,7 @@ namespace MyShop.ViewModel
             string image_extensions = ".png;.jpeg;.gif;.jpg;.bmp;.tiff;.tif";
             new List<string>(image_extensions.Split(";")).ForEach(item => filePicker.FileTypeFilter.Add(item));
             //StorageFile file = await filePicker.PickSingleFileAsync();
-            
+
             WinRT.Interop.InitializeWithWindow.Initialize(filePicker, hwnd);
             StorageFile file = await filePicker.PickSingleFileAsync();
 
@@ -97,8 +101,10 @@ namespace MyShop.ViewModel
             }
             File.Copy(_selectedImage.FullName, newPathAbsolute);
             NewBook.Image = relativePath;
+            DefaultPicturePath = null;
         }
 
+        public string DefaultPicturePath { get => _defaultPicturePath; set => _defaultPicturePath = value; }
         public RelayCommand BackCommand { get => _backCommand; set => _backCommand = value; }
         public RelayCommand ConfirmCommand { get => _confirmCommand; set => _confirmCommand = value; }
         public Book NewBook { get => _newBook; set => _newBook = value; }

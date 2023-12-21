@@ -1,4 +1,4 @@
-<!-- Copyright (c) Microsoft Corporation and Contributors. -->
+﻿<!-- Copyright (c) Microsoft Corporation and Contributors. -->
 <!-- Licensed under the MIT License. -->
 
 <Page
@@ -14,10 +14,172 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:slider="using:Syncfusion.UI.Xaml.Sliders"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
->
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <interactivity:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:EventTriggerBehavior.Actions>
+                <core:InvokeCommandAction Command="{Binding PageLoadCommand}" />
+            </core:EventTriggerBehavior.Actions>
+        </core:EventTriggerBehavior>
+    </interactivity:Interaction.Behaviors>
 
     <Page.DataContext>
+        <viewmodel:BooksViewModel x:Name="booksViewModel"/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <services:RelativeToAbsoluteConverter x:Key="absoluteConverter"/>
+        <services:FormatCurrencyService x:Key="formatCurrency"/>
+        <services:AutoSuggestQueryParameterConverter x:Key="argsConverter"/>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <AutoSuggestBox Header="Search" VerticalAlignment="Center" Width="250"
+                    PlaceholderText="Type a book name"
+                     VerticalContentAlignment="Center"
+                     QueryIcon="Find"
+                     Text="{Binding CurrentKeyword, Mode=TwoWay}"
+                     Margin="0,10,10,30">
+            </AutoSuggestBox>
+            <ComboBox x:Name="priceComboBox" Header="Price" PlaceholderText="Pick a price" Width="200" VerticalAlignment="Center" Margin="0,10,10,30" SelectedValue="{Binding PriceType, Mode=TwoWay}">
+                <x:String>All</x:String>
+                <x:String>Below 100K</x:String>
+                <x:String>100K - 200K</x:String>
+                <x:String>200K - 500K</x:String>
+                <x:String>Above 500K</x:String>
+            </ComboBox>
+            <ComboBox x:Name="categoryComboBox" Header="Category" VerticalAlignment="Center" Width="200"
+                      ItemsSource="{Binding Genres}"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding GenreId, Mode=TwoWay}"
+                      Margin="0,0,10,20"
+                      PlaceholderText="Default"/>
+
+            <Button Content="Search" VerticalAlignment="Center" Width="80" Margin="0 10 0 0" Command="{Binding SearchCommand}" CommandParameter="{Binding CurrentKeyword}"></Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border 
+                Grid.Row="0"
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                Padding="10" 
+                CornerRadius="10"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Margin="10">
+                <ScrollView HorizontalAlignment="Stretch">
+                    <GridView  
+                        Margin="0,10,0,0"
+                        x:Name="bookContentGridView"
+                        ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                        ItemsSource="{Binding DisplayBookCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedBook, Mode=TwoWay}"
+                        HorizontalAlignment="Center">
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" Width="200" Height="280">
+                                    <Image  Margin="0, 0, 5, 0" Width="100" Height="200" 
+                                            Source="{Binding Image, Converter={StaticResource absoluteConverter}}"/>
+                                    <TextBlock TextWrapping="Wrap" HorizontalTextAlignment="Center">
+                                        <Run Text="{Binding Title}" FontWeight="Bold" Foreground="Blue"/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" HorizontalTextAlignment="Center">
+                                        <Run Text="{Binding Author}" Foreground="DimGray"/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="WrapWholeWords" HorizontalTextAlignment="Center">
+                                        <Run Text="{Binding PublishedDate}" Foreground="ForestGreen"/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="WrapWholeWords" HorizontalTextAlignment="Center">
+                                        <Run Text="{Binding Price, Converter={StaticResource formatCurrency}}" Foreground="CadetBlue" FontWeight="Bold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
+                                               MaximumRowsOrColumns="5"
+                                               Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+
+                    </GridView>
+                </ScrollView>
+               
+            </Border>
+
+            <StackPanel  Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+                <HyperlinkButton
+                    x:Name="PreviousPageButton"
+                    Command="{Binding GoToPreviousPageCommand}"
+                    Content="&lt; Prev" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="Page" />
+                <NumberBox
+                    Maximum="{Binding TotalPages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Minimum="1"
+                    Value="{Binding CurrentPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="ValueChanged">
+                            <core:InvokeCommandAction 
+                                Command="{Binding CurrentPageChangedCommand}"/>
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+
+                </NumberBox>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text=" / " />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{Binding TotalPages, Mode=TwoWay}" />
+                <HyperlinkButton
+                    x:Name="NextPageButton"
+                    Command="{Binding GoToNextPageCommand}"
+                    Content="Next &gt;" />
+            </StackPanel>
+
+            <!--<StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+                <AppBarButton Label="Previous" Icon="Previous" Command="{Binding GoToPreviousPageCommand}"/>
+                <StackPanel>
+                    <TextBlock HorizontalTextAlignment="Center" Text="{Binding PaginationMessage}"/>
+                    <TextBlock HorizontalAlignment="Center">
+             <Run Text="{Binding CurrentPage}"></Run>/<Run Text="{Binding TotalPages}"></Run>
+                    </TextBlock>
+                </StackPanel>
+                <AppBarButton Label="Next" Icon="Next" Command="{Binding GoToNextPageCommand}"/>
+            </StackPanel>-->
+
+        </Grid>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <AppBarButton x:Name="addButton" Icon="Add" Label="Add" Command="{Binding AddBookCommand}"/>
+            <AppBarButton x:Name="deleteButton" Icon="Delete" Label="Delete" Command="{Binding DeleteBookCommand}"/>
+            <AppBarButton x:Name="updateButton" Icon="Edit" Label="Update" Command="{Binding EditBookCommand}"/>
+        </StackPanel>
+    </Grid>
+
+    <!--<Page.DataContext>
         <viewmodel:BooksViewModel x:Name="booksViewModel"/>
     </Page.DataContext>
 
@@ -120,20 +282,20 @@
                         <TextBlock TextWrapping="Wrap" HorizontalTextAlignment="Center">
                                 <Run Text="{Binding Author}" Foreground="DimGray"/>
                         </TextBlock>
-                        <!--<TextBlock TextWrapping="WrapWholeWords" HorizontalTextAlignment="Center">
+                        <TextBlock TextWrapping="WrapWholeWords" HorizontalTextAlignment="Center">
                                 <Run Text="{Binding PublishedDate}" Foreground="ForestGreen"/>
-                        </TextBlock>-->
+                        </TextBlock>
                         <TextBlock TextWrapping="WrapWholeWords" HorizontalTextAlignment="Center">
                                 <Run Text="{Binding Price, Converter={StaticResource formatCurrency}}" Foreground="CadetBlue" FontWeight="Bold"/>
                         </TextBlock>
 
 
-                        <!--<StackPanel.ContextFlyout>
+                        <StackPanel.ContextFlyout>
                             <CommandBarFlyout Placement="Right" x:Name="CommandBarFlyout1">
                                 <AppBarButton Label="Edit" Icon="Edit" ToolTipService.ToolTip="Save" Command="{Binding EditBookCommand}" />
                                 <AppBarButton Label="Delete" Icon="Delete" ToolTipService.ToolTip="Delete" Command="{Binding DeleteBookCommand}"/>
                             </CommandBarFlyout>
-                        </StackPanel.ContextFlyout>-->
+                        </StackPanel.ContextFlyout>
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
@@ -158,5 +320,5 @@
             <AppBarButton Label="Next" Icon="Next" Command="{Binding GoToNextPageCommand}"/>
         </StackPanel>
 
-    </Grid>
+    </Grid>-->
 </Page>

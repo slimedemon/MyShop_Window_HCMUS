@@ -14,6 +14,7 @@ using System.Windows.Input;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using System.IO;
+using Microsoft.UI.Xaml.Controls;
 
 namespace MyShop.ViewModel
 {
@@ -35,6 +36,20 @@ namespace MyShop.ViewModel
         private int _endPrice;
         private int _genreId;
         private string _currentKeyword = String.Empty;
+        private string _priceType;
+
+        private RelayCommand _currentPageChangedCommand;
+        private RelayCommand _editBookCommand;
+        private RelayCommand _deleteBookCommand;
+        private RelayCommand _addBookCommand;
+        private RelayCommand _goToPreviousPageCommand;
+        private RelayCommand _goToNextPageCommand;
+        private RelayCommand<string> _searchCommand;
+        private RelayCommand _resetSearchCommand;
+        private RelayCommand _resetPriceCommand;
+        private RelayCommand _resetCategoryCommand;
+        private RelayCommand _importByExcelCommand;
+        private RelayCommand _importByAccessCommand;
         public BooksViewModel()
         {
             _bookRepository = new BookRepository();
@@ -43,10 +58,11 @@ namespace MyShop.ViewModel
             DisplayBookCollection = new ObservableCollection<Book>();
             //Paging info
             {
+                TotalPages = 1;
                 CurrentPage = 1;
                 ItemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["ItemsPerPage"]);
-                StartPrice = 100000;
-                EndPrice = 500000;
+                StartPrice = 0;
+                EndPrice = Int32.MaxValue;
                 GenreId = 0;
             }
             ExecuteGetAllCommand();
@@ -59,10 +75,15 @@ namespace MyShop.ViewModel
             ResetSearchCommand = new RelayCommand(ExecuteResetSearchCommand);
             ResetPriceCommand = new RelayCommand(ExecuteResetPriceCommand);
             ResetCategoryCommand = new RelayCommand(ExecuteResetCategoryCommand);
-
-
+            CurrentPageChangedCommand = new RelayCommand(ExecuteCurrentPageChangedCommand);
         }
 
+        private void ExecuteCurrentPageChangedCommand() 
+        {
+            UpdateDataSource();
+            UpdatePagingInfo();
+        }
+            
 
         private void ExecuteResetCategoryCommand()
         {
@@ -85,44 +106,6 @@ namespace MyShop.ViewModel
             UpdateDataSource();
             UpdatePagingInfo();
         }
-
-        private RelayCommand _editBookCommand;
-        private RelayCommand _deleteBookCommand;
-        private RelayCommand _addBookCommand;
-        private RelayCommand _goToPreviousPageCommand;
-        private RelayCommand _goToNextPageCommand;
-        private RelayCommand<string> _searchCommand;
-        private RelayCommand _resetSearchCommand;
-        private RelayCommand _resetPriceCommand;
-        private RelayCommand _resetCategoryCommand;
-        private RelayCommand _importByExcelCommand;
-        private RelayCommand _importByAccessCommand;
-
-
-        public Book SelectedBook { get => _selectedBook; set => _selectedBook = value; }
-        public RelayCommand EditBookCommand { get => _editBookCommand; set => _editBookCommand = value; }
-        public RelayCommand DeleteBookCommand { get => _deleteBookCommand; set => _deleteBookCommand = value; }
-        public RelayCommand AddBookCommand { get => _addBookCommand; set => _addBookCommand = value; }
-        public RelayCommand GoToPreviousPageCommand { get => _goToPreviousPageCommand; set => _goToPreviousPageCommand = value; }
-        public RelayCommand GoToNextPageCommand { get => _goToNextPageCommand; set => _goToNextPageCommand = value; }
-        public string PaginationMessage { get => _paginationMessage; set => _paginationMessage = value; }
-        public int CurrentPage { get => _currentPage; set => _currentPage = value; }
-        public int ItemsPerPage { get => _itemsPerPage; set => _itemsPerPage = value; }
-        public int TotalItems { get => _totalItems; set => _totalItems = value; }
-        public int TotalPages { get => _totalPages; set => _totalPages = value; }
-        public List<Book> DisplayBooksList { get => _displayBooksList; set => _displayBooksList = value; }
-        public List<Book> BooksList { get => _booksList; set => _booksList = value; }
-        public int StartPrice { get => _startPrice; set => _startPrice = value; }
-        public int EndPrice { get => _endPrice; set => _endPrice = value; }
-        public int GenreId { get => _genreId; set => _genreId = value; }
-        public string CurrentKeyword { get => _currentKeyword; set => _currentKeyword = value; }
-        public ObservableCollection<Book> DisplayBookCollection { get => _displayBookCollection; set => _displayBookCollection = value; }
-        public List<Genre> Genres { get => _genres; set => _genres = value; }
-        public RelayCommand<string> SearchCommand { get => _searchCommand; set => _searchCommand = value; }
-        public List<Book> ResultBooksList { get => _resultBooksList; set => _resultBooksList = value; }
-        public RelayCommand ResetSearchCommand { get => _resetSearchCommand; set => _resetSearchCommand = value; }
-        public RelayCommand ResetPriceCommand { get => _resetPriceCommand; set => _resetPriceCommand = value; }
-        public RelayCommand ResetCategoryCommand { get => _resetCategoryCommand; set => _resetCategoryCommand = value; } 
 
         public async void ExecuteEditBookCommand()
         {
@@ -159,7 +142,6 @@ namespace MyShop.ViewModel
             }
             UpdateDataSource();
             UpdatePagingInfo();
-            
         }
 
         public void ExecuteAddBookCommand()
@@ -172,10 +154,11 @@ namespace MyShop.ViewModel
             BooksList = await _bookRepository.GetAll();
             BooksList.ForEach(item => ResultBooksList.Add(item));
             Genres = await _bookRepository.GetGenres();
+            Genres.Insert(0, new Genre() { Id = 0, Name = "All" }); // Default Genre => search all genres
             TotalItems = BooksList.Count;
-
             UpdateDataSource();
             UpdatePagingInfo();
+            CurrentPage = 1;
         }
 
         public void ExecuteGoToNextPageCommand()
@@ -209,16 +192,65 @@ namespace MyShop.ViewModel
             DisplayBookCollection.Clear();
             DisplayBooksList = ResultBooksList.Skip((CurrentPage - 1) * ItemsPerPage).Take(ItemsPerPage).ToList();
             DisplayBooksList.ForEach(x => DisplayBookCollection.Add(x));
-            
         }
         private void ExecuteSearchCommand(string keyword)
         {
             CurrentPage = 1;
+            if (PriceType == null)
+            {
+                StartPrice = 0; EndPrice = Int32.MaxValue;
+            }
+            else if (PriceType.Equals("All")) {
+                StartPrice = 0; EndPrice = Int32.MaxValue;
+            }
+            else if (PriceType.Equals("Below 100K"))
+            {
+                StartPrice = 0; EndPrice = 99999;
+            }
+            else if (PriceType.Equals("100K - 200K"))
+            {
+                StartPrice = 100000; EndPrice = 200000;
+            }
+            else if (PriceType.Equals("200K - 500K"))
+            {
+                StartPrice = 200000; EndPrice = 500000;
+            }
+            else if (PriceType.Equals("Above 500K"))
+            {
+                StartPrice = 500001; EndPrice = Int32.MaxValue;
+            }
+            
             ResultBooksList = _bookRepository.Filter(BooksList, StartPrice, EndPrice, CurrentKeyword, GenreId);
             UpdateDataSource();
             TotalItems = ResultBooksList.Count;
             UpdatePagingInfo();
         }
 
+        public string PriceType { get => _priceType; set => _priceType = value; } 
+        public Book SelectedBook { get => _selectedBook; set => _selectedBook = value; }
+        public RelayCommand CurrentPageChangedCommand { get => _currentPageChangedCommand; set => _currentPageChangedCommand = value; }
+        public RelayCommand EditBookCommand { get => _editBookCommand; set => _editBookCommand = value; }
+        public RelayCommand DeleteBookCommand { get => _deleteBookCommand; set => _deleteBookCommand = value; }
+        public RelayCommand AddBookCommand { get => _addBookCommand; set => _addBookCommand = value; }
+        public RelayCommand GoToPreviousPageCommand { get => _goToPreviousPageCommand; set => _goToPreviousPageCommand = value; }
+        public RelayCommand GoToNextPageCommand { get => _goToNextPageCommand; set => _goToNextPageCommand = value; }
+        public string PaginationMessage { get => _paginationMessage; set => _paginationMessage = value; }
+        public int CurrentPage { get => _currentPage; set => _currentPage = value; }
+        public int ItemsPerPage { get => _itemsPerPage; set => _itemsPerPage = value; }
+        public int TotalItems { get => _totalItems; set => _totalItems = value; }
+        public int TotalPages { get => _totalPages; set => _totalPages = value; }
+        public List<Book> DisplayBooksList { get => _displayBooksList; set => _displayBooksList = value; }
+        public List<Book> BooksList { get => _booksList; set => _booksList = value; }
+        public int StartPrice { get => _startPrice; set => _startPrice = value; }
+        public int EndPrice { get => _endPrice; set => _endPrice = value; }
+        public int GenreId { get => _genreId; set => _genreId = value; }
+        public string CurrentKeyword { get => _currentKeyword; set => _currentKeyword = value; }
+        public ObservableCollection<Book> DisplayBookCollection { get => _displayBookCollection; set => _displayBookCollection = value; }
+        public List<Genre> Genres { get => _genres; set => _genres = value; }
+        public RelayCommand<string> SearchCommand { get => _searchCommand; set => _searchCommand = value; }
+        public List<Book> ResultBooksList { get => _resultBooksList; set => _resultBooksList = value; }
+        public RelayCommand ResetSearchCommand { get => _resetSearchCommand; set => _resetSearchCommand = value; }
+        public RelayCommand ResetPriceCommand { get => _resetPriceCommand; set => _resetPriceCommand = value; }
+        public RelayCommand ResetCategoryCommand { get => _resetCategoryCommand; set => _resetCategoryCommand = value; }
     }
 }

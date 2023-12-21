@@ -17,7 +17,149 @@
         <services:TimeConverter x:Key="timeConverter"/>
     </Page.Resources>
 
-    <ScrollViewer>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Add a new book" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" Margin="20"></TextBlock>
+
+        <Border 
+             Grid.Row="1" Grid.Column="0"
+             BorderBrush="LightGray" 
+             BorderThickness="1"
+             Padding="10" 
+             CornerRadius="10"
+             HorizontalAlignment="Stretch" 
+             VerticalAlignment="Stretch"
+             Margin="10">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
+                    <TextBlock Text="Title"></TextBlock>
+                    <TextBox PlaceholderText="Enter a book title" Margin="0 0 0 20" HorizontalAlignment="Stretch"></TextBox>
+                    <TextBlock Text="Author"></TextBlock>
+                    <TextBox PlaceholderText="Enter an author name" Margin="0 0 0 20" HorizontalAlignment="Stretch"></TextBox>
+                    <TextBlock Text="Genre"></TextBlock>
+                    <ComboBox PlaceholderText="Select a genre" HorizontalAlignment="Stretch"  ItemsSource="{Binding Genres}"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="Id"
+                              SelectedValue="{Binding NewBook.GenreId, Mode=TwoWay}"></ComboBox>
+                </StackPanel>
+
+                <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20 0 20 20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Description"></TextBlock>
+                    <RichEditBox Grid.Row="1" VerticalAlignment="Stretch" PlaceholderText="Enter book description" Margin="0 0 0 20" HorizontalAlignment="Stretch"></RichEditBox>
+                </Grid>
+            </Grid>
+        </Border>
+            
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Border 
+             Grid.Row="0"
+             BorderBrush="LightGray" 
+             BorderThickness="1"
+             Padding="10" 
+             CornerRadius="10"
+             HorizontalAlignment="Stretch" 
+             VerticalAlignment="Stretch"
+             Margin="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Book Image"></TextBlock>
+
+                    <StackPanel Grid.Row="1">
+                        <Grid Width="150" Height="200">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="{Binding DefaultPicturePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform"/>
+                            </Grid.Background>
+                            <Image Stretch="Uniform">
+                                <Image.Source>
+                                    <BitmapImage UriSource="{Binding NewBook.Image,Converter={StaticResource absoluteConverter}, Mode=TwoWay}"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
+                        <Button Content="Browse" HorizontalAlignment="Center" Command="{Binding BrowseCommand}"></Button>
+                    </StackPanel>
+
+
+                </Grid>
+
+            </Border>
+
+            <Border 
+                Grid.Row="1"
+                BorderBrush="LightGray" 
+                BorderThickness="1"
+                Padding="10" 
+                CornerRadius="10"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Margin="10">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Quantity"></TextBlock>
+                    <NumberBox PlaceholderText="Enter a quantity" Margin="0 0 0 20" HorizontalAlignment="Stretch"></NumberBox>
+                    <TextBlock Text="Price"></TextBlock>
+                    <NumberBox PlaceholderText="Enter a price" Margin="0 0 0 20" HorizontalAlignment="Stretch"></NumberBox>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Width="80" Content="Back" Margin="10"></Button>
+            <Button Width="80" Content="Save" Margin="10"></Button>
+        </StackPanel>
+    </Grid>
+
+    <!--<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        
+    </Grid>-->
+
+
+    <!--<ScrollViewer>
         <Grid VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -79,6 +221,6 @@
         </Grid>
 
 
-    </ScrollViewer>
+    </ScrollViewer>-->
 
 </Page>
