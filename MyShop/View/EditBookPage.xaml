@@ -29,7 +29,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Add a new book" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"></TextBlock>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Edit the book" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"></TextBlock>
 
         <Border 
            Grid.Row="1" Grid.Column="0"

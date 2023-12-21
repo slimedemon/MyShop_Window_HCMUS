@@ -193,7 +193,6 @@
             <Border Grid.Column="1"
                     BorderBrush="LightGray" 
                     BorderThickness="1"
-                    MinWidth="450"
                     CornerRadius="10"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
