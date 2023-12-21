@@ -29,7 +29,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Add a new book" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" Margin="20"></TextBlock>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Add a new book" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"></TextBlock>
 
         <Border 
              Grid.Row="1" Grid.Column="0"
@@ -48,14 +48,24 @@
 
                 <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
                     <TextBlock Text="Title"></TextBlock>
-                    <TextBox PlaceholderText="Enter a book title" Margin="0 0 0 20" HorizontalAlignment="Stretch"></TextBox>
+                    <TextBox PlaceholderText="Enter a book title" 
+                             Margin="0 0 0 20" 
+                             HorizontalAlignment="Stretch" 
+                             Text="{Binding NewBook.Title, Mode=TwoWay}"/>
                     <TextBlock Text="Author"></TextBlock>
-                    <TextBox PlaceholderText="Enter an author name" Margin="0 0 0 20" HorizontalAlignment="Stretch"></TextBox>
+                    <TextBox PlaceholderText="Enter an author name" 
+                             Margin="0 0 0 20" 
+                             HorizontalAlignment="Stretch" 
+                             Text="{Binding NewBook.Author, Mode=TwoWay}"/>
                     <TextBlock Text="Genre"></TextBlock>
                     <ComboBox PlaceholderText="Select a genre" HorizontalAlignment="Stretch"  ItemsSource="{Binding Genres}"
                               DisplayMemberPath="Name"
                               SelectedValuePath="Id"
-                              SelectedValue="{Binding NewBook.GenreId, Mode=TwoWay}"></ComboBox>
+                              SelectedValue="{Binding NewBook.GenreId, Mode=TwoWay}"
+                              Margin="0 0 0 20" ></ComboBox>
+                    <TextBlock Text="Publication Year"/>
+                    <CalendarDatePicker  PlaceholderText="Select a Date" HorizontalAlignment="Stretch"
+                      Date="{Binding NewBook.PublishedDate, Converter={StaticResource timeConverter}, Mode=TwoWay}"/>
                 </StackPanel>
 
                 <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20 0 20 20">
@@ -64,16 +74,26 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="Description"></TextBlock>
-                    <RichEditBox Grid.Row="1" VerticalAlignment="Stretch" PlaceholderText="Enter book description" Margin="0 0 0 20" HorizontalAlignment="Stretch"></RichEditBox>
+                    <ScrollView Grid.Row="1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                        <TextBox  PlaceholderText="Enter book description" 
+                                  Margin="0 0 0 20" 
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  AcceptsReturn="True" 
+                                  TextWrapping="Wrap"
+                                  Text="{Binding NewBook.Description, Mode=TwoWay}"/>
+                    </ScrollView>
                 </Grid>
             </Grid>
         </Border>
-            
+
 
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Border 
@@ -93,7 +113,7 @@
                     <TextBlock Grid.Row="0" Text="Book Image"></TextBlock>
 
                     <StackPanel Grid.Row="1">
-                        <Grid Width="150" Height="200">
+                        <Grid Width="200" Height="150" Margin="10">
                             <Grid.Background>
                                 <ImageBrush ImageSource="{Binding DefaultPicturePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform"/>
                             </Grid.Background>
@@ -105,10 +125,7 @@
                         </Grid>
                         <Button Content="Browse" HorizontalAlignment="Center" Command="{Binding BrowseCommand}"></Button>
                     </StackPanel>
-
-
                 </Grid>
-
             </Border>
 
             <Border 
@@ -122,105 +139,16 @@
                 Margin="10">
                 <StackPanel Margin="20">
                     <TextBlock Text="Quantity"></TextBlock>
-                    <NumberBox PlaceholderText="Enter a quantity" Margin="0 0 0 20" HorizontalAlignment="Stretch"></NumberBox>
-                    <TextBlock Text="Price"></TextBlock>
-                    <NumberBox PlaceholderText="Enter a price" Margin="0 0 0 20" HorizontalAlignment="Stretch"></NumberBox>
+                    <NumberBox PlaceholderText="Enter a quantity" Margin="0 0 0 20" HorizontalAlignment="Stretch" Value="{Binding NewBook.Quantity, Mode=TwoWay}"></NumberBox>
+                    <TextBlock Text="Price (VND)"></TextBlock>
+                    <NumberBox PlaceholderText="Enter a price" Margin="0 0 0 20" HorizontalAlignment="Stretch" Value="{Binding NewBook.Price, Mode=TwoWay}"></NumberBox>
                 </StackPanel>
             </Border>
         </Grid>
 
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Width="80" Content="Back" Margin="10"></Button>
-            <Button Width="80" Content="Save" Margin="10"></Button>
+            <Button Width="80" Content="Back" Margin="10" Command="{Binding BackCommand}"></Button>
+            <Button Width="80" Content="Add" Margin="10"  Command="{Binding ConfirmCommand}"></Button>
         </StackPanel>
     </Grid>
-
-    <!--<Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
-        
-    </Grid>-->
-
-
-    <!--<ScrollViewer>
-        <Grid VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="{Binding ErrorMessage}"/>
-            <TextBlock Grid.Row="1" Text="Title" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NewBook.Title, Mode=TwoWay}"/>
-            <TextBlock Grid.Row="2" Text="Author" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NewBook.Author, Mode=TwoWay}"/>
-            <TextBlock Grid.Row="3" Text="Genre" VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="3" Grid.Column="1" 
-                      ItemsSource="{Binding Genres}"
-                      DisplayMemberPath="Name"
-                      SelectedValuePath="Id"
-                      SelectedValue="{Binding NewBook.GenreId, Mode=TwoWay}"/>
-            <TextBlock Grid.Row="4" Text="Description" VerticalAlignment="Center"/>
-            <ScrollViewer  Grid.Row="4" Grid.Column="1" VerticalScrollBarVisibility="Auto">
-                <TextBox Height="200" 
-                         AcceptsReturn="True" 
-                         TextWrapping="Wrap"
-                         Text="{Binding NewBook.Description, Mode=TwoWay}"></TextBox>
-            </ScrollViewer>
-            <TextBlock Grid.Row="5" Text="Publication Year" VerticalAlignment="Center"/>
-            <CalendarDatePicker Grid.Row="5" Grid.Column="1" PlaceholderText="Select a Date" 
-                                Date="{Binding NewBook.PublishedDate, Converter={StaticResource timeConverter}, Mode=TwoWay}"/>
-            <TextBlock Grid.Row="6" Text="Book Image" VerticalAlignment="Center"/>
-            <StackPanel Grid.Row="6" Grid.Column="1">
-                <Image Width="150" Height="200">
-                    <Image.Source>
-                        <BitmapImage UriSource="{Binding NewBook.Image,Converter={StaticResource absoluteConverter}, Mode=TwoWay}"/>
-                    </Image.Source>
-                </Image>
-
-                <Button Content="Browse" HorizontalAlignment="Center" Command="{Binding BrowseCommand}"></Button>
-            </StackPanel>
-            <TextBlock Grid.Row="7" Text="Price" VerticalAlignment="Center"/>
-            <NumberBox Grid.Row="7" Grid.Column="1" PlaceholderText="Price number (VND)" Minimum="0" Value="{Binding NewBook.Price, Mode=TwoWay}"/>
-            <TextBlock Grid.Row="8" Text="Quantity" VerticalAlignment="Center"/>
-            <NumberBox Grid.Row="8" Grid.Column="1" PlaceholderText="Quantity" Minimum="0" Value="{Binding NewBook.Quantity, Mode=TwoWay}"/>
-            <StackPanel Grid.Row="9" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Back" Margin="10,10,10,10" Command="{Binding BackCommand}"></Button>
-                <Button Content="Confirm" Margin="10,10,10,10" Command="{Binding ConfirmCommand}"></Button>
-            </StackPanel>
-        </Grid>
-
-
-    </ScrollViewer>-->
-
 </Page>
