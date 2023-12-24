@@ -30,7 +30,7 @@
 
             <!--Show logo-->
             <StackPanel Grid.Row="0">
-                <TextBlock Text="Configuration database" HorizontalAlignment="Center" Margin="20" FontSize="30" FontWeight="Bold"></TextBlock>
+                <TextBlock Text="Database Configuration" HorizontalAlignment="Center" Margin="20" FontSize="30" FontWeight="Bold"></TextBlock>
             </StackPanel>
 
 

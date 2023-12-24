@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage.Pickers;
 using Windows.Storage;
+using System.Windows.Forms;
 
 namespace MyShop.ViewModel
 {
@@ -30,7 +31,12 @@ namespace MyShop.ViewModel
             AddCommand = new RelayCommand(ExecuteAddCommand);
             DeleteCommand = new RelayCommand(ExecuteDeleteCommand);
             SaveCommand = new RelayCommand(ExecuteSaveCommand);
-            
+            GotFocusCommand = new RelayCommand<object>(ExecuteGotFocusCommand);
+        }
+        private void ExecuteGotFocusCommand(object sender)
+        {
+            TextBox textBox = sender as TextBox;
+
         }
 
         private async void ExecuteSaveCommand()
@@ -79,7 +85,9 @@ namespace MyShop.ViewModel
         private RelayCommand _addCommand;
         private RelayCommand _deleteCommand;
         private RelayCommand _saveCommand;
-        
+        private RelayCommand<object> _gotFocusCommand;
+
+
         public List<Genre> Genres { get => _genres; set => _genres = value; }
         public ObservableCollection<Genre> DisplayGenresCollection { get => _displayGenresCollection; set => _displayGenresCollection = value; }
         public IBookRepository BookRepository { get => _bookRepository; set => _bookRepository = value; }
@@ -87,5 +95,6 @@ namespace MyShop.ViewModel
         public RelayCommand AddCommand { get => _addCommand; set => _addCommand = value; }
         public RelayCommand DeleteCommand { get => _deleteCommand; set => _deleteCommand = value; }
         public RelayCommand SaveCommand { get => _saveCommand; set => _saveCommand = value; }
+        public RelayCommand<object> GotFocusCommand { get => _gotFocusCommand; set => _gotFocusCommand = value; }
     }
 }

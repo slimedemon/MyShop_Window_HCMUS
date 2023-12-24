@@ -32,7 +32,7 @@
 
             <StackPanel Grid.Row="0">
                 <Image Source="/Assets/bg_home.png" Stretch="Uniform" Height="100" Width="auto" HorizontalAlignment="Center"></Image>
-                <TextBlock Text="Log in to your account" HorizontalAlignment="Center" Margin="20" FontSize="30" FontWeight="Bold"></TextBlock>
+                <TextBlock Text="Login to your account" HorizontalAlignment="Center" Margin="20" FontSize="30" FontWeight="Bold"></TextBlock>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" Width="300">
@@ -59,14 +59,14 @@
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <CheckBox x:Name="keepLoginCheckBox" Content="Lưu mật khẩu" Grid.Column="0" Margin="0 20 0 0" HorizontalAlignment="Left"
+                    <CheckBox x:Name="keepLoginCheckBox" Content="Remember me" Grid.Column="0" Margin="0 20 0 0" HorizontalAlignment="Left"
                               IsChecked="{Binding RememberMe}" Command="{Binding RememberAccountCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"></CheckBox>
 
                     <CheckBox Name="revealModeCheckBox" Content="Show password" IsChecked="False" Grid.Column="1" Margin="0 20 0 0"
                                Checked="RevealModeCheckbox_Changed" Unchecked="RevealModeCheckbox_Changed"/>
                 </Grid>
 
-                <Button x:Name="btnLogin" Content="Đăng nhập" Margin="0 20 0 0" Command="{Binding LoginCommand}" Width="300"></Button>
+                <Button x:Name="btnLogin" Content="Login" Margin="0 20 0 0" Command="{Binding LoginCommand}" Width="300"></Button>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -75,11 +75,11 @@
                     </Grid.ColumnDefinitions>
 
                     <HyperlinkButton Content="Sign up" Grid.Column="0" x:Name="btnSignup" Margin="0 20 20 0" HorizontalAlignment="Left" Command="{Binding SignupCommand}"/>
-                    <HyperlinkButton Content="Forgetten password" Grid.Column="1" x:Name="btnForgotten" Margin="0 20 0 0" HorizontalAlignment="Right"/>
+                    <HyperlinkButton Content="Forgot password" Grid.Column="1" x:Name="btnForgotten" Margin="0 20 0 0" HorizontalAlignment="Right"/>
 
                 </Grid>
 
-                <HyperlinkButton Content="Configurate database" 
+                <HyperlinkButton Content="Database Configuration" 
                                  Grid.Column="2" 
                                  x:Name="btnConfiguration" 
                                  Margin="0 20 20 0" 
