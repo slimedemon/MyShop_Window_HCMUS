@@ -7,10 +7,11 @@ using System.IO;
 using System.Windows.Forms;
 using System;
 using MyShop.Services;
+using System.ComponentModel;
 
 namespace MyShop.ViewModel
 {
-    public class EditBookViewModel : ViewModelBase
+    public class EditBookViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private IBookRepository _bookRepository;
         private Book _currentBook;
@@ -22,11 +23,14 @@ namespace MyShop.ViewModel
         private FileInfo _selectedImage;
         private string _errorMessage;
 
+        public event ProgressChangedEventHandler ProgressChanged;
+        public int SelectedIndex { get; set; }
         public EditBookViewModel(Book currentBook)
         {
             _bookRepository = new BookRepository();
             //Get the book clone instance
             CurrentBook = currentBook;
+        
             //Loaded
             PageLoaded();
             BrowseCommand = new RelayCommand(ExecuteBrowseCommand);
@@ -37,10 +41,18 @@ namespace MyShop.ViewModel
         public async void PageLoaded()
         {
             Genres = await _bookRepository.GetGenres();
+
+            for (int i = 0; i < Genres.Count; i++)
+            {
+                if (Genres[i].Id == CurrentBook.GenreId) {
+                    SelectedIndex = i; break;
+                }
+            }
         }
 
         public async void ExecuteConfirmCommand()
         {
+            CurrentBook.GenreId = Genres[SelectedIndex].Id;
             var task = await _bookRepository.Edit(CurrentBook);
             if (task)
             {

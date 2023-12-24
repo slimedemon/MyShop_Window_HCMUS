@@ -38,7 +38,7 @@ namespace MyShop.ViewModel
         private string _currentKeyword = String.Empty;
         private string _priceType;
 
-        private RelayCommand _currentPageChangedCommand;
+        private RelayCommand<object> _currentPageChangedCommand;
         private RelayCommand _editBookCommand;
         private RelayCommand _deleteBookCommand;
         private RelayCommand _addBookCommand;
@@ -75,11 +75,18 @@ namespace MyShop.ViewModel
             ResetSearchCommand = new RelayCommand(ExecuteResetSearchCommand);
             ResetPriceCommand = new RelayCommand(ExecuteResetPriceCommand);
             ResetCategoryCommand = new RelayCommand(ExecuteResetCategoryCommand);
-            CurrentPageChangedCommand = new RelayCommand(ExecuteCurrentPageChangedCommand);
+            CurrentPageChangedCommand = new RelayCommand<object>(ExecuteCurrentPageChangedCommand);
         }
 
-        private void ExecuteCurrentPageChangedCommand() 
+        private void ExecuteCurrentPageChangedCommand(object sender) 
         {
+            // _currentPage is updated automatically. Unfortunately, that's a bit late. After this method is called, _currentPage is only updated.
+            var pageNumberBox = sender as NumberBox;
+            if (pageNumberBox != null) 
+            {
+                _currentPage = (int)pageNumberBox.Value;
+            }
+
             UpdateDataSource();
             UpdatePagingInfo();
         }
@@ -228,7 +235,7 @@ namespace MyShop.ViewModel
 
         public string PriceType { get => _priceType; set => _priceType = value; } 
         public Book SelectedBook { get => _selectedBook; set => _selectedBook = value; }
-        public RelayCommand CurrentPageChangedCommand { get => _currentPageChangedCommand; set => _currentPageChangedCommand = value; }
+        public RelayCommand<object> CurrentPageChangedCommand { get => _currentPageChangedCommand; set => _currentPageChangedCommand = value; }
         public RelayCommand EditBookCommand { get => _editBookCommand; set => _editBookCommand = value; }
         public RelayCommand DeleteBookCommand { get => _deleteBookCommand; set => _deleteBookCommand = value; }
         public RelayCommand AddBookCommand { get => _addBookCommand; set => _addBookCommand = value; }

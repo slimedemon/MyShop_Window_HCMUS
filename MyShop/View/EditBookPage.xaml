@@ -57,11 +57,10 @@
                            Margin="0 0 0 20" 
                            HorizontalAlignment="Stretch" 
                            Text="{Binding CurrentBook.Author, Mode=TwoWay}"/>
-                    <TextBlock Text="Genre"></TextBlock>
+                    <TextBlock Text="Category"></TextBlock>
                     <ComboBox PlaceholderText="Select a genre" HorizontalAlignment="Stretch"  ItemsSource="{Binding Genres}"
                             DisplayMemberPath="Name"
-                            SelectedValuePath="Id"
-                            SelectedValue="{Binding CurrentBook.GenreId, Mode=TwoWay}"
+                            SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
                             Margin="0 0 0 20" ></ComboBox>
                     <TextBlock Text="Publication Year"/>
                     <CalendarDatePicker  PlaceholderText="Select a Date" HorizontalAlignment="Stretch"
@@ -145,7 +144,7 @@
 
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Width="80" Content="Back" Margin="10" Command="{Binding BackCommand}"></Button>
-            <Button Width="80" Content="Add" Margin="10"  Command="{Binding ConfirmCommand}"></Button>
+            <Button Width="80" Content="Save" Margin="10"  Command="{Binding ConfirmCommand}"></Button>
         </StackPanel>
     </Grid>
 

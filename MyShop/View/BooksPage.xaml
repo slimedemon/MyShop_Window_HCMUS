@@ -135,14 +135,14 @@
                 <TextBlock
                     VerticalAlignment="Center"
                     Text="Page" />
-                <NumberBox
+                <NumberBox Name="pageNumberBox"
                     Maximum="{Binding TotalPages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Minimum="1"
                     Value="{Binding CurrentPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="ValueChanged">
                             <core:InvokeCommandAction 
-                                Command="{Binding CurrentPageChangedCommand}"/>
+                                Command="{Binding CurrentPageChangedCommand}" CommandParameter="{Binding ElementName=pageNumberBox}"/>
                         </core:EventTriggerBehavior>
                     </interactivity:Interaction.Behaviors>
 
