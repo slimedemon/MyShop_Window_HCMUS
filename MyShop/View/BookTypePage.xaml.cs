@@ -1,3 +1,4 @@
+using CommunityToolkit.WinUI.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -28,6 +29,11 @@ namespace MyShop.View
             this.InitializeComponent();
         }
 
-
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+{
+            TextBox textBox = sender as TextBox;
+            var obj = textBox.DataContext ; // Genres
+            dataListView.SelectedItem = obj;
+        }
     }
 }

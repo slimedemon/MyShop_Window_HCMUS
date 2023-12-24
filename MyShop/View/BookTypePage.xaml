@@ -39,12 +39,8 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding Id}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300">
-                                    <i:Interaction.Behaviors>
-                                        <ic:EventTriggerBehavior EventName="LostFocus">
-                                            <ic:InvokeCommandAction Command="{Binding GotFocusCommand}" CommandParameter="{Binding Id}" />
-                                        </ic:EventTriggerBehavior>
-                                    </i:Interaction.Behaviors>
+                                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" GotFocus="TextBox_GotFocus">
+                                   
                                 </TextBox>
                             </StackPanel>
                         </DataTemplate>
