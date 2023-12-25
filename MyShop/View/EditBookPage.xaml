@@ -119,7 +119,7 @@
                                 </Image.Source>
                             </Image>
                         </Grid>
-                        <Button Content="Browse" HorizontalAlignment="Center" Command="{Binding BrowseCommand}"></Button>
+                        <Button Content="Browse" HorizontalAlignment="Center" Command="{Binding BrowseCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -143,8 +143,8 @@
         </Grid>
 
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Width="80" Content="Back" Margin="10" Command="{Binding BackCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
-            <Button Width="80" Content="Save" Margin="10"  Command="{Binding ConfirmCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
+            <Button Width="100" Content="Back" Margin="10" Command="{Binding BackCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
+            <Button Width="100" Content="Save" Margin="10"  Command="{Binding ConfirmCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
         </StackPanel>
     </Grid>
 
