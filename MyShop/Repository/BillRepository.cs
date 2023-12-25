@@ -267,12 +267,6 @@ namespace MyShop.Repository
                     int price = Convert.ToInt32(reader["price"]);
                     int number = Convert.ToInt32(reader["number"]);
                     int quantity = Convert.ToInt32(reader["quantity"]);
-
-                    //Int32.TryParse((string)reader["book_id"], out bookId);
-                    //Int32.TryParse((string)reader["price"], out price);
-                    //Int32.TryParse((string)reader["number"], out number);
-                    //Int32.TryParse((string)reader["quantity"], out quantity);
-
                     string title = Convert.ToString(reader["title"]);
 
                     details.Add(new Order

@@ -63,6 +63,7 @@ namespace MyShop.Repository
                 string sql = "update CUSTOMER set name=@name,phone=@phone,address=@address " +
                     "where id = @id";
                 var command = new SqlCommand(sql, connection);
+                command.Parameters.Add("@id", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Id;
                 command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Name;
                 command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber == null ? DBNull.Value : customer.PhoneNumber;
                 command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address == null ? DBNull.Value : customer.Address;

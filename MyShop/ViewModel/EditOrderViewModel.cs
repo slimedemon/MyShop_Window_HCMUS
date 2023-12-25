@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.Windows.ApplicationModel.Resources;
 using MyShop.Model;
 using MyShop.Repository;
 using MyShop.Services;
@@ -6,14 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace MyShop.ViewModel
 {
     class EditOrderViewModel : ViewModelBase
     {
         // Fields
-        private ObservableCollection<Order> _billDetailList; //int <<billId>> respective to the bill's list of <<billDetail>>
-
         private IBillRepository _billRepository;
         private IBookRepository _bookRepository;
         private ICustomerRepository _customerRepository;
@@ -21,29 +21,37 @@ namespace MyShop.ViewModel
         private Bill _currentBill;
 
         private ObservableCollection<Book> _books;
-        private ObservableCollection<Customer> _customers;
 
-        private Customer _selectedCustomer;
-        private Order _selectedBillDetail;
+        private Customer _bindingCustomer;
+        private Order _bindingOrder;
+        private Order _selectedOrder;
 
         private int _currentTotalPrice;
         private Book _selectedBook;
-        private ObservableCollection<int> _selectedBookIds;
+        private List<Order> _originalOrders;
+
+        //-> Commands
+        private RelayCommand _backCommand;
+        private RelayCommand _confirmCommand;
+        private RelayCommand _addCommand;
+        private RelayCommand _removeCommand;
+        private RelayCommand _refreshCommand;
 
         // getter, setter
         public RelayCommand BackCommand { get => _backCommand; set => _backCommand = value; }
         public RelayCommand ConfirmCommand { get => _confirmCommand; set => _confirmCommand = value; }
-        //public RelayCommand BrowseCommand { get => _browseCommand; set => _browseCommand = value; }
         public RelayCommand AddCommand { get => _addCommand; set => _addCommand = value; }
-        public RelayCommand DeleteCommand { get => _deleteCommand; set => _deleteCommand = value; }
+        public RelayCommand RemoveCommand { get => _removeCommand; set => _removeCommand = value; }
         public RelayCommand RefreshCommand { get => _refreshCommand; set => _refreshCommand = value; }
+
 
         public Bill CurrentBill { get => _currentBill; set => _currentBill = value; }
         public ObservableCollection<Book> Books { get => _books; set => _books = value; }
-        public ObservableCollection<Order> BillDetailList { get => _billDetailList; set => _billDetailList = value; }
-        public ObservableCollection<Customer> Customers { get => _customers; set => _customers = value; }
-        public Customer SelectedCustomer { get => _selectedCustomer; set => _selectedCustomer = value; }
-        public Order SelectedBillDetail { get => _selectedBillDetail; set => _selectedBillDetail = value; }
+        public ObservableCollection<Order> Orders { get; set; }
+        public Order BindingOrder { get => _bindingOrder; set => _bindingOrder = value; }
+        public Order SelectedOrder { get => _selectedOrder; set => _selectedOrder = value; }
+        public Customer BindingCustomer { get => _bindingCustomer; set => _bindingCustomer = value; }
+
         public Book SelectedBook
         {
             get => _selectedBook;
@@ -53,202 +61,216 @@ namespace MyShop.ViewModel
                 OnPropertyChanged(nameof(SelectedBook));
             }
         }
-        public int CurrentTotalPrice { get => _currentTotalPrice; set => _currentTotalPrice = value; }
 
-        //-> Commands
-        private RelayCommand _backCommand;
-        private RelayCommand _confirmCommand;
-        private RelayCommand _browseCommand;
-
-        private RelayCommand _addCommand;
-        private RelayCommand _deleteCommand;
-        private RelayCommand _refreshCommand;
-
-        //public async void PageLoaded()
-        //{
-        //    var task = await _bookRepository.GetAll();
-        //    Books = new ObservableCollection<Book>();
-        //    task.ForEach(book => Books.Add(book));
-
-        //    var task2 = await _customerRepository.GetAll();
-        //    Customers = new ObservableCollection<Customer>();
-        //    task2.ForEach(customer => Customers.Add(customer));
-
-        //    var task3 = await _billRepository.GetBillDetailById(CurrentBill.Id);
-        //    BillDetailList = new ObservableCollection<Order>();
-        //    task3.ForEach(bill => {
-        //        // combine local total quantity
-        //        bill.BookQuantity += bill.Number;
-
-        //        BillDetailList.Add(bill);
-        //        _selectedBookIds.Add(bill.BookId);
-        //    }
-        //    );
-
-        //    // sync the local total quantity
-        //    for (int i = 0; i < Books.Count; i++)
-        //    {
-        //        for (int j = 0; j < BillDetailList.Count; j++)
-        //        {
-        //            if (Books[i].Id == BillDetailList[j].BookId)
-        //            {
-        //                Books[i].Quantity = BillDetailList[j].BookQuantity;
-        //            }
-        //        }
-        //    }
-
-        //    SelectedCustomer = await _customerRepository.GetById(CurrentBill.CustomerId);
-        //}
-
-        //// Edit bill details
-        //public async void ExecuteAddCommand()
-        //{
-        //    if (SelectedBook == null)
-        //    {
-        //        await App.MainRoot.ShowDialog("No selected book", "Please select the book you would like to add to the order!");
-        //        return;
-        //    }
-        //    if (_selectedBookIds.Contains(SelectedBook.Id))
-        //    {
-        //        await App.MainRoot.ShowDialog("Duplicate book", "This book already exists in the order! Please edit that...");
-        //    }
-        //    else
-        //    {
-        //        _selectedBookIds.Add(SelectedBook.Id);
-
-        //        // + totalprice
-        //        Order newBillDetail = new Order
-        //        {
-        //            BookId = SelectedBook.Id,
-        //            BillId = CurrentBill.Id,
-        //            BookName = SelectedBook.Title,
-        //            BookQuantity = SelectedBook.Quantity,
-        //            Number = 1,
-        //            Price = SelectedBook.Price,
-        //        };
-
-        //        ExecuteRefreshCommand();
-        //        CurrentTotalPrice += newBillDetail.TotalPrice();
-
-        //        BillDetailList.Add(newBillDetail);
-        //    }
-        //}
-        //public async void ExecuteDeleteCommand()
-        //{
-        //    // - totalprice
-        //    if (SelectedBillDetail == null)
-        //    {
-        //        await App.MainRoot.ShowDialog("No selected bill detail", "Please select the bill detail you would like to delete!");
-        //        return;
-        //    }
-        //    _selectedBookIds.Remove(SelectedBillDetail.BookId);
-
-        //    ExecuteRefreshCommand();
-        //    CurrentTotalPrice -= SelectedBillDetail.TotalPrice();
-
-        //    BillDetailList.Remove(SelectedBillDetail);
-        //}
-
-        //public void ExecuteRefreshCommand()
-        //{
-        //    CurrentTotalPrice = 0;
-
-        //    for (int i = 0; i < _billDetailList.Count; i++)
-        //    {
-        //        CurrentTotalPrice += _billDetailList[i].TotalPrice();
-        //    }
-
-        //}
-
-        //public async void ExecuteConfirmCommand()
-        //{
-        //    if (SelectedCustomer == null)
-        //    {
-        //        await App.MainRoot.ShowDialog("No selected customer", "Please select the owner of this order!");
-        //        return;
-        //    }
-
-        //    // add bill values + update total price in real-time
-        //    CurrentBill.CustomerId = SelectedCustomer.Id;
-        //    ExecuteRefreshCommand();
-
-        //    CurrentBill.TotalPrice = CurrentTotalPrice;
-
-
-        //    // add bill details, resolve duplicate book insertions
-        //    List<int> bookIds = await _billRepository.GetBookIdsById(CurrentBill.Id);
-        //    for (int i = 0; i<bookIds.Count; i++)
-        //    {
-        //        await _billRepository.RemoveBillDetail(CurrentBill.Id, bookIds[i]);
-        //    }
-
-        //    for (int i = 0; i < _billDetailList.Count; i++)
-        //    {
-        //        await _billRepository.AddBillDetail(_billDetailList[i]);
-
-        //        _billDetailList[i].BookQuantity = _billDetailList[i].BookQuantity - _billDetailList[i].Number;
-        //    }
-
-        //    // sync the local total quantity
-        //    for (int i = 0; i < Books.Count; i++)
-        //    {
-        //        for (int j = 0; j < BillDetailList.Count; j++)
-        //        {
-        //            if (Books[i].Id == BillDetailList[j].BookId)
-        //            {
-        //                Books[i].Quantity = BillDetailList[j].BookQuantity;
-        //            }
-        //        }
-
-        //        await _bookRepository.EditBookQuantity(Books[i].Id, Books[i].Quantity);
-        //    }
-
-        //    await _billRepository.Edit(CurrentBill);
-
-        //    //if (task)
-        //    //{
-        //    //    ParentPageNavigation.ViewModel = new OrderHistoryViewModel();
-
-        //    //}
-        //    //else
-        //    //{
-        //    //    ErrorMessage = "* Task failed!";
-        //    //}
-        //    await App.MainRoot.ShowDialog("Success", "Order is updated!");
-        //    ExecuteBackCommand();
-        //}
-
-        public void ExecuteBackCommand()
+        public int CurrentTotalPrice
         {
-            ParentPageNavigation.ViewModel = new OrderHistoryViewModel();
+            get => _currentTotalPrice;
+            set
+            {
+                _currentTotalPrice = value;
+                OnPropertyChanged("CurrentTotalPrice");
+            }
         }
-
-        //public void ExecuteBrowseCommand()
-        //{
-        //    // browse book
-        //}
 
         // Constructor
         public EditOrderViewModel(Bill currentBill)
         {
-            //_billRepository = new BillRepository();
-            //_bookRepository = new BookRepository();
-            //_customerRepository = new CustomerRepository();
+            _billRepository = new BillRepository();
+            _bookRepository = new BookRepository();
+            _customerRepository = new CustomerRepository();
+            _originalOrders = new List<Order>();
+            BindingCustomer = new Customer();
+            BindingOrder = new Order()
+            {
+                Number = 1,
+            };
 
-            //CurrentBill = currentBill;
-            //_selectedBookIds = new ObservableCollection<int>();
-            //CurrentTotalPrice = CurrentBill.TotalPrice;
+            // => init CurrentBill
+            CurrentBill = currentBill;
 
-            //PageLoaded();
+            Books = new ObservableCollection<Book>();
+            Orders = new ObservableCollection<Order>();
+            CurrentTotalPrice = CurrentBill.TotalPrice;
 
-            ////BrowseCommand = new RelayCommand(ExecuteBrowseCommand);
-            //BackCommand = new RelayCommand(ExecuteBackCommand);
-            //ConfirmCommand = new RelayCommand(ExecuteConfirmCommand);
+            PageLoaded();
 
-            //AddCommand = new RelayCommand(ExecuteAddCommand);
-            //DeleteCommand = new RelayCommand(ExecuteDeleteCommand);
-            //RefreshCommand = new RelayCommand(ExecuteRefreshCommand);
+            //BrowseCommand = new RelayCommand(ExecuteBrowseCommand);
+            BackCommand = new RelayCommand(ExecuteBackCommand);
+            ConfirmCommand = new RelayCommand(ExecuteConfirmCommand);
+
+            AddCommand = new RelayCommand(ExecuteAddCommand);
+            RemoveCommand = new RelayCommand(ExecuteRemoveCommand);
+            RefreshCommand = new RelayCommand(ExecuteRefreshCommand);
         }
 
+        public async void PageLoaded()
+        {
+            // Get all books
+            var task1 = await _bookRepository.GetAll();
+            task1.ForEach(book => Books.Add(book));
+
+            // Get customer
+            var task2 = await _customerRepository.GetById(CurrentBill.CustomerId);
+            BindingCustomer = task2;
+
+            // Get all Orders
+            var task3 = await _billRepository.GetBillDetailById(CurrentBill.Id);
+
+            //update current stock for all orders and restore quantity for each book before edit (when record is saved, stock is updated)
+            for (int i = 0; i < task3.Count(); i++)
+            {
+                // save all original order
+                _originalOrders.Add(new Order
+                {
+                    Number = task3[i].Number,
+                    BillId = task3[i].BillId,
+                    BookId = task3[i].BookId,
+                    BookName = task3[i].BookName,
+                    No = task3[i].No,
+                    Price = task3[i].Price,
+                    StockQuantity = task3[i].StockQuantity,
+                });
+
+                var temp = Books.Where(book => book.Id == task3[i].BookId).First();
+                if (temp != null)
+                {
+                    temp.Quantity = temp.Quantity + task3[i].Number;
+                }
+                
+                task3[i].StockQuantity = temp.Quantity;
+                await _bookRepository.EditBookQuantity(task3[i].BookId, task3[i].StockQuantity);
+
+                // Update No.
+                task3[i].No = i + 1;
+            }
+
+            task3.ForEach(order => Orders.Add(order));
+            ExecuteRefreshCommand();
+        }
+
+        // Edit bill details
+        public async void ExecuteAddCommand()
+        {
+            if (SelectedBook == null)
+            {
+                await App.MainRoot.ShowDialog("No selected book", "Please select the book you would like to add to the order!");
+                return;
+            }
+            if (Orders.Select(x => x.BookId).ToList().Contains(SelectedBook.Id))
+            {
+                await App.MainRoot.ShowDialog("Duplicate book", "This book already exists in the order!");
+                return;
+
+            }
+            if (BindingOrder.Number > SelectedBook.Quantity)
+            {
+                await App.MainRoot.ShowDialog("Not enough stock", "Out of stock or insufficient quantity for sale! Please restock the goods and update the system accordingly!");
+                return;
+            }
+            else
+            {
+                var newOrder = new Order()
+                {
+                    No = Orders.Count + 1,
+                    BookId = SelectedBook.Id,
+                    BookName = SelectedBook.Title,
+                    Number = BindingOrder.Number,
+                    Price = SelectedBook.Price,
+                    StockQuantity = SelectedBook.Quantity
+                };
+
+                Orders.Add(newOrder);
+                ExecuteRefreshCommand();
+            }
+        }
+
+        public async void ExecuteRemoveCommand()
+        {
+            // - total_price
+            if (SelectedOrder == null)
+            {
+                await App.MainRoot.ShowDialog("No selected selected order", "Please select the order which you would like to delete!");
+                return;
+            }
+            Orders.Remove(SelectedOrder);
+            ExecuteRefreshCommand();
+        }
+
+        public void ExecuteRefreshCommand()
+        {
+            CurrentTotalPrice = 0;
+
+            for (int i = 0; i < Orders.Count; i++)
+            {
+                CurrentTotalPrice += Orders[i].TotalPrice();
+            }
+
+            for (int i = 0; i < Orders.Count; i++)
+            {
+                Orders[i].No = i + 1;
+            }
+        }
+
+        public async void ExecuteConfirmCommand()
+        {
+            try
+            {
+                if (BindingCustomer.Name == null || BindingCustomer.Name.Equals(""))
+                {
+                    await App.MainRoot.ShowDialog("Customer name is empty", "Please enter customer name!");
+                    return;
+                }
+
+                if (Orders.Count() < 1)
+                {
+                    await App.MainRoot.ShowDialog("There is no any order", "Please add at least one order!");
+                    return;
+                }
+
+                // Edit current customer
+                await _customerRepository.Edit(BindingCustomer);
+
+                // add bill values + update total price in real-time + update quantity
+                ExecuteRefreshCommand();
+                CurrentBill.TotalPrice = CurrentTotalPrice;
+                await _billRepository.Edit(CurrentBill);
+
+                // remove original bill detail
+                for (int i = 0; i < _originalOrders.Count; i++)
+                {
+                    await _billRepository.RemoveBillDetail(_originalOrders[i].BillId, _originalOrders[i].BookId);
+                }
+
+                // add bill detail
+                for (int i = 0; i < Orders.Count; i++)
+                {
+                    Orders[i].BillId = CurrentBill.Id;
+                    await _billRepository.AddBillDetail(Orders[i]);
+                    await _bookRepository.EditBookQuantity(Orders[i].BookId, Orders[i].StockQuantity - Orders[i].Number);
+                }
+
+                await App.MainRoot.ShowDialog("Success", "Current bill is saved!");
+
+                // Back to parent page
+                ParentPageNavigation.ViewModel = new OrderHistoryViewModel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        public async void ExecuteBackCommand()
+        {
+            // recover quantity property of Book
+            for (int i = 0; i < _originalOrders.Count(); i++)
+            {
+                var temp = Books.Where(book => book.Id == _originalOrders[i].BookId).First();
+                await _bookRepository.EditBookQuantity(_originalOrders[i].BookId, temp.Quantity - _originalOrders[i].Number);
+            }
+
+            ParentPageNavigation.ViewModel = new OrderHistoryViewModel();
+        }
     }
 }
