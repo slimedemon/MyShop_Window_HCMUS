@@ -11,6 +11,11 @@
     <SolidColorBrush x:Key="SecundaryBlueColor" Color="#009fc2"/>
     <SolidColorBrush x:Key="TertiaryBlueColor" Color="#004787"/>
     <SolidColorBrush x:Key="FourthBlueColor" Color="#ffffff"/>
+    
+    <!--Second Colors-->
+    <SolidColorBrush x:Key="PrimaryGrayColor" Color="#e8e8e8"/>
+    <SolidColorBrush x:Key="SecondGrayColor" Color="LightGray"/>
+
 
     <!-- Typograhy Colors -->
     <SolidColorBrush x:Key="PrimaryTextColor" Color="#FFFFFF"/>

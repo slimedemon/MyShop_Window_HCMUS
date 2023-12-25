@@ -35,7 +35,7 @@ namespace MyShop.ViewModel
             try
             {
                 // Check is null
-                if (FullName == null || PhoneNumber == null || Password == null || RetypePassword == null || Username == null)
+                if (FullName == null || Password == null || RetypePassword == null || Username == null)
                 {
                     throw new Exception("Not fill out completely!");
                 }
@@ -63,7 +63,7 @@ namespace MyShop.ViewModel
                 }
 
                 // Check phone number
-                if (!Regex.IsMatch(PhoneNumber, @"[0-9]+")) 
+                if (PhoneNumber!= null && !Regex.IsMatch(PhoneNumber, @"[0-9]+")) 
                 {
                     throw new Exception("Invalid phone number");
                 }
@@ -73,7 +73,7 @@ namespace MyShop.ViewModel
                 Account.PhoneNumber = PhoneNumber;
                 Account.Address = "";
 
-                // encrypt password
+                // non-encrypt password
                 Account.Password = Password;
 
                 var result = await _accountRepository.Add(Account);

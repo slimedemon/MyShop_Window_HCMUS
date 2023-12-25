@@ -68,7 +68,7 @@
                       Margin="0,0,10,20"
                       PlaceholderText="Default"/>
 
-            <Button Content="Search" VerticalAlignment="Center" Width="80" Margin="0 10 0 0" Command="{Binding SearchCommand}" CommandParameter="{Binding CurrentKeyword}"></Button>
+            <Button Content="Search" VerticalAlignment="Center" Width="100" Margin="0 10 0 0" Command="{Binding SearchCommand}" CommandParameter="{Binding CurrentKeyword}" Style="{StaticResource AccentButtonStyle}"></Button>
         </StackPanel>
 
         <Grid Grid.Row="1" Grid.Column="0">

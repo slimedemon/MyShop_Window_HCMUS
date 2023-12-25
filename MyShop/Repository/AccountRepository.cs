@@ -152,17 +152,62 @@ namespace MyShop.Repository
             return message;
         }
 
-        public async void Edit(Account account)
+        public async Task<bool> UpdateProfile(Account account)
         {
-            string message = string.Empty;
+            if (account.Name == null || account.Name.Equals("")) return false;
+
+            bool isSuccessful = false;
             var connection = GetConnection();
+
             await Task.Run(() =>
             {
                 try
                 {
                     connection.Open();
                 }
-                catch (Exception ex) { message = "Connection timed out!"; }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
+            }).ConfigureAwait(false);
+
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                {
+                    string sql = "update ACCOUNT set name=@name, phone=@phone, address=@address where id=@id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = account.Id;
+                    command.Parameters.Add("@name", SqlDbType.NVarChar).Value = account.Name == null ? DBNull.Value : account.Name ;
+                    command.Parameters.Add("@phone", SqlDbType.VarChar).Value = account.PhoneNumber == null ? DBNull.Value: account.PhoneNumber;
+                    command.Parameters.Add("@address", SqlDbType.NVarChar).Value = account.Address == null ? DBNull.Value : account.Address;
+
+                    int rows = command.ExecuteNonQuery();
+                    if (rows > 0)
+                    {
+                        isSuccessful = true;
+                    }
+                    else 
+                    {
+                        isSuccessful = false;
+                    }
+                    connection.Close();
+                }
+            }
+
+            return isSuccessful;
+        }
+
+        public async Task<bool> ChangePassword(Account account)
+        {
+            if (account.Password == null || account.Password.Equals("")) return false;
+
+            bool isSuccessful = false;
+            var connection = GetConnection();
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    connection.Open();
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
             }).ConfigureAwait(false);
 
             if (connection != null && connection.State == ConnectionState.Open)
@@ -171,24 +216,26 @@ namespace MyShop.Repository
                 {
                     var tuple = EncryptPassword(account.Password);
 
-                    string sql = "update ACCOUNT set password=@password, entropy=@entropy where username=@username";
+                    string sql = "update ACCOUNT set password=@password, entropy=@entropy where id=@id";
                     var command = new SqlCommand(sql, connection);
-                    command.Parameters.Add("@username", SqlDbType.NVarChar).Value = account.Username;
-                    command.Parameters.Add("@password", SqlDbType.NVarChar).Value = tuple.Item1;
-                    command.Parameters.Add("@entropy", SqlDbType.NVarChar).Value = tuple.Item2;
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = account.Id;
+                    command.Parameters.Add("@password", SqlDbType.VarChar).Value = tuple.Item1 == null ? DBNull.Value : tuple.Item1;
+                    command.Parameters.Add("@entropy", SqlDbType.VarChar).Value = tuple.Item2 == null ? DBNull.Value : tuple.Item2;
 
                     int rows = command.ExecuteNonQuery();
                     if (rows > 0)
                     {
-                       await App.MainRoot.ShowDialog("Update status", "Your password has been updated!");
+                        isSuccessful = true;
                     }
                     else
                     {
-                        await App.MainRoot.ShowDialog("Update status", "An error occurred while updating your password!");
+                        isSuccessful = false;
                     }
                     connection.Close();
                 }
             }
+
+            return isSuccessful;
         }
 
         public async Task<Account> GetById(int id)

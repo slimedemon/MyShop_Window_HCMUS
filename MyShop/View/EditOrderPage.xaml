@@ -39,7 +39,7 @@
         <!--Input book information for bill-->
         <Border
             Grid.Row="1" Grid.Column="0"
-            BorderBrush="LightGray" 
+            BorderBrush="LightGray"
             BorderThickness="1"
             Padding="10" 
             Margin="20 20 0 20"

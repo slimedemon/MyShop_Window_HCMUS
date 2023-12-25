@@ -11,9 +11,10 @@ namespace MyShop.Model
     {
         Task<string> AuthenticateAccount(NetworkCredential credential);
         Task<bool> Add(Account account);
-        void Edit(Account account);
-        void Remove(int id);
+        Task<bool> UpdateProfile(Account account);
+        Task<bool> ChangePassword(Account account);
         Task<Account> GetById(int id);
+        void Remove(int id);
         Task<Account> GetByUsername(string username);
     }
 }

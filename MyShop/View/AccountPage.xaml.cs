@@ -27,5 +27,47 @@ namespace MyShop.View
         {
             this.InitializeComponent();
         }
+
+        private void ShowGroup(string group)
+        {
+            if (group.Equals("None"))
+            {
+                ChangePasswordBox.Visibility = Visibility.Collapsed;
+                UpdateProfileBox.Visibility = Visibility.Collapsed;
+            }
+            else if (group.Equals("ShowChangePassword"))
+            {
+                ChangePasswordBox.Visibility = Visibility.Visible;
+                UpdateProfileBox.Visibility = Visibility.Collapsed;
+            }
+            else if (group.Equals("ShowUpdateProfileBox")) {
+                ChangePasswordBox.Visibility = Visibility.Collapsed;
+                UpdateProfileBox.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Click_ShowChangePasswordBox(object sender, RoutedEventArgs e)
+        {
+            if (ChangePasswordBox.Visibility == Visibility.Visible)
+            {
+                ShowGroup("None");
+            }
+            else 
+            {
+                ShowGroup("ShowChangePassword");
+            }
+        }
+
+        private void Click_ShowUpdateProfileBox(object sender, RoutedEventArgs e)
+        {
+            if (UpdateProfileBox.Visibility == Visibility.Visible)
+            {
+                ShowGroup("None");
+            }
+            else 
+            {
+                ShowGroup("ShowUpdateProfileBox");
+            }
+        }
     }
 }

@@ -33,7 +33,7 @@
 
         <Border 
            Grid.Row="1" Grid.Column="0"
-           BorderBrush="LightGray" 
+           BorderBrush="Gray" Background="#e0e0e0"
            BorderThickness="1"
            Padding="10" 
            CornerRadius="10"
@@ -97,7 +97,7 @@
 
             <Border 
                 Grid.Row="0"
-                BorderBrush="LightGray" 
+                BorderBrush="LightGray" Background="White"
                 BorderThickness="1"
                 Padding="10" 
                 CornerRadius="10"
@@ -126,7 +126,7 @@
 
             <Border 
                 Grid.Row="1"
-                BorderBrush="LightGray" 
+                BorderBrush="LightGray" Background="White"
                 BorderThickness="1"
                 Padding="10" 
                 CornerRadius="10"
@@ -143,8 +143,8 @@
         </Grid>
 
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Width="80" Content="Back" Margin="10" Command="{Binding BackCommand}"></Button>
-            <Button Width="80" Content="Save" Margin="10"  Command="{Binding ConfirmCommand}"></Button>
+            <Button Width="80" Content="Back" Margin="10" Command="{Binding BackCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
+            <Button Width="80" Content="Save" Margin="10"  Command="{Binding ConfirmCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
         </StackPanel>
     </Grid>
 
