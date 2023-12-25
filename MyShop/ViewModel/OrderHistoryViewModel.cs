@@ -7,16 +7,17 @@ using MyShop.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Windows.Services.Store;
-using static System.Reflection.Metadata.BlobBuilder;
-using static System.Windows.Forms.AxHost;
+
 
 namespace MyShop.ViewModel
 {
@@ -25,129 +26,29 @@ namespace MyShop.ViewModel
         // Fields
         private DateOnly _dateFrom;
         private DateOnly _dateTo;
-        private string _paginationMessage;
-        private int _currentPage;
-        private int _itemsPerPage; //can be changed through setting
         private int _totalItems;
-        private int _totalPages;
-        private List<Bill> _billList;
-        private ObservableCollection<Bill> _displayBillList;
-        private Dictionary<int, List<Order>> _billDetailDict; //int <<billId>> respective to the bill's list of <<billDetail>>
+        private Dictionary<int, List<BillDetailRow>> _billDetailRowDic; //int <<billId>> respective to the bill's list of <<billDetail>>
 
         private IBillRepository _billRepository;
         private ICustomerRepository _customerRepository;
 
-        private Bill _selectedBill;
-        private List<Order> _selectedBillDetailList;
-        private string _selectedCustomer;
+        private BillRow _selectedBillRow;
+        private ObservableCollection<BillRow> _billRowList;
+        private ObservableCollection<BillDetailRow> _selectedBillDetailRowList;
 
-        // Constructor
-        public OrderHistoryViewModel() {
-            _billRepository = new BillRepository();
-            _customerRepository = new CustomerRepository();
-            _billDetailDict = new Dictionary<int, List<Order>>();
-            BillList = new List<Bill>();
-            DisplayBillList = new ObservableCollection<Bill>();
-
-            //Initial paging info
-            {
-                CurrentPage = 1;
-                ItemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["ItemsPerPage"]);
-                DateFrom = new DateOnly(2023, 4, 13);
-                DateTo = DateOnly.FromDateTime(DateTime.Now);
-            }
-            ExecuteGetAllCommand();
-
-            //
-            AddCommand = new RelayCommand(ExecuteCreateOrderCommand);
-            DeleteCommand = new RelayCommand(ExecuteDeleteOrderCommand);
-            EditCommand = new RelayCommand(ExecuteEditOrderCommand);
-            SearchCommand = new RelayCommand(ExecuteSearchCommand);
-            
-            GetIdCommand = new RelayCommand(ExecuteGetByIdCommand);
-            GoToNextPageCommand = new RelayCommand(ExecuteGoToNextPageCommand);
-            GoToPreviousPageCommand = new RelayCommand(ExecuteGoToPreviousPageCommand);
-        }
-
-        public void ExecuteCreateOrderCommand()
-        {
-            ParentPageNavigation.ViewModel = new AddOrderViewModel();
-        }
-
-        public async void ExecuteDeleteOrderCommand()
-        {
-            if (SelectedBill == null)
-            {
-                await App.MainRoot.ShowDialog("No selected item", "Please select an item first!");
-                return;
-            }
-            var confirmed = await App.MainRoot.ShowYesCancelDialog("Delete this item?","Delete","Cancel");
-
-            if (confirmed == true)
-            {
-                int key = SelectedBill.Id;
-
-                // remove from DETAILTED_BILL
-                List<Order> billDetail;
-                _billDetailDict.TryGetValue(key, out billDetail);
-                for (int i = 0;i < billDetail.Count; i++)
-                {
-                    await _billRepository.RemoveBillDetail(key, billDetail[i].BookId);
-                }
-
-                _billDetailDict.Remove(key);
-                DisplayBillList.Remove(SelectedBill);
-
-                BillList.Remove(SelectedBill);
-
-                // remove from BILL
-                await _billRepository.Remove(key);
-
-                await App.MainRoot.ShowDialog("Success", "Order is removed!");
-            }
-        }
-
-        public async void ExecuteEditOrderCommand()
-        {
-            if (SelectedBill == null)
-            {
-                await App.MainRoot.ShowDialog("No selected item", "Please select an item first!");
-                return;
-            }
-
-            ParentPageNavigation.ViewModel = new EditOrderViewModel(SelectedBill);
-        }
-
-        public async void ExecuteGetAllCommand()
-        {
-            // get all from date to date
-            var task = await _billRepository.GetAll(DateFrom, DateTo);
-            BillList = task;
-
-            for (int i = 0; i < BillList.Count; i++)
-            {
-                List<Order> temp = await _billRepository.GetBillDetailById(BillList[i].Id);
-
-                _billDetailDict.Add(BillList[i].Id, temp);
-            }
-            TotalItems = BillList.Count;
-            UpdateDataSource();
-            UpdatePagingInfo();
-        }
-
-        public async void ExecuteGetByIdCommand()
-        {
-            var task = await _billRepository.GetById(SelectedBill.Id);
-            //Bill bill = task;
-        }
-
-        
+        //-> Commands
+        public ICommand AddCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand SearchCommand { get; }
+        public int TotalItems { get => _totalItems; set => _totalItems = value; }
+        public ObservableCollection<BillRow> BillRowList { get => _billRowList; set => _billRowList = value; }
+        public ObservableCollection<BillDetailRow> SelectedBillDetailList { get => _selectedBillDetailRowList; set => _selectedBillDetailRowList = value; }
 
         // getter, setter
-
         public DateOnly DateFrom
         {
-            get => _dateFrom; 
+            get => _dateFrom;
             set
             {
                 //SetProperty(ref _date, value);
@@ -167,104 +68,152 @@ namespace MyShop.ViewModel
             }
         }
 
-        public ObservableCollection<Bill> DisplayBillList
-        { 
-            get => _displayBillList; 
-            set => _displayBillList = value;
-        }
-
-        public Bill SelectedBill
+        public BillRow SelectedBillRow
         {
-            get => _selectedBill;
+            get => _selectedBillRow;
             set
             {
-                if (_selectedBill == value)
-                    return;
-                else if (value == null)
+                _selectedBillRow = value;
+                SelectedBillDetailList.Clear();
+
+                if (value == null)
                 {
-                    SelectedBillDetailList = null;
                     return;
                 }
 
-                _selectedBill = value;
-                List<Order> billDetail;
-                _billDetailDict.TryGetValue(value.Id, out billDetail);
-                SelectedBillDetailList = billDetail;
-                SelectedCustomer = "Customer: " + getCustomerName(value.CustomerId);
+                List<BillDetailRow> billDetailRows;
+                _billDetailRowDic.TryGetValue(value.BillId, out billDetailRows);
+                billDetailRows.ForEach(row =>
+                {
+                    SelectedBillDetailList.Add(row);
+                });
 
-                OnPropertyChanged(nameof(SelectedBill));
+                OnPropertyChanged(nameof(SelectedBillRow));
             }
         }
 
-        //-> Commands
-        public ICommand AddCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand EditCommand { get; }        
-        public ICommand GetIdCommand { get; }
-        public ICommand SearchCommand { get; }
-        public ICommand GoToPreviousPageCommand { get; }
-        public ICommand GoToNextPageCommand { get; }
-        public string PaginationMessage { get => _paginationMessage; set => _paginationMessage = value; }
-        public int CurrentPage { get => _currentPage; set => _currentPage = value; }
-        public int ItemsPerPage { get => _itemsPerPage; set => _itemsPerPage = value; }
-        public int TotalItems { get => _totalItems; set => _totalItems = value; }
-        public int TotalPages { get => _totalPages; set => _totalPages = value; }
-        public List<Bill> BillList { get => _billList; set => _billList = value; }
-        public List<Order> SelectedBillDetailList { get => _selectedBillDetailList; set => _selectedBillDetailList = value; }
-        public string SelectedCustomer { get => _selectedCustomer; set => _selectedCustomer = value; }
+        // Constructor
+        public OrderHistoryViewModel() {
+            _billRepository = new BillRepository();
+            _customerRepository = new CustomerRepository();
+            _billDetailRowDic = new Dictionary<int, List<BillDetailRow>>();
+            BillRowList = new ObservableCollection<BillRow>();
+            SelectedBillDetailList = new ObservableCollection<BillDetailRow>();
 
-        public void ExecuteGoToNextPageCommand()
-        {
-            if (CanExecuteGoToNextPageCommand()) CurrentPage += 1;
-            UpdateDataSource();
-            UpdatePagingInfo();
+            //Initial paging info
+            {
+                DateFrom = DateOnly.FromDateTime(DateTime.Now.AddDays(-7));
+                DateTo = DateOnly.FromDateTime(DateTime.Now);
+            }
+            ExecuteGetAllCommand();
+
+            AddCommand = new RelayCommand(ExecuteCreateOrderCommand);
+            DeleteCommand = new RelayCommand(ExecuteDeleteOrderCommand);
+            EditCommand = new RelayCommand(ExecuteEditOrderCommand);
+            SearchCommand = new RelayCommand(ExecuteSearchCommand);
         }
 
-        public void ExecuteGoToPreviousPageCommand()
+        public void ExecuteCreateOrderCommand()
         {
-            if (CanExecuteGoToPreviousCommand()) CurrentPage -= 1;
-            UpdateDataSource();
-            UpdatePagingInfo();
+            ParentPageNavigation.ViewModel = new AddOrderViewModel();
         }
 
-        public bool CanExecuteGoToNextPageCommand() { return CurrentPage < TotalPages; }
-        public bool CanExecuteGoToPreviousCommand() { return CurrentPage > 1; }
-
-        public void UpdatePagingInfo()
+        public async void ExecuteDeleteOrderCommand()
         {
-            TotalPages = TotalItems / ItemsPerPage +
-                  (TotalItems % ItemsPerPage == 0 ? 0 : 1);
-            PaginationMessage = $"{DisplayBillList.Count}/{TotalItems} orders";
+            if (SelectedBillRow == null)
+            {
+                await App.MainRoot.ShowDialog("No selected item", "Please select an item first!");
+                return;
+            }
+            var confirmed = await App.MainRoot.ShowYesCancelDialog("Delete this item?","Delete","Cancel");
+
+            if (confirmed == true)
+            {
+                int key = SelectedBillRow.BillId;
+
+                // remove from DETAILTED_BILL
+                List<BillDetailRow> billDetailRows;
+                _billDetailRowDic.TryGetValue(key, out billDetailRows);
+                for (int i = 0;i < billDetailRows.Count; i++)
+                {
+                    await _billRepository.RemoveBillDetail(key, billDetailRows[i].BookId);
+                }
+
+                _billDetailRowDic.Remove(key);
+                BillRowList.Remove(SelectedBillRow);
+
+                // remove from BILL
+                await _billRepository.Remove(key);
+
+                await App.MainRoot.ShowDialog("Success", "Order is removed!");
+            }
         }
 
-        public void UpdateDataSource()
+        public async void ExecuteEditOrderCommand()
         {
-            DisplayBillList.Clear();
-            //ResultBooksList = _bookRepository.Filter(BooksList, StartPrice, EndPrice, CurrentKeyword, GenreId);
-            var result = BillList.Skip((CurrentPage - 1) * ItemsPerPage).Take(ItemsPerPage).ToList();
-            result.ForEach(x => DisplayBillList.Add(x));
+            if (SelectedBillRow == null)
+            {
+                await App.MainRoot.ShowDialog("No selected item", "Please select an item first!");
+                return;
+            }
 
+            ParentPageNavigation.ViewModel = new EditOrderViewModel(new Bill() 
+            { 
+                 Id = SelectedBillRow.BillId,
+                 CustomerId = SelectedBillRow.CustomerId,
+                 TransactionDate = SelectedBillRow.TransactionDate,
+                 TotalPrice = SelectedBillRow.TotalPrice,
+            });
+        }
+
+        public async void ExecuteGetAllCommand()
+        {
+            BillRowList.Clear();
+            _billDetailRowDic.Clear();
+            TotalItems = 0;
+
+            // get all from date to date
+            var task = await _billRepository.GetAll(DateFrom, DateTo);
+
+            for (int i = 0; i < task.Count; i++)
+            {
+                List<Order> temp = await _billRepository.GetBillDetailById(task[i].Id);
+                Customer customer = await _customerRepository.GetById(task[i].CustomerId);
+                List<BillDetailRow> billDetailRows = new List<BillDetailRow>();
+
+                for (int j = 0; j < temp.Count; j++)
+                {
+                    billDetailRows.Add(new BillDetailRow()
+                    {
+                        No = j + 1,
+                        BillId = temp[j].BillId,
+                        BookId = temp[j].BookId,
+                        BookName = temp[j].BookName,
+                        Number = temp[j].Number,
+                        Price = temp[j].Price,
+                    });                    
+                }
+
+                BillRowList.Add(new BillRow()
+                {
+                    No = i + 1,
+                    BillId = task[i].Id,
+                    CustomerId = task[i].CustomerId,
+                    TotalPrice = task[i].TotalPrice,
+                    TransactionDate = task[i].TransactionDate,
+                    CustomerName = customer.Name,
+                });
+
+                _billDetailRowDic.Add(task[i].Id, billDetailRows);
+            }
+            TotalItems = BillRowList.Count;
         }
 
         private async void ExecuteSearchCommand()
         {
             if (DateFrom <= DateTo)
             {
-                CurrentPage = 1;
-                _billDetailDict.Clear();
-                var task = await _billRepository.GetAll(DateFrom, DateTo);
-                BillList = task;
-
-                for (int i = 0; i < BillList.Count; i++)
-                {
-                    List<Order> temp = await _billRepository.GetBillDetailById(BillList[i].Id);
-
-                    _billDetailDict.Add(BillList[i].Id, temp);
-                }
-
-                UpdateDataSource();
-                TotalItems = BillList.Count;
-                UpdatePagingInfo();
+                ExecuteGetAllCommand();
             }
             else
             {
@@ -272,11 +221,28 @@ namespace MyShop.ViewModel
             }
         }
 
-        private string getCustomerName(int id)
+        public class BillRow : INotifyPropertyChanged
         {
-            var task = _customerRepository.GetById(id);
+            public int No { get; set; }
+            public string CustomerName { get; set; }
+            public int TotalPrice { get; set; }
+            public DateOnly? TransactionDate { get; set; }
+            public int BillId { get; set; }
+            public int CustomerId { get; set; }
 
-            return task.Result.Name;
+            public event PropertyChangedEventHandler PropertyChanged;
+        }
+
+        public class BillDetailRow : INotifyPropertyChanged
+        {
+            public int No { get; set; }
+            public string BookName { get; set; }
+            public int Number { get; set; }
+            public int Price { get; set; }
+            public int BookId { get; set; }
+            public int BillId { get; set; }
+
+            public event PropertyChangedEventHandler PropertyChanged;
         }
     }
 }

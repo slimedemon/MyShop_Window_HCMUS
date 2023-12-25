@@ -17,6 +17,13 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     
     <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent"/>
+                <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="Transparent"/>
+            </ResourceDictionary>
+        </Grid.Resources>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -28,7 +35,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Create Order" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Create a new bill" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
 
         <!--Input book information for bill-->
         <Border
@@ -50,9 +57,9 @@
                 <ComboBox Grid.Row="0" 
                           PlaceholderText="Type a book name" 
                           HorizontalAlignment="Left" 
-                        ItemsSource="{Binding Books}"
+                          ItemsSource="{Binding Books}"
                           DisplayMemberPath="Title"
-                          SelectedValue="{Binding SelectedBook, Mode=TwoWay}"
+                          SelectedValue="{Binding SelectedBook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           Width="250" 
                           Margin="0 0 0 20"/>
                 <!--<AutoSuggestBox Grid.Row="0" PlaceholderText="Type a book name" HorizontalAlignment="Left" QueryIcon="Find" Width="250" Margin="0 0 0 20" ItemsSource="{Binding Books}" DisplayMemberPath="Title" TextMemberPath="Title"/>-->
@@ -118,7 +125,7 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="Customer information" Margin="0 0 0 20"/>
+                    <TextBlock Grid.Row="0" Text="Customer information" FontWeight="Bold" FontSize="15" Margin="0 0 0 20"/>
                     <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock Text="Full Name: "/>
                         <TextBox PlaceholderText="Full Name" Text="{Binding BindingCustomer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 20"/>
@@ -144,7 +151,7 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="Summary" Margin="0 0 0 20"/>
+                    <TextBlock Grid.Row="0" Text="Summary" Margin="0 0 0 20" FontWeight="Bold" FontSize="15"/>
                     <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock Margin="0 0 0 20">Customer: <Run Text="{Binding BindingCustomer.Name}"/></TextBlock>
                         <TextBlock Margin="0 0 0 20">Date: <Run Text="{Binding NewBill.TransactionDate}"/> </TextBlock>
@@ -159,116 +166,4 @@
             <Button Content="Save" Margin="20 10 20 20" Padding="40 5 40 5" Command="{Binding ConfirmCommand}"></Button>
         </StackPanel>
     </Grid>
-    <!--<ScrollViewer>
-        <Grid VerticalAlignment="Center" Margin="10,10,10,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Text="Customer" VerticalAlignment="Center" FontWeight="Bold"/>
-            --><!--ComboBox of customers--><!--
-            <ComboBox Grid.Column="1" 
-                      ItemsSource="{Binding Customers}"
-                      DisplayMemberPath="Name"
-                      SelectedValue="{Binding SelectedCustomer, Mode=TwoWay}"/>
-
-            --><!--Display but not editable--><!--
-            <TextBlock Grid.Row="1" Text="Total Price" VerticalAlignment="Center" FontWeight="Bold"/>
-            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" Text="{Binding CurrentTotalPrice, Mode=TwoWay}"/>
-                <TextBlock VerticalAlignment="Center" Text=" VND"/>
-                <AppBarButton Icon="Refresh" Label="Refresh" Command="{Binding RefreshCommand}"/>
-            </StackPanel>
-
-            <TextBlock Grid.Row="2" Text="Transaction Date" VerticalAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding NewBill.TransactionDate}"/>
-
-            <TextBlock Grid.Row="4" Text="Bill Details" FontWeight="Bold" VerticalAlignment="Center"/>
-            <ListView Grid.Row="5" Grid.ColumnSpan="2" 
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                  Width="400" Height="400"
-                  HorizontalAlignment="Left"
-                  ItemsSource="{Binding BillDetailList, Mode=TwoWay}"
-                  SelectedItem="{Binding SelectedBillDetail, Mode=TwoWay}">
-
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Width="400" Height="100" VerticalAlignment="Center">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Text="Book" FontWeight="Light"/>
-                            <TextBlock Grid.Column="1" TextWrapping="WrapWholeWords">
-                                <Run Text="{Binding BookName}" FontWeight="Bold" Foreground="CadetBlue"/>
-                            </TextBlock>
-
-                            <TextBlock Grid.Row="1" Text="Book Price" FontWeight="Light"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="WrapWholeWords" HorizontalAlignment="Left">
-                                    <Run Text="{Binding Price}" FontWeight="Bold" Foreground="CadetBlue"/>
-                            </TextBlock>
-
-                            <TextBlock Grid.Row="2" Text="Quantity" FontWeight="Light"/>
-                            <NumberBox Grid.Row="2" Grid.Column="1" Minimum="1" Maximum="{Binding BookQuantity}" Text="{Binding Number, Mode=TwoWay}"
-                                       FontWeight="Bold" Foreground="CadetBlue"
-                                       ValidationMode="InvalidInputOverwritten"/>
-
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-
-                <ListView.Resources>
-                    <CommandBarFlyout Placement="Right" x:Name="CommandBarFlyout1">
-                        <AppBarButton Icon="Delete" Label="Delete" Command="{Binding DeleteCommand}"/>
-                    </CommandBarFlyout>
-                </ListView.Resources>
-
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
-                           MaximumRowsOrColumns="5"
-                           Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
-
-            <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" >
-                --><!--Choose book before adding--><!--
-                <TextBlock Text="Select Book " FontSize="13" VerticalAlignment="Center"/>
-                <ComboBox VerticalAlignment="Center" 
-                                      ItemsSource="{Binding Books}"
-                                      DisplayMemberPath="Title"
-                                      SelectedValue="{Binding SelectedBook, Mode=TwoWay}"/>
-
-                <AppBarButton Icon="Add" Label="Add Detail" Command="{Binding AddCommand}"/>
-                <AppBarButton Icon="Delete" Label="Delete Detail" Command="{Binding DeleteCommand}"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Back" Margin="10,10,10,10" Command="{Binding BackCommand}"/>
-                <Button Content="Confirm" Margin="10,10,10,10" Command="{Binding ConfirmCommand}"/>
-            </StackPanel>
-        </Grid>
-
-    </ScrollViewer>-->
 </Page>

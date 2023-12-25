@@ -154,7 +154,7 @@ namespace MyShop.ViewModel
 
                 if (BindingCustomer == null)
                 {
-                    await App.MainRoot.ShowDialog("No selected customer", "Please select the owner of this order!");
+                    await App.MainRoot.ShowDialog("No selected customer", "Please select the owner of this bill!");
                     return;
                 }
 
@@ -192,7 +192,7 @@ namespace MyShop.ViewModel
                     await _bookRepository.EditBookQuantity(Orders[i].BookId, Orders[i].StockQuantity - Orders[i].Number);
                 }
 
-                await App.MainRoot.ShowDialog("Success", "New order is added!");
+                await App.MainRoot.ShowDialog("Success", "New bill is added!");
                 ExecuteBackCommand();
             }
             catch (Exception ex)

@@ -14,7 +14,6 @@ namespace MyShop.Repository
 {
     class BillRepository : RepositoryBase, IBillRepository
     {
-
         public async Task<int> Add(Bill bill)
         {
             int id = 0;
@@ -129,7 +128,6 @@ namespace MyShop.Repository
                 {
                     sql = "select id,customer_id,total_price,transaction_date from BILL";
                     command = new SqlCommand(sql, connection);
-                    
                 }
                 else
                 {

@@ -46,7 +46,7 @@
                        Date="{Binding DateTo, Converter={StaticResource timeConverter}, Mode=TwoWay}" 
                        DateFormat = "{}{dayofweek.full}, {month.full} {day.integer}, {year.full}"/>
 
-            <Button Content="Search" VerticalAlignment="Center" Margin="10 35 10 10"></Button>
+            <Button Content="Search" VerticalAlignment="Center" Margin="10 35 10 10" Command="{Binding SearchCommand}"></Button>
         </StackPanel>
 
         <Border Grid.Row="1" Grid.Column="0" 
@@ -66,33 +66,33 @@
 
                 <TextBlock Grid.Row="0" Text="Bills" FontSize="20" FontWeight="Bold" Margin="0 0 0 20"></TextBlock>
 
-                <TextBlock Grid.Row="1" Text="The number of items: " Margin="0 0 0 10"></TextBlock>
+                <TextBlock Grid.Row="1" Margin="0 0 0 10">The number of items: <Run Text="{Binding TotalItems}"></Run></TextBlock>
 
                 <ctWinUI:DataGrid Grid.Row="2" x:Name="BillsDataGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                   AutoGenerateColumns="False" 
                                   CanUserSortColumns="True"
                                   IsReadOnly="True" AllowFocusOnInteraction="False" AllowDrop="False" AllowFocusWhenDisabled="False"
                                   BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0"
-                                  ItemsSource="{Binding DisplayBillList, Mode=TwoWay}"
-                                  SelectedItem="{Binding SelectedBill, Mode=TwoWay}">
+                                  ItemsSource="{Binding BillRowList, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedBillRow, Mode=TwoWay}">
                     <ctWinUI:DataGrid.Columns>
-                        <ctWinUI:DataGridTextColumn Header="ID" 
-                                                    Binding="{Binding Id}"
-                                                    Tag="ID"
-                                                    Width="Auto"/>
+                        <ctWinUI:DataGridTextColumn Header="No" 
+                                                    Binding="{Binding No}"
+                                                    Tag="No"
+                                                    Width="1*"/>
 
-                        <ctWinUI:DataGridTextColumn Header="Cutomer ID"
-                                                    Binding="{Binding CustomerId}"
+                        <ctWinUI:DataGridTextColumn Header="Cutomer"
+                                                    Binding="{Binding CustomerName}"
                                                     Tag="Cutomer ID"
-                                                    Width="Auto"/>
+                                                    Width="2*"/>
 
                         <ctWinUI:DataGridTextColumn Header="Total Price"
                                                     Binding="{Binding TotalPrice}"
-                                                    Tag="Total Price" Width="1*"/>
+                                                    Tag="Total Price" Width="2*"/>
                         
-                        <ctWinUI:DataGridTextColumn Header="Transaction Date"
+                        <ctWinUI:DataGridTextColumn Header="Date"
                                                     Binding="{Binding TransactionDate}"
-                                                    Tag="Transaction Date" Width="1*"/>
+                                                    Tag="Date" Width="2*"/>
                     </ctWinUI:DataGrid.Columns>
                 </ctWinUI:DataGrid>
             </Grid>
@@ -115,8 +115,8 @@
 
                 <TextBlock Grid.Row="0" Text="Bill Detail Of Selected Bill" FontSize="20" FontWeight="Bold" Margin="0 0 0 20"></TextBlock>
 
-                <TextBlock Text="{Binding SelectedCustomer}" Foreground="Blue" Grid.Row="1" Margin="0 0 0 10">
-                    Customer:
+                <TextBlock Foreground="Blue" Grid.Row="1" Margin="0 0 0 10">
+                    Customer: <Run Text="{Binding SelectedBillRow.CustomerName}" Foreground="Blue"></Run>
                 </TextBlock>
 
 
@@ -128,18 +128,24 @@
                                   BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0"
                                   ItemsSource="{Binding SelectedBillDetailList, Mode=TwoWay}">
                     <ctWinUI:DataGrid.Columns>
-                        <ctWinUI:DataGridTextColumn Header="Book ID"
-                                                    Binding="{Binding BookId}"
-                                                    Tag="ID"
-                                                    Width="Auto"/>
+                        <ctWinUI:DataGridTextColumn Header="No"
+                                                    Binding="{Binding No}"
+                                                    Tag="No"
+                                                    Width="2*"/>
+                        
+                        <ctWinUI:DataGridTextColumn Header="Book"
+                                                    Binding="{Binding BookName}"
+                                                    Tag="Book"
+                                                    Width="3*"/>
 
                         <ctWinUI:DataGridTextColumn Header="Number"
                                                     Binding="{Binding Number}"
-                                                    Tag="Cutomer ID"
-                                                    Width="1*"/>
+                                                    Tag="Number"
+                                                    Width="2*"/>
+                        
                         <ctWinUI:DataGridTextColumn Header="Price"
                                                     Binding="{Binding Price}"
-                                                    Tag="Price" Width="1*"/>
+                                                    Tag="Price" Width="3*"/>
                     </ctWinUI:DataGrid.Columns>
                 </ctWinUI:DataGrid>
             </Grid>
