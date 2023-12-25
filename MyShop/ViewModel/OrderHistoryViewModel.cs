@@ -32,20 +32,20 @@ namespace MyShop.ViewModel
         private int _totalPages;
         private List<Bill> _billList;
         private ObservableCollection<Bill> _displayBillList;
-        private Dictionary<int, List<BillDetail>> _billDetailDict; //int <<billId>> respective to the bill's list of <<billDetail>>
+        private Dictionary<int, List<Order>> _billDetailDict; //int <<billId>> respective to the bill's list of <<billDetail>>
 
         private IBillRepository _billRepository;
         private ICustomerRepository _customerRepository;
 
         private Bill _selectedBill;
-        private List<BillDetail> _selectedBillDetailList;
+        private List<Order> _selectedBillDetailList;
         private string _selectedCustomer;
 
         // Constructor
         public OrderHistoryViewModel() {
             _billRepository = new BillRepository();
             _customerRepository = new CustomerRepository();
-            _billDetailDict = new Dictionary<int, List<BillDetail>>();
+            _billDetailDict = new Dictionary<int, List<Order>>();
             BillList = new List<Bill>();
             DisplayBillList = new ObservableCollection<Bill>();
 
@@ -69,33 +69,9 @@ namespace MyShop.ViewModel
             GoToPreviousPageCommand = new RelayCommand(ExecuteGoToPreviousPageCommand);
         }
 
-        public async void ExecuteCreateOrderCommand()
+        public void ExecuteCreateOrderCommand()
         {
-            //var task = await _billRepository.GetEmptyBillId();
-            //int newId;
-
-            //if (task.Count > 0)
-            //{
-            //    newId = task[0];
-            //}
-            //else
-            //{
-            //    string username = ConfigurationManager.AppSettings["Username"]!;
-            //    Account customer = await _customerRepository.GetByUsername(username);
-
-            //    Bill newBill = new Bill
-            //    {
-            //        CustomerId = customer.Id,
-            //        TotalPrice = 0,
-            //        TransactionDate = DateOnly.FromDateTime(DateTime.Now),
-            //    };
-            //    await _billRepository.Add(newBill);
-
-            //    task = await _billRepository.GetEmptyBillId();
-            //    newId = task[0];
-            //}
-
-            ParentPageNavigation.ViewModel = new AddOrderViewModel(3);
+            ParentPageNavigation.ViewModel = new AddOrderViewModel();
         }
 
         public async void ExecuteDeleteOrderCommand()
@@ -112,7 +88,7 @@ namespace MyShop.ViewModel
                 int key = SelectedBill.Id;
 
                 // remove from DETAILTED_BILL
-                List<BillDetail> billDetail;
+                List<Order> billDetail;
                 _billDetailDict.TryGetValue(key, out billDetail);
                 for (int i = 0;i < billDetail.Count; i++)
                 {
@@ -150,7 +126,7 @@ namespace MyShop.ViewModel
 
             for (int i = 0; i < BillList.Count; i++)
             {
-                List<BillDetail> temp = await _billRepository.GetBillDetailById(BillList[i].Id);
+                List<Order> temp = await _billRepository.GetBillDetailById(BillList[i].Id);
 
                 _billDetailDict.Add(BillList[i].Id, temp);
             }
@@ -211,7 +187,7 @@ namespace MyShop.ViewModel
                 }
 
                 _selectedBill = value;
-                List<BillDetail> billDetail;
+                List<Order> billDetail;
                 _billDetailDict.TryGetValue(value.Id, out billDetail);
                 SelectedBillDetailList = billDetail;
                 SelectedCustomer = "Customer: " + getCustomerName(value.CustomerId);
@@ -234,7 +210,7 @@ namespace MyShop.ViewModel
         public int TotalItems { get => _totalItems; set => _totalItems = value; }
         public int TotalPages { get => _totalPages; set => _totalPages = value; }
         public List<Bill> BillList { get => _billList; set => _billList = value; }
-        public List<BillDetail> SelectedBillDetailList { get => _selectedBillDetailList; set => _selectedBillDetailList = value; }
+        public List<Order> SelectedBillDetailList { get => _selectedBillDetailList; set => _selectedBillDetailList = value; }
         public string SelectedCustomer { get => _selectedCustomer; set => _selectedCustomer = value; }
 
         public void ExecuteGoToNextPageCommand()
@@ -281,7 +257,7 @@ namespace MyShop.ViewModel
 
                 for (int i = 0; i < BillList.Count; i++)
                 {
-                    List<BillDetail> temp = await _billRepository.GetBillDetailById(BillList[i].Id);
+                    List<Order> temp = await _billRepository.GetBillDetailById(BillList[i].Id);
 
                     _billDetailDict.Add(BillList[i].Id, temp);
                 }

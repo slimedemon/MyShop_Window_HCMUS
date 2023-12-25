@@ -6,15 +6,16 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MyShop.Repository
 {
     public class CustomerRepository: RepositoryBase, ICustomerRepository
     {
-        public async Task<bool> Add(Customer customer)
+        public async Task<int> Add(Customer customer)
         {
-            bool isSuccessful = false;
             var connection = GetConnection();
+            int id = 0;
 
             await Task.Run(() =>
             {
@@ -24,22 +25,27 @@ namespace MyShop.Repository
             if (connection != null && connection.State == ConnectionState.Open)
             {
                 string sql = "insert into CUSTOMER (name,phone,address)" +
-                    "values (@name, @phone, @address)";
+                    "values (@name, @phone, @address); " +
+                    " select ident_current('customer');";
                 var command = new SqlCommand(sql, connection);
 
-                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name;
-                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber;
-                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address;
+                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Name;
+                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber == null ? DBNull.Value : customer.PhoneNumber;
+                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address == null ? DBNull.Value : customer.Address;
 
-                int rowsAffected = command.ExecuteNonQuery();
-
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
-
+                try
+                {
+                    id = (int)((decimal)command.ExecuteScalar());
+                }
+                catch (Exception ex)
+                { 
+                    MessageBox.Show(ex.Message);
+                }
 
                 connection.Close();
             }
-            return isSuccessful;
+
+            return id;
         }
 
         public async Task<bool> Edit(Customer customer)
@@ -57,9 +63,9 @@ namespace MyShop.Repository
                 string sql = "update CUSTOMER set name=@name,phone=@phone,address=@address " +
                     "where id = @id";
                 var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name;
-                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber;
-                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address;
+                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Name;
+                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber == null ? DBNull.Value : customer.PhoneNumber;
+                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address == null ? DBNull.Value : customer.Address;
                 int rowsAffected = command.ExecuteNonQuery();
 
                 if (rowsAffected > 0) { isSuccessful = true; }

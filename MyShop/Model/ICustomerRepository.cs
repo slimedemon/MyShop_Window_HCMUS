@@ -10,7 +10,7 @@ namespace MyShop.Model
 {
     public interface ICustomerRepository
     {
-        Task<bool> Add(Customer customer);
+        Task<int> Add(Customer customer);
         Task<bool> Edit(Customer customer);
         Task<List<Customer>> GetAll();
         Task<Customer> GetById(int id);

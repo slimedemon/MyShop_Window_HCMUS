@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.Model
 {
-    public class Customer
+    public class Customer: INotifyPropertyChanged
     {
         private int _id;
         private string _name;

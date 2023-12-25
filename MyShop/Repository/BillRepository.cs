@@ -15,9 +15,9 @@ namespace MyShop.Repository
     class BillRepository : RepositoryBase, IBillRepository
     {
 
-        public async Task Add(Bill bill)
+        public async Task<int> Add(Bill bill)
         {
-            bool isSuccessful = false;
+            int id = 0;
             var connection = GetConnection();
 
             await Task.Run(() =>
@@ -32,18 +32,18 @@ namespace MyShop.Repository
             if (connection != null && connection.State == ConnectionState.Open)
             {
                 string sql = "insert into BILL (customer_id,total_price,transaction_date) " +
-                    "values (@customer_id,@total_price,@transaction_date)";
+                    "values (@customer_id,@total_price,@transaction_date); "+
+                    "select ident_current('BILL');"; ;
                 var command = new SqlCommand(sql, connection);
                 command.Parameters.Add("@customer_id", SqlDbType.Int).Value = bill.CustomerId;
                 command.Parameters.Add("@total_price", SqlDbType.Int).Value = bill.TotalPrice;
                 command.Parameters.Add("@transaction_date", SqlDbType.Date).Value = bill.TransactionDate;
-                int rowsAffected = command.ExecuteNonQuery();
-
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
+                id = (int)((decimal)command.ExecuteScalar());
 
                 connection.Close();
             }
+
+            return id;
         }
 
         public async Task Edit(Bill bill)
@@ -235,14 +235,15 @@ namespace MyShop.Repository
                     int id = Convert.ToInt32(reader["id"]);
                     ids.Add(id);
                 }
+
                 connection.Close();
             }
             return ids;
         }
 
-        public async Task<List<BillDetail>> GetBillDetailById(int billId)
+        public async Task<List<Order>> GetBillDetailById(int billId)
         {
-            List<BillDetail> details = new List<BillDetail>();
+            List<Order> details = new List<Order>();
             var connection = GetConnection();
 
             await Task.Run(() =>
@@ -276,13 +277,13 @@ namespace MyShop.Repository
 
                     string title = Convert.ToString(reader["title"]);
 
-                    details.Add(new BillDetail
+                    details.Add(new Order
                     {
                         BillId = billId,
                         BookId = bookId,
                         Price = price,
                         Number = number,
-                        BookQuantity = quantity,
+                        StockQuantity = quantity,
                         BookName = title
                     });
                 }
@@ -322,7 +323,7 @@ namespace MyShop.Repository
             return bookIds;
         }
 
-        public async Task AddBillDetail(BillDetail billDetail)
+        public async Task AddBillDetail(Order billDetail)
         {
             bool isSuccessful = false;
             var connection = GetConnection();
@@ -354,7 +355,7 @@ namespace MyShop.Repository
             }
         }
         
-        public async Task EditBillDetail(BillDetail billDetail)
+        public async Task EditBillDetail(Order billDetail)
         {
             bool isSuccessful = false;
             var connection = GetConnection();

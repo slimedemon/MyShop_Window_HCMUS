@@ -47,16 +47,24 @@
                 </Grid.RowDefinitions>
 
                 <!-- search box-->
-                <AutoSuggestBox Grid.Row="0" PlaceholderText="Type a book name" HorizontalAlignment="Left" QueryIcon="Find" Width="250" Margin="0 0 0 20"/>
+                <ComboBox Grid.Row="0" 
+                          PlaceholderText="Type a book name" 
+                          HorizontalAlignment="Left" 
+                        ItemsSource="{Binding Books}"
+                          DisplayMemberPath="Title"
+                          SelectedValue="{Binding SelectedBook, Mode=TwoWay}"
+                          Width="250" 
+                          Margin="0 0 0 20"/>
+                <!--<AutoSuggestBox Grid.Row="0" PlaceholderText="Type a book name" HorizontalAlignment="Left" QueryIcon="Find" Width="250" Margin="0 0 0 20" ItemsSource="{Binding Books}" DisplayMemberPath="Title" TextMemberPath="Title"/>-->
 
                 <!-- small controls -->
                 <ctWinUI:WrapPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 0 0 20">
                     <TextBlock Text="Number: " VerticalAlignment="Center"></TextBlock>
-                    <NumberBox PlaceholderText="Number" Margin="5 0 20 0" Width="80" VerticalAlignment="Center"/>
+                    <NumberBox PlaceholderText="Number" Margin="5 0 20 0" Width="80" VerticalAlignment="Center" Minimum="1" Maximum="{Binding SelectedBook.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="{Binding BindingOrder.Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Text="Discount (%): " VerticalAlignment="Center"></TextBlock>
-                    <TextBox PlaceholderText="Discount (%)" Margin="5 0 20 0" Width="100" VerticalAlignment="Center"/>
-                    <Button Content="Add" Margin="0 0 20 0" Width="100" VerticalAlignment="Center"/>
-                    <Button Content="Remove" Width="100" VerticalAlignment="Center"/>
+                    <TextBox PlaceholderText="Discount (%)" Margin="5 0 20 0" Width="100" VerticalAlignment="Center" />
+                    <Button Content="Add" Margin="0 0 20 0" Width="100" VerticalAlignment="Center" Command="{Binding AddCommand}"/>
+                    <Button Content="Remove" Width="100" VerticalAlignment="Center" Command="{Binding RemoveCommand}"/>
                 </ctWinUI:WrapPanel>
 
                 <!-- info box and control box-->
@@ -71,15 +79,17 @@
                                       AutoGenerateColumns="False"
                                       CanUserSortColumns="True"
                                       IsReadOnly="True" AllowFocusOnInteraction="False" AllowDrop="False" AllowFocusWhenDisabled="False"
-                                      BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0">
+                                      BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0"
+                                      SelectedItem="{Binding SelectedOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding Orders}">
                         <ctWinUI:DataGrid.Columns>
-                            <ctWinUI:DataGridTextColumn Header="#" Tag="#" Width="1*"/>
+                            <ctWinUI:DataGridTextColumn Header="#" Tag="#" Width="1*" Binding="{Binding No}"/>
 
-                            <ctWinUI:DataGridTextColumn Header="Book" Tag="Book" Width="2*"/>
+                            <ctWinUI:DataGridTextColumn Header="Book" Tag="Book" Width="2*" Binding="{Binding BookName}"/>
 
-                            <ctWinUI:DataGridTextColumn Header="Number" Tag="Number" Width="1*"/>
+                            <ctWinUI:DataGridTextColumn Header="Number" Tag="Number" Width="1*" Binding="{Binding Number}"/>
 
-                            <ctWinUI:DataGridTextColumn Header="Price" Tag="Price" Width="1*"/>
+                            <ctWinUI:DataGridTextColumn Header="Price" Tag="Price" Width="1*" Binding="{Binding Price}"/>
                         </ctWinUI:DataGrid.Columns>
                     </ctWinUI:DataGrid>
 
@@ -111,13 +121,12 @@
                     <TextBlock Grid.Row="0" Text="Customer information" Margin="0 0 0 20"/>
                     <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock Text="Full Name: "/>
-                        <TextBox PlaceholderText="Full Name" Margin="0 0 0 20"/>
+                        <TextBox PlaceholderText="Full Name" Text="{Binding BindingCustomer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 20"/>
                         <TextBlock Text="Phone Number: "/>
-                        <TextBox PlaceholderText="Phone Number" Margin="0 0 0 20"/>
+                        <TextBox PlaceholderText="Phone Number" Text="{Binding BindingCustomer.PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 20"/>
                         <TextBlock Text="Address: "/>
-                        <TextBox PlaceholderText="Address" Margin="0 0 0 20"/>
+                        <TextBox PlaceholderText="Address" Text="{Binding BindingCustomer.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 20"/>
                     </StackPanel>
-                   
                 </Grid>
             </Border>
 
@@ -137,18 +146,17 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="Summary" Margin="0 0 0 20"/>
                     <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
-                        <TextBlock Text="Customer: " Margin="0 0 0 20"/>
-                        <TextBlock Text="Date: " Margin="0 0 0 20"/>
-                        <TextBlock Text="Total: " Margin="0 0 0 20"></TextBlock>
+                        <TextBlock Margin="0 0 0 20">Customer: <Run Text="{Binding BindingCustomer.Name}"/></TextBlock>
+                        <TextBlock Margin="0 0 0 20">Date: <Run Text="{Binding NewBill.TransactionDate}"/> </TextBlock>
+                        <TextBlock Margin="0 0 0 20">Total: <Run Text="{Binding CurrentTotalPrice}"/></TextBlock>
                     </StackPanel>
-
                 </Grid>
             </Border>
         </Grid>
 
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" >
-            <Button Content="Back" Margin="20 10 20 20" Padding="40 5 40 5"></Button>
-            <Button Content="Save" Margin="20 10 20 20" Padding="40 5 40 5"></Button>
+            <Button Content="Back" Margin="20 10 20 20" Padding="40 5 40 5" Command="{Binding BackCommand}"></Button>
+            <Button Content="Save" Margin="20 10 20 20" Padding="40 5 40 5" Command="{Binding ConfirmCommand}"></Button>
         </StackPanel>
     </Grid>
     <!--<ScrollViewer>
