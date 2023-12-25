@@ -39,7 +39,7 @@
         <!--Input book information for bill-->
         <Border
             Grid.Row="1" Grid.Column="0"
-            BorderBrush="LightGray"
+            BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
             BorderThickness="1"
             Padding="10" 
             Margin="20 20 0 20"
@@ -112,7 +112,7 @@
             </Grid.RowDefinitions>
             <Border
                 Grid.Row="0"
-                BorderBrush="LightGray" 
+                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 Padding="10" 
                 Margin="20"
@@ -138,7 +138,7 @@
 
             <Border
              Grid.Row="1"
-             BorderBrush="LightGray" 
+             BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}" 
              BorderThickness="1"
              Padding="10" 
              Margin="20 0 20 20"
@@ -161,8 +161,8 @@
         </Grid>
 
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" >
-            <Button Content="Back" Margin="20 10 20 20" Padding="40 5 40 5" Command="{Binding BackCommand}"></Button>
-            <Button Content="Save" Margin="20 10 20 20" Padding="40 5 40 5" Command="{Binding ConfirmCommand}"></Button>
+            <Button Content="Back" Margin="20 10 20 20" Padding="20 5 20 5" Width="100" Command="{Binding BackCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
+            <Button Content="Save" Margin="20 10 20 20" Padding="20 5 20 5" Width="100" Command="{Binding ConfirmCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
         </StackPanel>
     </Grid>
 </Page>

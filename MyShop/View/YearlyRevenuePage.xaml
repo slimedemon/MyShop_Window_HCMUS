@@ -26,7 +26,7 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0"        
-                BorderBrush="LightGray" 
+                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 CornerRadius="10"
                 HorizontalAlignment="Stretch"
@@ -71,7 +71,7 @@
         </Border>
 
         <Border Grid.Column="1"     
-                BorderBrush="LightGray" 
+                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 CornerRadius="10"
                 HorizontalAlignment="Stretch"

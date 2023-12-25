@@ -86,45 +86,4 @@
             <Image Grid.Column="1" Source="/Assets/bg_home.png" Stretch="Uniform" ></Image>
         </Grid>
     </Grid>
-
-
-    <!--<Grid MaxWidth="300">
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-
-            <TextBlock Text="Database Login" 
-                       FontWeight="SemiBold"
-                       FontSize="25"
-                       TextAlignment="Center"></TextBlock>
-
-            <TextBlock Text="{Binding ErrorMessage}"
-                       TextWrapping="WrapWholeWords"
-                       TextAlignment="Center"
-                       FontSize="10"></TextBlock>
-
-            <TextBox x:Name="usernameTextBox" 
-                     PlaceholderText="Username"
-                     Text="{Binding DbUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-            <PasswordBox x:Name="passwordBox" 
-                         PasswordRevealMode="Hidden" 
-                         PlaceholderText="Password"
-                         Password="{Binding DbPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-            <CheckBox Name="revealModeCheckBox" Content="Show password" IsChecked="False"
-            Checked="RevealModeCheckbox_Changed" Unchecked="RevealModeCheckbox_Changed"/>
-
-            <Button Content="SIGN IN"
-                    Command="{Binding LoginCommand}"
-                    HorizontalAlignment="Stretch"
-                    x:Name="loginButton">
-
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="10">
-                        </Setter>
-                    </Style>
-                </Button.Resources>
-            </Button>
-        </StackPanel>
-    </Grid>-->
 </Page>

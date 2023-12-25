@@ -132,7 +132,7 @@
                 <!-- TOP 5 BOOKS ARE RUNNING OUT OF STOCK SOON-->
                 <Border 
                     Grid.Column="0"
-                    BorderBrush="LightGray" 
+                    BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                     BorderThickness="1"
                     Padding="10" 
                     CornerRadius="10"
@@ -174,7 +174,7 @@
 
                 <!--Pie chart of top 5 book best seller-->
                 <Border Grid.Row="1"          
-                        BorderBrush="LightGray" 
+                        BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                         BorderThickness="1"
                         CornerRadius="10"
                         HorizontalAlignment="Stretch"
@@ -191,7 +191,7 @@
 
             <!--Line chart of the revenue of this month-->
             <Border Grid.Column="1"
-                    BorderBrush="LightGray" 
+                    BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                     BorderThickness="1"
                     CornerRadius="10"
                     HorizontalAlignment="Stretch"

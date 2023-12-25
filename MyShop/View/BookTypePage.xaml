@@ -19,7 +19,7 @@
 
         <Border 
                Grid.Column="0" 
-               BorderBrush="LightGray" 
+               BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                BorderThickness="1"
                Padding="10" 
                CornerRadius="10"

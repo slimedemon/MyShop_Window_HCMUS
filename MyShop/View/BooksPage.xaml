@@ -78,7 +78,7 @@
             </Grid.RowDefinitions>
             <Border 
                 Grid.Row="0"
-                BorderBrush="LightGray" 
+                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 Padding="10" 
                 CornerRadius="10"
@@ -162,7 +162,7 @@
         </Grid>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
-            <AppBarButton x:Name="addButton" Icon="Add" Label="Add" Command="{Binding AddBookCommand}"/>
+            <AppBarButton x:Name="addButton" Icon="Add" Label="Add" Command="{Binding AddBookCommand}" />
             <AppBarButton x:Name="deleteButton" Icon="Delete" Label="Delete" Command="{Binding DeleteBookCommand}"/>
             <AppBarButton x:Name="updateButton" Icon="Edit" Label="Update" Command="{Binding EditBookCommand}"/>
         </StackPanel>

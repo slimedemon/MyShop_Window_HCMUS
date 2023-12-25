@@ -32,8 +32,7 @@
         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Add a new book" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"></TextBlock>
 
         <Border 
-             Grid.Row="1" Grid.Column="0"
-             BorderBrush="LightGray" 
+             Grid.Row="1" Grid.Column="0" BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
              BorderThickness="1"
              Padding="10" 
              CornerRadius="10"
@@ -98,7 +97,7 @@
 
             <Border 
                 Grid.Row="0"
-                BorderBrush="LightGray" 
+                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 Padding="10" 
                 CornerRadius="10"
@@ -123,14 +122,14 @@
                                 </Image.Source>
                             </Image>
                         </Grid>
-                        <Button Content="Browse" HorizontalAlignment="Center" Command="{Binding BrowseCommand}"></Button>
+                        <Button Content="Browse" HorizontalAlignment="Center" Command="{Binding BrowseCommand}" Width="80" Style="{StaticResource AccentButtonStyle}"></Button>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <Border 
                 Grid.Row="1"
-                BorderBrush="LightGray" 
+                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 Padding="10" 
                 CornerRadius="10"
@@ -147,8 +146,8 @@
         </Grid>
 
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Width="80" Content="Back" Margin="10" Command="{Binding BackCommand}"></Button>
-            <Button Width="80" Content="Add" Margin="10"  Command="{Binding ConfirmCommand}"></Button>
+            <Button Width="100" Content="Back" Margin="10" Command="{Binding BackCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
+            <Button Width="100" Content="Add" Margin="10"  Command="{Binding ConfirmCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
         </StackPanel>
     </Grid>
 </Page>

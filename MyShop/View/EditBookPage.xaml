@@ -33,7 +33,7 @@
 
         <Border 
            Grid.Row="1" Grid.Column="0"
-           BorderBrush="Gray" Background="#e0e0e0"
+           BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
            BorderThickness="1"
            Padding="10" 
            CornerRadius="10"
@@ -97,7 +97,7 @@
 
             <Border 
                 Grid.Row="0"
-                BorderBrush="LightGray" Background="White"
+                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 Padding="10" 
                 CornerRadius="10"
@@ -126,7 +126,7 @@
 
             <Border 
                 Grid.Row="1"
-                BorderBrush="LightGray" Background="White"
+                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 Padding="10" 
                 CornerRadius="10"
