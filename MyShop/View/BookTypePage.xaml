@@ -28,28 +28,24 @@
                Margin="10 30 10 10">
             <ScrollView HorizontalAlignment="Stretch">
                 <ListView 
-           x:Name="dataListView"
-           Margin="10,20,0,0"
-           ItemsSource="{Binding Genres, Mode=TwoWay}"
-           SelectedItem="{Binding SelectedGenre, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          HorizontalAlignment="Center">
-                 
-
+                    x:Name="dataListView"
+                    Margin="10,20,0,0"
+                    ItemsSource="{Binding DisplayGenreRowsCollection, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedGenreRow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    HorizontalAlignment="Center">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Id}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" GotFocus="TextBox_GotFocus">
-                                   
-                                </TextBox>
+                                <TextBlock Text="{Binding No}" VerticalAlignment="Center" Margin="0,0,10,0" Width="30"/>
+                                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" GotFocus="TextBox_GotFocus"></TextBox>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
-                    MaximumRowsOrColumns="5"
-                    Orientation="Horizontal"/>
+                                           MaximumRowsOrColumns="5"
+                                           Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                 </ListView>
