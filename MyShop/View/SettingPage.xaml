@@ -8,6 +8,8 @@
     xmlns:local="using:MyShop.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="using:MyShop.ViewModel"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -15,7 +17,55 @@
         <viewmodel:SettingViewModel x:Name="thisViewModel"/>
     </Page.DataContext>
 
-    <Grid Margin="20, 20, 20, 20">
+    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="40" Orientation="Vertical">
+        <HyperlinkButton Content="Do you want to configure items per page?" Click="ShowItemPerPages"></HyperlinkButton>
+        <StackPanel Name="ItemPerPageGroup" Orientation="Vertical" Margin="30 0 0 20" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Items per page: " VerticalAlignment="Center"></TextBlock>
+                <NumberBox Width="350" Minimum="5" Maximum="40" Margin="20 0 0 0" Value="{Binding ItemsPerPage}"></NumberBox>
+            </StackPanel>
+            <Button Content="Save" HorizontalAlignment="Center" Margin="0 20 0 0" Width="100" Style="{StaticResource AccentButtonStyle}" Command="{Binding SaveSettingCommand}"></Button>
+        </StackPanel>
+
+        <HyperlinkButton Content="Do you want to open last closed page?" Click="ShowOpenLastPageGroup"></HyperlinkButton>
+        <StackPanel Name="OpenLastPageGroup" Orientation="Horizontal" Margin="30 0 0 20" Visibility="Collapsed">
+            <ToggleSwitch Name="rememberPageSwitch" Header="Open last closed page" OffContent="Disabled" OnContent="Enabled" IsOn="{Binding ToggleSwitchIsOn, Mode=TwoWay}">
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="Toggled">
+                        <core:InvokeCommandAction Command="{Binding SaveRememberPageCommand}" CommandParameter="{Binding ElementName=ItemPerPageGroup}"/>
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </ToggleSwitch>
+        </StackPanel>
+
+        <HyperlinkButton Content="Do you want to import Genres?" Click="ShowImportGenreGroup"></HyperlinkButton>
+        <StackPanel Name="ImportGenreGroup" Margin="30 0 0 20" Visibility="Collapsed">
+            <TextBlock Text="Restore original data"/>
+            <Button Content="Import" Margin="0,10,10,10" Width="100" Style="{StaticResource AccentButtonStyle}">
+                <Button.Flyout>
+                    <MenuFlyout Placement="Right">
+                        <MenuFlyoutItem Text="Excel (.xls/.xlsx)" Command="{Binding ImportByExcelCommand}" Icon="PreviewLink"/>
+                        <MenuFlyoutItem Text="Access (.accdb)" Command="{Binding ImportByAccessCommand}" Icon="SwitchApps"/>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </StackPanel>
+
+        <HyperlinkButton Content="Do you want to import Books?" Click="ShowImportBookGroup"></HyperlinkButton>
+        <StackPanel Name="ImportBookGroup" Margin="30 0 0 20" Visibility="Collapsed">
+            <TextBlock Text="Restore original data"/>
+            <Button Content="Import" Margin="0,10,10,10" Style="{StaticResource AccentButtonStyle}" Width="100">
+                <Button.Flyout>
+                    <MenuFlyout Placement="Right">
+                        <MenuFlyoutItem Text="Excel (.xls/.xlsx)" Command="{Binding ImportByExcelCommand}" Icon="PreviewLink"/>
+                        <MenuFlyoutItem Text="Access (.accdb)" Command="{Binding ImportByAccessCommand}" Icon="SwitchApps"/>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </StackPanel>
+    </StackPanel>
+
+    <!--<Grid Margin="20, 20, 20, 20">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -65,5 +115,5 @@
                       Grid.Row="3" Grid.Column="1" 
                       x:Name="saveButton" Icon="Save" Label="Save"
                       Command="{Binding SaveSettingCommand}"/>
-    </Grid>
+    </Grid>-->
 </Page>

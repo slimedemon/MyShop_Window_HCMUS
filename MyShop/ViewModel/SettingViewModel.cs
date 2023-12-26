@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Controls;
 using MyShop.Model;
 using MyShop.Repository;
 using MyShop.Services;
@@ -8,9 +9,11 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.System.Preview;
 
 namespace MyShop.ViewModel
 {
@@ -22,13 +25,29 @@ namespace MyShop.ViewModel
         private IBookRepository _bookRepository;
 
         // getter, setter
-        public bool ToggleSwitchIsOn { get => _toggleSwitchIsOn; set => _toggleSwitchIsOn = value; }
-        public int ItemsPerPage { get => _itemsPerPage; set => _itemsPerPage = value; }
+        public bool ToggleSwitchIsOn 
+        { 
+            get => _toggleSwitchIsOn;
+            set
+            {
+                _toggleSwitchIsOn = value;
+                ExecuteSaveRememberPageCommand();
+                OnPropertyChanged(nameof(ToggleSwitchIsOn));
+            }
+        }
+        public int ItemsPerPage 
+        { 
+            get => _itemsPerPage;
+            set => _itemsPerPage = value;
+        }
+
+
         public RelayCommand SaveSettingCommand { get => _saveSettingCommand; set => _saveSettingCommand = value; }
         public RelayCommand ImportByExcelCommand { get => _importByExcelCommand; set => _importByExcelCommand = value; }
         public RelayCommand ImportByAccessCommand { get => _importByAccessCommand; set => _importByAccessCommand = value; }
 
         //-> Commands
+        private RelayCommand<object> _saveRememberPageCommand;
         private RelayCommand _saveSettingCommand;
         private RelayCommand _importByExcelCommand;
         private RelayCommand _importByAccessCommand;
@@ -36,6 +55,7 @@ namespace MyShop.ViewModel
         // Constructor
         public SettingViewModel()
         {
+            ToggleSwitchIsOn = false;
             _bookRepository = new BookRepository();
             SaveSettingCommand = new RelayCommand(ExecuteSaveSettingCommand);
             PageLoaded();
@@ -45,23 +65,47 @@ namespace MyShop.ViewModel
 
         private void PageLoaded()
         {
-            //get from local
-            ItemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["ItemsPerPage"]);
-            //CurrentPage = ConfigurationManager.AppSettings["RememberPage"];
+            try
+            {
+                ItemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["ItemsPerPage"]);
+                ToggleSwitchIsOn = Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private async void ExecuteSaveSettingCommand()
         {
-            var sysconfig = ConfigurationManager.OpenExeConfiguration(
-                    ConfigurationUserLevel.None);
-            if (_toggleSwitchIsOn == true)
+            try
             {
-                //sysconfig.AppSettings.Settings["RememberPage"].Value = currentPage;
-            }
-            sysconfig.AppSettings.Settings["ItemsPerPage"].Value = ItemsPerPage.ToString();
-            sysconfig.Save(ConfigurationSaveMode.Full);
-            ConfigurationManager.RefreshSection("appSettings");
+                var sysconfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                sysconfig.AppSettings.Settings["ItemsPerPage"].Value = ItemsPerPage.ToString();
+                sysconfig.Save(ConfigurationSaveMode.Full);
+                ConfigurationManager.RefreshSection("appSettings");
 
-            await App.MainRoot.ShowDialog("Save", "Your changes have been successfully saved and applied.");
+                await App.MainRoot.ShowDialog("Success", "Your changes have been successfully saved and applied.");
+            }
+            catch(Exception ex)
+            { 
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void ExecuteSaveRememberPageCommand()
+        {
+            try
+            {
+                var sysconfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                sysconfig.AppSettings.Settings["RememberPage"].Value = ToggleSwitchIsOn.ToString();
+                sysconfig.Save(ConfigurationSaveMode.Full);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private async void ExecuteImportByAccessCommand()
@@ -83,7 +127,6 @@ namespace MyShop.ViewModel
                 //_bookRepository.Refresh(books, genres);
                 //await App.MainRoot.ShowDialog("NOTIFICATION", "Restore successfully!");
             }
-
         }
 
         private async void ExecuteImportByExcelCommand()

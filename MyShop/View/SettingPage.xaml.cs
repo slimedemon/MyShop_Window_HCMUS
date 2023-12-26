@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.VoiceCommands;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -26,6 +27,54 @@ namespace MyShop.View
         public SettingPage()
         {
             this.InitializeComponent();
+        }
+
+        private void ShowItemPerPages(object sender, RoutedEventArgs e)
+        {
+            if (ItemPerPageGroup.Visibility == Visibility.Collapsed)
+            {
+                ItemPerPageGroup.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ItemPerPageGroup.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void ShowOpenLastPageGroup(object sender, RoutedEventArgs e)
+        {
+            if (OpenLastPageGroup.Visibility == Visibility.Collapsed)
+            {
+                OpenLastPageGroup.Visibility = Visibility.Visible;
+            }
+            else
+            { 
+                OpenLastPageGroup.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void ShowImportGenreGroup(object sender, RoutedEventArgs e)
+        {
+            if (ImportGenreGroup.Visibility == Visibility.Collapsed)
+            {
+                ImportGenreGroup.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ImportGenreGroup.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void ShowImportBookGroup(object sender, RoutedEventArgs e)
+        {
+            if (ImportBookGroup.Visibility == Visibility.Collapsed)
+            {
+                ImportBookGroup.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ImportBookGroup.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

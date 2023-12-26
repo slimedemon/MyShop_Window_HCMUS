@@ -8,7 +8,7 @@
     xmlns:vm="using:MyShop.ViewModel" d:DataContext="{d:DesignInstance Type=vm:HomeViewModel}"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    mc:Ignorable="d"
+    mc:Ignorable="d" 
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
         <NavigationView x:Name="nvHomePage"
@@ -24,7 +24,7 @@
                 </core:EventTriggerBehavior>
             </i:Interaction.Behaviors>
 
-            <NavigationView.MenuItems >
+            <NavigationView.MenuItems>
                 <NavigationViewItem Content="Dashboard" Icon="SolidStar" IsSelected="True"/>
                 <NavigationViewItem Content="Statistic" Icon="Shop"/>
                 <NavigationViewItem Content="Book" Icon="Library" />
