@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.Data.SqlClient;
 using Microsoft.Identity.Client;
 using Microsoft.UI.Xaml;
 using MyShop.Model;
@@ -35,7 +36,7 @@ namespace MyShop.ViewModel
 
         public RelayCommand SaveCommand { get; set; }
         public RelayCommand BackCommand { get; set; }
-        public RelayCommand TrustedConnectionCommand { get; set; }
+        public RelayCommand WindowsAuthenticationCommand { get; set; }
         public RelayCommand StandardSecurityCommand { get; set; }
         public RelayCommand CustomConnectionCommand { get; set; }
         public RelayCommand LoadedCommand { get; set; }
@@ -45,7 +46,7 @@ namespace MyShop.ViewModel
             _type = "Trusted Connection";
             SaveCommand = new RelayCommand(ExecuteSaveCommand);
             BackCommand = new RelayCommand(ExecuteBackCommand);
-            TrustedConnectionCommand = new RelayCommand(ExecuteTrustedConnectionCommand);
+            WindowsAuthenticationCommand = new RelayCommand(ExecuteWindowsAuthenticationCommand);
             StandardSecurityCommand = new RelayCommand(ExecuteStandardSecurityCommand);
             CustomConnectionCommand = new RelayCommand(ExecuteCustomConnectionCommand);
             LoadedCommand = new RelayCommand(PageLoaded);
@@ -53,16 +54,23 @@ namespace MyShop.ViewModel
 
         private async void ExecuteSaveCommand()
         {
+            var builder = new SqlConnectionStringBuilder();
+            builder.DataSource = ServerAddress;
+            builder.InitialCatalog = DatabaseName;
+            builder.TrustServerCertificate = true;
+
             // Create connection string
-            if (_type.Equals("Trusted Connection"))
+            if (_type.Equals("Windows Authentication"))
             {
-                string template = $"Server={ServerAddress};Database={DatabaseName};Trusted_Connection=True;";
-                ConnectionString = template;
+                builder.IntegratedSecurity = true;
+                ConnectionString = builder.ConnectionString;
             }
             else if (_type.Equals("Standard Security"))
             {
-                string template = $"Server={ServerAddress};Database={DatabaseName};User Id={DbUsername};Password={DbPassword};";
-                ConnectionString = template;
+
+                builder.UserID = DbUsername;
+                builder.Password = DbPassword;
+                ConnectionString = builder.ConnectionString;
             }
             else if (_type.Equals("Custom Connection String"))
             {
@@ -89,17 +97,17 @@ namespace MyShop.ViewModel
 
                 var passwordIn64 = Convert.ToBase64String(cypherText);
                 var entropyIn64 = Convert.ToBase64String(entropy);
-                sysconfig.AppSettings.Settings["dbPassword"].Value = passwordIn64;
-                sysconfig.AppSettings.Settings["dbEntropy"].Value = entropyIn64;
+                sysconfig.AppSettings.Settings["DbPassword"].Value = passwordIn64;
+                sysconfig.AppSettings.Settings["DbEntropy"].Value = entropyIn64;
             }
 
-            if (DbUsername != null) sysconfig.AppSettings.Settings["dbUsername"].Value = DbUsername;
-            if (ServerAddress != null) sysconfig.AppSettings.Settings["serverAddress"].Value = ServerAddress;
-            if (DatabaseName != null) sysconfig.AppSettings.Settings["databaseName"].Value = DatabaseName;
-            if (ConnectionString != null) sysconfig.AppSettings.Settings["connectionString"].Value = ConnectionString;
+            if (DbUsername != null) sysconfig.AppSettings.Settings["DbUsername"].Value = DbUsername;
+            if (ServerAddress != null) sysconfig.AppSettings.Settings["ServerAddress"].Value = ServerAddress;
+            if (DatabaseName != null) sysconfig.AppSettings.Settings["DatabaseName"].Value = DatabaseName;
+            if (ConnectionString != null) sysconfig.AppSettings.Settings["ConnectionString"].Value = ConnectionString;
 
             sysconfig.Save(ConfigurationSaveMode.Full);
-            System.Configuration.ConfigurationManager.RefreshSection("appSettings");
+            System.Configuration.ConfigurationManager.RefreshSection("AppSettings");
 
             await App.MainRoot.ShowDialog("Success", "Database configuration is saved!");
         }
@@ -109,9 +117,9 @@ namespace MyShop.ViewModel
             ParentPageNavigation.ViewModel = new LoginViewModel();
         }
 
-        private void ExecuteTrustedConnectionCommand()
+        private void ExecuteWindowsAuthenticationCommand()
         {
-            _type = "Trusted Connection";
+            _type = "Windows Authentication";
         }
 
         private void ExecuteStandardSecurityCommand()
@@ -132,26 +140,25 @@ namespace MyShop.ViewModel
         private void PageLoaded()
         {
             //get from local
-            DbUsername = ConfigurationManager.AppSettings["Username"];
-            ServerAddress = ConfigurationManager.AppSettings["serverName"];
-            DatabaseName = ConfigurationManager.AppSettings["databaseName"];
-            ConnectionString = ConfigurationManager.AppSettings["connectionString"];
+            DbUsername = ConfigurationManager.AppSettings["DbUsername"];
+            ServerAddress = ConfigurationManager.AppSettings["ServerName"];
+            DatabaseName = ConfigurationManager.AppSettings["DatabaseName"];
+            ConnectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
-            string passwordIn64 = ConfigurationManager.AppSettings["Password"];
-            string entropyIn64 = ConfigurationManager.AppSettings["Entropy"]!;
+            string dbPasswordIn64 = ConfigurationManager.AppSettings["DbPassword"];
+            string dbEntropyIn64 = ConfigurationManager.AppSettings["DbEntropy"]!;
 
-            if (passwordIn64.Length != 0)
+            if (dbPasswordIn64.Length != 0)
             {
-                byte[] entropyInBytes = Convert.FromBase64String(entropyIn64);
-                byte[] cypherTextInBytes = Convert.FromBase64String(passwordIn64);
+                byte[] dbEntropyInBytes = Convert.FromBase64String(dbEntropyIn64);
+                byte[] dbCypherTextInBytes = Convert.FromBase64String(dbPasswordIn64);
 
-                byte[] passwordInBytes = ProtectedData.Unprotect(cypherTextInBytes,
-                    entropyInBytes,
+                byte[] dbPasswordInBytes = ProtectedData.Unprotect(dbCypherTextInBytes,
+                    dbEntropyInBytes,
                     DataProtectionScope.CurrentUser
                 );
 
-                string password = Encoding.UTF8.GetString(passwordInBytes);
-                DbPassword = password;
+                DbPassword = Encoding.UTF8.GetString(dbPasswordInBytes);
             }
 
             if (ServerAddress == null || ServerAddress.Equals(""))
@@ -161,12 +168,12 @@ namespace MyShop.ViewModel
 
             if (DatabaseName == null || DatabaseName.Equals(""))
             {
-                DatabaseName = "db_book";
+                DatabaseName = "MyShopDB";
             }
 
             if (ConnectionString == null || ConnectionString.Equals(""))
             {
-                ConnectionString = "Server=.\\SQLEXPRESS;Database=db_book;Trusted_Connection=True;TrustServerCertificate=true;";
+                ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=MyShopDB;Integrated Security=True;Trust Server Certificate=True";
             }
 
             CustomConnectionString = ConnectionString;
@@ -236,10 +243,6 @@ namespace MyShop.ViewModel
 
         //    sysconfig.Save(ConfigurationSaveMode.Full);
         //    System.Configuration.ConfigurationManager.RefreshSection("appSettings");
-
-
         //}
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

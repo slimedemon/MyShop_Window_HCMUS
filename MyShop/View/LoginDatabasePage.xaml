@@ -52,7 +52,7 @@
 
                 <TextBlock Text="SELECT CONNECTION" FontSize="15" FontWeight="Bold" Margin="0 0 0 0"></TextBlock>
                 <StackPanel>
-                    <RadioButton Content="Trusted Connection" Command="{Binding TrustedConnectionCommand}" IsChecked="True"></RadioButton>
+                    <RadioButton Content="Windows Authetication" Command="{Binding WindowAuthenticationCommand}" IsChecked="True"></RadioButton>
 
                     <RadioButton Content="Standard Security" Command="{Binding StandardSecurityCommand}"></RadioButton>
 
@@ -61,15 +61,16 @@
                                  PlaceholderText="Username"
                                  Text="{Binding DbUsername}"
                                  Margin="0 5 0 0"/>
-                        <TextBox x:Name="passwordTextBox"
+                        <PasswordBox x:Name="passwordTextBox"
                                  PlaceholderText="Password"
-                                 Text="{Binding DbPassword}"
+                                 Password="{Binding DbPassword}"
                                  Margin="0 20 0 0"/>
+                        <CheckBox Name="revealModeCheckBox" Content="Show password" IsChecked="False" Margin="0 20 0 0"
+                                  Checked="RevealModeCheckbox_Changed" Unchecked="RevealModeCheckbox_Changed"/>
                     </StackPanel>
 
                     <RadioButton Content="Custom Connection" Command="{Binding CustomConnectionCommand}"></RadioButton>
                     <StackPanel Margin="40 0 0 0">
-                        <TextBlock Text="Custom Connection String" Margin="0 0 0 5"/>
                         <TextBox x:Name="customConnectionString" Text="{Binding CustomConnectionString, Mode=TwoWay}"/>
                     </StackPanel>
                 </StackPanel>

@@ -28,16 +28,16 @@ namespace MyShop.View
             this.InitializeComponent();
         }
 
-        //private void RevealModeCheckbox_Changed(object sender, RoutedEventArgs e)
-        //{
-        //    if (revealModeCheckBox.IsChecked == true)
-        //    {
-        //        passwordBox.PasswordRevealMode = PasswordRevealMode.Visible;
-        //    }
-        //    else
-        //    {
-        //        passwordBox.PasswordRevealMode = PasswordRevealMode.Hidden;
-        //    }
-        //}
+        private void RevealModeCheckbox_Changed(object sender, RoutedEventArgs e)
+        {
+            if (revealModeCheckBox.IsChecked == true)
+            {
+                passwordTextBox.PasswordRevealMode = PasswordRevealMode.Visible;
+            }
+            else
+            {
+                passwordTextBox.PasswordRevealMode = PasswordRevealMode.Hidden;
+            }
+        }
     }
 }
