@@ -4,6 +4,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.UI.Xaml.Controls;
 using MyShop.Repository;
+using MyShop.Services;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -93,6 +94,11 @@ namespace MyShop.ViewModel
         private async void DisplayChart()
         {
             var task = await _statisticRepository.GetMonthlyStatistic(SelectedStartDate.Date, SelectedEndDate.Date);
+            if (task == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                task = new List<Tuple<DateTime, int>>();
+            }
 
             var series = new LineSeries<Tuple<DateTime, int>>()
             {

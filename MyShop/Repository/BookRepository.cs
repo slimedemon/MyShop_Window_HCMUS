@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Accessibility;
+using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Abstractions;
 using MyShop.Model;
 using MyShop.Services;
 using System;
@@ -11,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Windows.Storage;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -22,34 +25,43 @@ namespace MyShop.Repository
         {
             bool isSuccessful = false;
             var connection = GetConnection();
-
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "insert into BOOK (title,author,description,genre_id,price,quantity,published_date,image)" +
-                    "values (@title,@author,@description,@genre_id,@price,@quantity,@published_date, @image)";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title;
-                command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author;
-                command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description;
-                command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image;
-                command.Parameters.Add("@genre_id", SqlDbType.Int).Value = book.GenreId;
-                command.Parameters.Add("@price", SqlDbType.Int).Value = book.Price;
-                command.Parameters.Add("@quantity", SqlDbType.Int).Value = book.Quantity;
-                command.Parameters.Add("@published_date", SqlDbType.Date).Value = book.PublishedDate;
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "insert into BOOK (title,author,description,genre_id,price,quantity,published_date,image)" +
+                        "values (@title,@author,@description,@genre_id,@price,@quantity,@published_date, @image)";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title;
+                    command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author;
+                    command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description;
+                    command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image;
+                    command.Parameters.Add("@genre_id", SqlDbType.Int).Value = book.GenreId;
+                    command.Parameters.Add("@price", SqlDbType.Int).Value = book.Price;
+                    command.Parameters.Add("@quantity", SqlDbType.Int).Value = book.Quantity;
+                    command.Parameters.Add("@published_date", SqlDbType.Date).Value = book.PublishedDate;
 
-                int rowsAffected = command.ExecuteNonQuery();
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
-
-
-                connection.Close();
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
+                }
             }
+            catch (Exception ex)
+            {
+                isSuccessful = false;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            { 
+                connection?.Close();
+            }
+
             return isSuccessful;
         }
 
@@ -58,25 +70,36 @@ namespace MyShop.Repository
             bool isSuccessful = false;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "insert into Genre (name) values (@name)";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = genre.Name;
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "insert into Genre (name) values (@name)";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@name", SqlDbType.NVarChar).Value = genre.Name;
 
-                int rowsAffected = command.ExecuteNonQuery();
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
-
-
-                connection.Close();
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
+                }
             }
+            catch (Exception ex)
+            {
+                isSuccessful = false;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
+            }
+
+         
             return isSuccessful;
         }
 
@@ -85,33 +108,46 @@ namespace MyShop.Repository
             bool isSuccessful = false;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "update BOOK set title=@title,author=@author,description=@description,genre_id=@genre_id," +
-                    "price=@price,quantity=@quantity,published_date=@published_date,image=@image " +
-                    "where id = @id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title;
-                command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author;
-                command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description;
-                command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image;
-                command.Parameters.Add("@genre_id", SqlDbType.Int).Value = book.GenreId;
-                command.Parameters.Add("@price", SqlDbType.Int).Value = book.Price;
-                command.Parameters.Add("@quantity", SqlDbType.Int).Value = book.Quantity;
-                command.Parameters.Add("@published_date", SqlDbType.Date).Value = book.PublishedDate;
-                command.Parameters.Add("@id", SqlDbType.Int).Value = book.Id;
-                int rowsAffected = command.ExecuteNonQuery();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "update BOOK set title=@title,author=@author,description=@description,genre_id=@genre_id," +
+                        "price=@price,quantity=@quantity,published_date=@published_date,image=@image " +
+                        "where id = @id";
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title;
+                    command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author;
+                    command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description;
+                    command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image;
+                    command.Parameters.Add("@genre_id", SqlDbType.Int).Value = book.GenreId;
+                    command.Parameters.Add("@price", SqlDbType.Int).Value = book.Price;
+                    command.Parameters.Add("@quantity", SqlDbType.Int).Value = book.Quantity;
+                    command.Parameters.Add("@published_date", SqlDbType.Date).Value = book.PublishedDate;
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = book.Id;
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                connection.Close();
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
+                }
             }
+            catch (Exception ex)
+            {
+                isSuccessful = false;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
+            }
+
+
             return isSuccessful;
         }
 
@@ -120,30 +156,42 @@ namespace MyShop.Repository
             bool isSuccessful = false;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "update GENRE set name=@name where id = @id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = genre.Name;
-                command.Parameters.Add("@id", SqlDbType.Int).Value = genre.Id;
-                int rowsAffected = command.ExecuteNonQuery();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "update GENRE set name=@name where id = @id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@name", SqlDbType.NVarChar).Value = genre.Name;
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = genre.Id;
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
 
-                connection.Close();
+                }
             }
+            catch (Exception ex)
+            {
+                isSuccessful = false;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
+            }
+
+
             return isSuccessful;
         }
 
         public List<Book> Filter(List<Book> booksList, int startPrice = 0, int endPrice = Int32.MaxValue, string keyword = "", int genre = 0)
         {
-            // Sử dụng LINQ để thực hiện các điều kiện lọc trên danh sách sách
             var filteredBooks = booksList.Where(book =>
                 book.Price >= startPrice &&
                 book.Price <= endPrice &&
@@ -159,46 +207,56 @@ namespace MyShop.Repository
             List<Book> books = new List<Book>();
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
-
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "select id,title,image,author,description,genre_id,price,quantity,published_date from BOOK";
-                var command = new SqlCommand(sql, connection);
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
+                await Task.Run(() =>
                 {
-                    int id = Convert.ToInt32(reader["id"]);
-                    string title = Convert.ToString(reader["title"]);
-                    string author = Convert.ToString(reader["author"]);
-                    string description = Convert.ToString(reader["description"]);
-                    string image = Convert.ToString(reader["image"]);
-                    int genre_id = Convert.ToInt32(reader["genre_id"]);
-                    int price = Convert.ToInt32(reader["price"]);
-                    int quantity = Convert.ToInt32(reader["quantity"]);
-                    object obj = reader["published_date"];
-                    DateOnly published_date = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-                    books.Add(new Book
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "select id,title,image,author,description,genre_id,price,quantity,published_date from BOOK";
+                    var command = new SqlCommand(sql, connection);
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
                     {
-                        Id = id,
-                        Title = title,
-                        Author = author,
-                        Description = description,
-                        Image = image,
-                        GenreId = genre_id,
-                        Price = price,
-                        Quantity = quantity,
-                        PublishedDate = published_date
-                    });
-                }
-                reader.Close();
+                        int id = Convert.ToInt32(reader["id"]);
+                        string title = Convert.ToString(reader["title"]);
+                        string author = Convert.ToString(reader["author"]);
+                        string description = Convert.ToString(reader["description"]);
+                        string image = Convert.ToString(reader["image"]);
+                        int genre_id = Convert.ToInt32(reader["genre_id"]);
+                        int price = Convert.ToInt32(reader["price"]);
+                        int quantity = Convert.ToInt32(reader["quantity"]);
+                        object obj = reader["published_date"];
+                        DateOnly published_date = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
 
-                connection.Close();
+                        books.Add(new Book
+                        {
+                            Id = id,
+                            Title = title,
+                            Author = author,
+                            Description = description,
+                            Image = image,
+                            GenreId = genre_id,
+                            Price = price,
+                            Quantity = quantity,
+                            PublishedDate = published_date
+                        });
+                    }
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                books = null;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
             }
 
             return books;
@@ -209,44 +267,56 @@ namespace MyShop.Repository
             Book newBook = null;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try 
             {
-                connection.Open();
-            }).ConfigureAwait(false);
-
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "select title,author,description,image,genre_id,price,quantity,published_date from BOOK" +
-                    "where id = @id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
-                var reader = command.ExecuteReader();
-                while (reader.Read())
+                await Task.Run(() =>
                 {
-                    string title = Convert.ToString(reader["title"]);
-                    string author = Convert.ToString(reader["author"]);
-                    string description = Convert.ToString(reader["description"]);
-                    string image = Convert.ToString(reader["image"]);
-                    int genre_id = Convert.ToInt32(reader["genre_id"]);
-                    int price = Convert.ToInt32(reader["price"]);
-                    int quantity = Convert.ToInt32(reader["quantity"]);
-                    DateOnly published_date = DateOnly.FromDateTime(Convert.ToDateTime(reader["published_date"]));
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-                    newBook = new Book
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "select title,author,description,image,genre_id,price,quantity,published_date from BOOK" +
+                        "where id = @id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
                     {
-                        Id = id,
-                        Title = title,
-                        Author = author,
-                        Description = description,
-                        Image = image,
-                        GenreId = genre_id,
-                        Price = price,
-                        Quantity = quantity,
-                        PublishedDate = published_date
-                    };
+                        string title = Convert.ToString(reader["title"]);
+                        string author = Convert.ToString(reader["author"]);
+                        string description = Convert.ToString(reader["description"]);
+                        string image = Convert.ToString(reader["image"]);
+                        int genre_id = Convert.ToInt32(reader["genre_id"]);
+                        int price = Convert.ToInt32(reader["price"]);
+                        int quantity = Convert.ToInt32(reader["quantity"]);
+                        DateOnly published_date = DateOnly.FromDateTime(Convert.ToDateTime(reader["published_date"]));
+
+                        newBook = new Book
+                        {
+                            Id = id,
+                            Title = title,
+                            Author = author,
+                            Description = description,
+                            Image = image,
+                            GenreId = genre_id,
+                            Price = price,
+                            Quantity = quantity,
+                            PublishedDate = published_date
+                        };
+                    }
                 }
-                connection.Close();
             }
+            catch (Exception ex)
+            {
+                newBook = null;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
+            }
+        
             return newBook;
         }
 
@@ -255,31 +325,41 @@ namespace MyShop.Repository
             List<Genre> genres = new List<Genre>();
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
-
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "select id,name from GENRE";
-                var command = new SqlCommand(sql, connection);
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
+                await Task.Run(() =>
                 {
-                    int id = Convert.ToInt32(reader["id"]);
-                    string name = Convert.ToString(reader["name"]);
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-                    genres.Add(new Genre
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "select id,name from GENRE";
+                    var command = new SqlCommand(sql, connection);
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
                     {
-                        Id = id,
-                        Name = name
-                    });
-                }
-                reader.Close();
+                        int id = Convert.ToInt32(reader["id"]);
+                        string name = Convert.ToString(reader["name"]);
 
-                connection.Close();
+                        genres.Add(new Genre
+                        {
+                            Id = id,
+                            Name = name
+                        });
+                    }
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                genres = null;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
             }
 
             return genres;
@@ -290,23 +370,35 @@ namespace MyShop.Repository
             bool isSuccessful = false;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "delete from BOOK where id = @id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
-                int rowsAffected = command.ExecuteNonQuery();
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "delete from BOOK where id = @id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                connection.Close();
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
+                }
             }
+            catch (Exception ex)
+            {
+                isSuccessful = false;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
+            }
+
             return isSuccessful;
         }
 
@@ -315,23 +407,34 @@ namespace MyShop.Repository
             bool isSuccessful = false;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "delete from GENRE where id = @id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
-                int rowsAffected = command.ExecuteNonQuery();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "delete from GENRE where id = @id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
-
-                connection.Close();
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
+                }
             }
+            catch (Exception ex)
+            {
+                isSuccessful = false;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
+            }
+
             return isSuccessful;
         }
 
@@ -340,24 +443,35 @@ namespace MyShop.Repository
             bool isSuccessful = false;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "update BOOK set quantity=@quantity where id=@id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
-                command.Parameters.Add("@quantity", SqlDbType.Int).Value = quantity;
-                int rowsAffected = command.ExecuteNonQuery();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "update BOOK set quantity=@quantity where id=@id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    command.Parameters.Add("@quantity", SqlDbType.Int).Value = quantity;
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
-
-                connection.Close();
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
+                }
             }
+            catch (Exception ex)
+            {
+                isSuccessful = false;
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
+            }
+           
             return isSuccessful;
         }
 
@@ -442,71 +556,89 @@ namespace MyShop.Repository
         {
             var _books = new List<Book>();
 
-            // If you use EPPlus in a noncommercial context
-            // according to the Polyform Noncommercial license:
-            OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
-
-            var stream = await file.OpenStreamForReadAsync();
-            var excelPackage = new OfficeOpenXml.ExcelPackage(stream);
-
-            string message = file.Name + "\n";
-            foreach (var excelWorksheet in excelPackage.Workbook.Worksheets)
+            try
             {
-                message += "found sheet: " + excelWorksheet.Name + "\n";
-            }
-            await App.MainRoot.ShowDialog("DEBUG", message);
-            var worksheet = excelPackage.Workbook.Worksheets["BOOK"];
-            int rows = worksheet.Dimension.Rows;
-            int columns = worksheet.Dimension.Columns;
+                // If you use EPPlus in a noncommercial context
+                // according to the Polyform Noncommercial license:
+                OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-            for (int row = 2; row <= rows; row++) // Assuming data starts from row 2
-            {
-                // Read data from Excel cells and create a data model
-                Book dataModel = new Book
+                var stream = await file.OpenStreamForReadAsync();
+                var excelPackage = new OfficeOpenXml.ExcelPackage(stream);
+
+                string message = file.Name + "\n";
+                foreach (var excelWorksheet in excelPackage.Workbook.Worksheets)
                 {
-                    Id = Convert.ToInt32(worksheet.Cells[row, 1].Value),
-                    Title = worksheet.Cells[row, 2].Value?.ToString(),
-                    Author = worksheet.Cells[row, 3].Value?.ToString(),
-                    Image = worksheet.Cells[row, 4].Value?.ToString(),
-                    GenreId = Convert.ToInt32(worksheet.Cells[row, 5].Value?.ToString()),
-                    Description = worksheet.Cells[row, 6].Value?.ToString(),
-                    PublishedDate = DateOnly.Parse(worksheet.Cells[row, 7].Value?.ToString()),
-                    Price = Convert.ToInt32(worksheet.Cells[row, 8].Value),
-                    Quantity = Convert.ToInt32(worksheet.Cells[row, 9].Value),
-                    // Add more properties for other columns as needed
-                };
-                _books.Add(dataModel); // Add data model to the collection
+                    message += "found sheet: " + excelWorksheet.Name + "\n";
+                }
+                await App.MainRoot.ShowDialog("DEBUG", message);
+                var worksheet = excelPackage.Workbook.Worksheets["BOOK"];
+                int rows = worksheet.Dimension.Rows;
+                int columns = worksheet.Dimension.Columns;
+
+                for (int row = 2; row <= rows; row++) // Assuming data starts from row 2
+                {
+                    // Read data from Excel cells and create a data model
+                    Book dataModel = new Book
+                    {
+                        Id = Convert.ToInt32(worksheet.Cells[row, 1].Value),
+                        Title = worksheet.Cells[row, 2].Value?.ToString(),
+                        Author = worksheet.Cells[row, 3].Value?.ToString(),
+                        Image = worksheet.Cells[row, 4].Value?.ToString(),
+                        GenreId = Convert.ToInt32(worksheet.Cells[row, 5].Value?.ToString()),
+                        Description = worksheet.Cells[row, 6].Value?.ToString(),
+                        PublishedDate = DateOnly.Parse(worksheet.Cells[row, 7].Value?.ToString()),
+                        Price = Convert.ToInt32(worksheet.Cells[row, 8].Value),
+                        Quantity = Convert.ToInt32(worksheet.Cells[row, 9].Value),
+                        // Add more properties for other columns as needed
+                    };
+                    _books.Add(dataModel); // Add data model to the collection
+                }
             }
+            catch (Exception ex)
+            {
+                _books = null;
+                MessageBox.Show(ex.Message);
+            }
+
             return _books;
         }
 
         public async Task<List<Genre>> ReadBookGenreFromExcelFile(StorageFile file)
         {
             var _genres = new List<Genre>();
-            // If you use EPPlus in a noncommercial context
-            // according to the Polyform Noncommercial license:
-            OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-            using (var stream = await file.OpenStreamForReadAsync())
+            try
             {
-                using (var excelPackage = new OfficeOpenXml.ExcelPackage(stream))
-                {
-                    var worksheet = excelPackage.Workbook.Worksheets["GENRE"];
-                    int rows = worksheet.Dimension.Rows;
-                    int columns = worksheet.Dimension.Columns;
+                // If you use EPPlus in a noncommercial context
+                // according to the Polyform Noncommercial license:
+                OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-                    for (int row = 2; row <= rows; row++) // Assuming data starts from row 2
+                using (var stream = await file.OpenStreamForReadAsync())
+                {
+                    using (var excelPackage = new OfficeOpenXml.ExcelPackage(stream))
                     {
-                        // Read data from Excel cells and create a data model
-                        Genre dataModel = new Genre
+                        var worksheet = excelPackage.Workbook.Worksheets["GENRE"];
+                        int rows = worksheet.Dimension.Rows;
+                        int columns = worksheet.Dimension.Columns;
+
+                        for (int row = 2; row <= rows; row++) // Assuming data starts from row 2
                         {
-                            Id = Convert.ToInt32(worksheet.Cells[row, 1].Value),
-                            Name = worksheet.Cells[row, 2].Value?.ToString(),
-                            // Add more properties for other columns as needed
-                        };
-                        _genres.Add(dataModel); // Add data model to the collection
+                            // Read data from Excel cells and create a data model
+                            Genre dataModel = new Genre
+                            {
+                                Id = Convert.ToInt32(worksheet.Cells[row, 1].Value),
+                                Name = worksheet.Cells[row, 2].Value?.ToString(),
+                                // Add more properties for other columns as needed
+                            };
+                            _genres.Add(dataModel); // Add data model to the collection
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                _genres = null;
             }
             return _genres;
         }
@@ -515,42 +647,50 @@ namespace MyShop.Repository
         {
             var books = new List<Book>();
 
-            // Set up the query to retrieve genre data from the file
-            var query = "SELECT id,title,author,description,genre_id,price,quantity,published_date,image FROM BOOK";
-
-            // Open a connection to the Access file
-            using (var connection = GetOleSqlConnection(file))
+            try
             {
-                await connection.OpenAsync();
+                // Set up the query to retrieve genre data from the file
+                var query = "SELECT id,title,author,description,genre_id,price,quantity,published_date,image FROM BOOK";
 
-                // Create a command to execute the query
-                using (var command = new OleDbCommand(query, connection))
+                // Open a connection to the Access file
+                using (var connection = GetOleSqlConnection(file))
                 {
-                    // Execute the query and get a reader to read the results
-                    using (var reader = await command.ExecuteReaderAsync())
+                    await connection.OpenAsync();
+
+                    // Create a command to execute the query
+                    using (var command = new OleDbCommand(query, connection))
                     {
-                        // Read the results into genre objects and add them to the collection
-                        while (await reader.ReadAsync())
+                        // Execute the query and get a reader to read the results
+                        using (var reader = await command.ExecuteReaderAsync())
                         {
-                            object obj = reader["published_date"];
-                            DateOnly published_date = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
-                            var newBook = new Book
+                            // Read the results into genre objects and add them to the collection
+                            while (await reader.ReadAsync())
                             {
-                                Id = Convert.ToInt32(reader["id"]),
-                                Title = reader["title"].ToString(),
-                                Author = reader["author"].ToString(),
-                                Description = reader["description"].ToString(),
-                                GenreId = Convert.ToInt32(reader["genre_id"]),
-                                Price = Convert.ToInt32(reader["price"]),
-                                Quantity = Convert.ToInt32(reader["quantity"]),
-                                PublishedDate = published_date,
-                                Image = reader["image"].ToString(),
-                                // Add more properties for other columns as needed
-                            };
-                            books.Add(newBook);
+                                object obj = reader["published_date"];
+                                DateOnly published_date = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
+                                var newBook = new Book
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Title = reader["title"].ToString(),
+                                    Author = reader["author"].ToString(),
+                                    Description = reader["description"].ToString(),
+                                    GenreId = Convert.ToInt32(reader["genre_id"]),
+                                    Price = Convert.ToInt32(reader["price"]),
+                                    Quantity = Convert.ToInt32(reader["quantity"]),
+                                    PublishedDate = published_date,
+                                    Image = reader["image"].ToString(),
+                                    // Add more properties for other columns as needed
+                                };
+                                books.Add(newBook);
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                books = null;
             }
 
             return books;
@@ -560,34 +700,41 @@ namespace MyShop.Repository
         {
             var genres = new List<Genre>();
 
-
-            // Set up the query to retrieve genre data from the file
-            var query = "SELECT id,name FROM GENRE";
-
-            // Open a connection to the Access file
-            using (var connection = GetOleSqlConnection(file))
+            try
             {
-                await connection.OpenAsync();
+                // Set up the query to retrieve genre data from the file
+                var query = "SELECT id,name FROM GENRE";
 
-                // Create a command to execute the query
-                using (var command = new OleDbCommand(query, connection))
+                // Open a connection to the Access file
+                using (var connection = GetOleSqlConnection(file))
                 {
-                    // Execute the query and get a reader to read the results
-                    using (var reader = await command.ExecuteReaderAsync())
+                    await connection.OpenAsync();
+
+                    // Create a command to execute the query
+                    using (var command = new OleDbCommand(query, connection))
                     {
-                        // Read the results into genre objects and add them to the collection
-                        while (await reader.ReadAsync())
+                        // Execute the query and get a reader to read the results
+                        using (var reader = await command.ExecuteReaderAsync())
                         {
-                            var genre = new Genre
+                            // Read the results into genre objects and add them to the collection
+                            while (await reader.ReadAsync())
                             {
-                                Id = Convert.ToInt32(reader["id"]),
-                                Name = reader["name"].ToString(),
-                                // Add more properties for other columns as needed
-                            };
-                            genres.Add(genre);
+                                var genre = new Genre
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Name = reader["name"].ToString(),
+                                    // Add more properties for other columns as needed
+                                };
+                                genres.Add(genre);
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                genres = null;
+                MessageBox.Show(ex.Message);
             }
 
             return genres;

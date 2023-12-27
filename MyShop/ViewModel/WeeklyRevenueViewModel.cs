@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.Web.WebView2.Core;
 using MyShop.Model;
 using MyShop.Repository;
+using MyShop.Services;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,12 @@ namespace MyShop.ViewModel
             DateTime endDate = ListOfWeeks[SelectedIndex_EndDate].Item2;
 
             var task = await _statisticRepository.GetWeeklyStatistic(startDate.Date, endDate.Date);
+            if (task == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                task = new List<Tuple<DateTime, int>>();
+            }
 
             var series = new LineSeries<Tuple<DateTime, int>>()
             {
@@ -125,6 +132,13 @@ namespace MyShop.ViewModel
         private async void Load_ListOfWeeks(RoutedEventArgs e)
         {
             var task = await _statisticRepository.GetListOfWeeks();
+            if (task == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                task = new List<Tuple<int, DateTime>>();
+            }
+
             ListOfWeeks.Clear();
 
             task.ForEach(taskItem =>

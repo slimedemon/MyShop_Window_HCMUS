@@ -42,6 +42,13 @@ namespace MyShop.ViewModel
         {
             Genres = await _bookRepository.GetGenres();
 
+            if (Genres == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                // purpose: continue flow;
+                Genres = new List<Genre>();
+            }
+
             for (int i = 0; i < Genres.Count; i++)
             {
                 if (Genres[i].Id == CurrentBook.GenreId) {

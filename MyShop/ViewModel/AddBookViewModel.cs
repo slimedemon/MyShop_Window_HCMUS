@@ -44,6 +44,11 @@ namespace MyShop.ViewModel
         public async void PageLoaded()
         {
             Genres = await _bookRepository.GetGenres();
+            if (Genres == null)
+            {
+                Genres = new List<Genre>();
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+            }
         }
 
         public async void ExecuteConfirmCommand()

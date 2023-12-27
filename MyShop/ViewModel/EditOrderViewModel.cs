@@ -108,10 +108,22 @@ namespace MyShop.ViewModel
         {
             // Get all books
             var task1 = await _bookRepository.GetAll();
+            if (task1 == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                // purpose: to continue flow;
+                task1 = new List<Book>();
+            }
             task1.ForEach(book => Books.Add(book));
 
             // Get customer
             var task2 = await _customerRepository.GetById(CurrentBill.CustomerId);
+            if(task2 == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                return;
+            }
+
             BindingCustomer = task2;
 
             // Get all Orders
@@ -119,7 +131,8 @@ namespace MyShop.ViewModel
             if (task3 == null)
             {
                 await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
-                return;
+                // purpose: continue flow
+                task3 = new List<Order>();
             }
 
             //update current stock for all orders and restore quantity for each book before edit (when record is saved, stock is updated)
@@ -234,7 +247,12 @@ namespace MyShop.ViewModel
                 }
 
                 // Edit current customer
-                await _customerRepository.Edit(BindingCustomer);
+                var resultFlag = await _customerRepository.Edit(BindingCustomer);
+                if (resultFlag)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
 
                 // add bill values + update total price in real-time + update quantity
                 ExecuteRefreshCommand();
@@ -250,8 +268,8 @@ namespace MyShop.ViewModel
                 // remove original bill detail
                 for (int i = 0; i < _originalOrders.Count; i++)
                 {
-                    var resultFlag = await _billRepository.RemoveBillDetail(_originalOrders[i].BillId, _originalOrders[i].BookId);
-                    if (!resultFlag)
+                    var flag = await _billRepository.RemoveBillDetail(_originalOrders[i].BillId, _originalOrders[i].BookId);
+                    if (!flag)
                     {
                         await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
                         return;
@@ -262,8 +280,8 @@ namespace MyShop.ViewModel
                 for (int i = 0; i < Orders.Count; i++)
                 {
                     Orders[i].BillId = CurrentBill.Id;
-                    var resultFlag = await _billRepository.AddBillDetail(Orders[i]);
-                    if (!task)
+                    var flag = await _billRepository.AddBillDetail(Orders[i]);
+                    if (!flag)
                     {
                         await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
                         return;

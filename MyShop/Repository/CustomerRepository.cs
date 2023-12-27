@@ -17,32 +17,42 @@ namespace MyShop.Repository
             var connection = GetConnection();
             int id = 0;
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
-
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "insert into CUSTOMER (name,phone,address)" +
-                    "values (@name, @phone, @address); " +
-                    " select ident_current('customer');";
-                var command = new SqlCommand(sql, connection);
-
-                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Name;
-                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber == null ? DBNull.Value : customer.PhoneNumber;
-                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address == null ? DBNull.Value : customer.Address;
-
-                try
+                await Task.Run(() =>
                 {
-                    id = (int)((decimal)command.ExecuteScalar());
-                }
-                catch (Exception ex)
-                { 
-                    MessageBox.Show(ex.Message);
-                }
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-                connection.Close();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "insert into CUSTOMER (name,phone,address)" +
+                        "values (@name, @phone, @address); " +
+                        " select ident_current('customer');";
+                    var command = new SqlCommand(sql, connection);
+
+                    command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Name;
+                    command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber == null ? DBNull.Value : customer.PhoneNumber;
+                    command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address == null ? DBNull.Value : customer.Address;
+
+                    try
+                    {
+                        id = (int)((decimal)command.ExecuteScalar());
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                id = -1;
+            }
+            finally
+            { 
+                connection?.Close();
             }
 
             return id;
@@ -53,27 +63,40 @@ namespace MyShop.Repository
             bool isSuccessful = false;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "update CUSTOMER set name=@name,phone=@phone,address=@address " +
-                    "where id = @id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@id", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Id;
-                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Name;
-                command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber == null ? DBNull.Value : customer.PhoneNumber;
-                command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address == null ? DBNull.Value : customer.Address;
-                int rowsAffected = command.ExecuteNonQuery();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "update CUSTOMER set name=@name,phone=@phone,address=@address " +
+                        "where id = @id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@id", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Id;
+                    command.Parameters.Add("@name", SqlDbType.NVarChar).Value = customer.Name == null ? DBNull.Value : customer.Name;
+                    command.Parameters.Add("@phone", SqlDbType.VarChar).Value = customer.PhoneNumber == null ? DBNull.Value : customer.PhoneNumber;
+                    command.Parameters.Add("@address", SqlDbType.NVarChar).Value = customer.Address == null ? DBNull.Value : customer.Address;
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
 
-                connection.Close();
+                    connection.Close();
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                isSuccessful = false;
+            }
+            finally
+            {
+                connection?.Close();
+            }
+
             return isSuccessful;
         }
 
@@ -82,35 +105,45 @@ namespace MyShop.Repository
             List<Customer> customers = new List<Customer>();
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
-
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "select id,name,phone,address from CUSTOMER";
-                var command = new SqlCommand(sql, connection);
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
+                await Task.Run(() =>
                 {
-                    int id = Convert.ToInt32(reader["id"]);
-                    string name = Convert.ToString(reader["name"]);
-                    string phone = Convert.ToString(reader["phone"]);
-                    string address = Convert.ToString(reader["address"]);
-                  
-                    customers.Add(new Customer
-                    {
-                        Id = id,
-                        Name = name,
-                        PhoneNumber = phone,
-                        Address = address,
-                    });
-                }
-                reader.Close();
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-                connection.Close();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "select id,name,phone,address from CUSTOMER";
+                    var command = new SqlCommand(sql, connection);
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        int id = Convert.ToInt32(reader["id"]);
+                        string name = Convert.ToString(reader["name"]);
+                        string phone = Convert.ToString(reader["phone"]);
+                        string address = Convert.ToString(reader["address"]);
+
+                        customers.Add(new Customer
+                        {
+                            Id = id,
+                            Name = name,
+                            PhoneNumber = phone,
+                            Address = address,
+                        });
+                    }
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                customers = null;
+            }
+            finally
+            {
+                connection?.Close();
             }
 
             return customers;
@@ -121,35 +154,47 @@ namespace MyShop.Repository
             Customer customer = null;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
-
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "select name,phone,address from CUSTOMER " +
-                    "where id = @id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
-                var reader = command.ExecuteReader();
-                while (reader.Read())
+                await Task.Run(() =>
                 {
-                    string name = Convert.ToString(reader["name"]);
-                    string phone = Convert.ToString(reader["phone"]);
-                    string address = Convert.ToString(reader["address"]);
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-                    customer = new Customer
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "select name,phone,address from CUSTOMER " +
+                        "where id = @id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
                     {
-                        Id = id,
-                        Name = name,
-                        PhoneNumber = phone,
-                        Address = address,
-                    };
+                        string name = Convert.ToString(reader["name"]);
+                        string phone = Convert.ToString(reader["phone"]);
+                        string address = Convert.ToString(reader["address"]);
 
+                        customer = new Customer
+                        {
+                            Id = id,
+                            Name = name,
+                            PhoneNumber = phone,
+                            Address = address,
+                        };
+
+                    }
                 }
-                connection.Close();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                customer = null;
+            }
+            finally
+            {
+                connection?.Close();
+            }
+          
             return customer;
         }
 
@@ -158,23 +203,37 @@ namespace MyShop.Repository
             bool isSuccessful = false;
             var connection = GetConnection();
 
-            await Task.Run(() =>
+            try
             {
-                connection.Open();
-            }).ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    connection.Open();
+                }).ConfigureAwait(false);
 
-            if (connection != null && connection.State == ConnectionState.Open)
-            {
-                string sql = "delete from CUSTOMER where id = @id";
-                var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
-                int rowsAffected = command.ExecuteNonQuery();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "delete from CUSTOMER where id = @id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected > 0) { isSuccessful = true; }
-                else { isSuccessful = false; }
+                    if (rowsAffected > 0) { isSuccessful = true; }
+                    else { isSuccessful = false; }
 
-                connection.Close();
+                    connection.Close();
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                isSuccessful = false;
+            }
+            finally
+            {
+                connection?.Close();
+            }
+
+
             return isSuccessful;
         }
     }

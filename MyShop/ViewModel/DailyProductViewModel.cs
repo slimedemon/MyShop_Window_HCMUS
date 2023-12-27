@@ -81,6 +81,11 @@ namespace MyShop.ViewModel
         {
             NameBookDic.Clear();
             var task = await _statisticRepository.GetProductStatistic(StartDate.Date, EndDate.Date);
+            if (task == null)
+            {
+                task = new List<Tuple<string, int>>();
+            }
+
             var series = new ColumnSeries<Tuple<string, int>>()
             {
                 Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },

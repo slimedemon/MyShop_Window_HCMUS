@@ -14,6 +14,7 @@ using LiveChartsCore.SkiaSharpView;
 using System.Collections.ObjectModel;
 using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 using Windows.UI.Shell;
+using MyShop.Services;
 
 namespace MyShop.ViewModel
 {
@@ -87,6 +88,13 @@ namespace MyShop.ViewModel
         {
             NameBookDic.Clear();
             var task = await _statisticRepository.GetProductStatistic(SelectedStartDate.Date, SelectedEndDate.Date);
+            if (task == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow;
+                task = new List<Tuple<string, int>>();
+            }
+
             var series = new ColumnSeries<Tuple<string, int>>()
             {
                 Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },

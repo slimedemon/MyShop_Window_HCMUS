@@ -63,6 +63,13 @@ namespace MyShop.ViewModel
             }
 
             var task = await _bookRepository.EditGenre(new Genre() { Id = SelectedGenreRow.Id, Name = SelectedGenreRow.Name});
+
+            if (!task)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                return;
+            }
+
             UpdateDataSource();
         }
 
@@ -75,12 +82,24 @@ namespace MyShop.ViewModel
             }
 
             var task = await _bookRepository.RemoveGenre(SelectedGenreRow.Id);
+            if (!task)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                return;
+            }
+
             UpdateDataSource();
         }
 
         private async void ExecuteAddCommand()
         {
             var task = await _bookRepository.AddGenre(new Genre { Name = "New Genre" }) ;
+            if (!task)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                return;
+            }
+
             UpdateDataSource();
         }
         public void PageLoaded()
@@ -91,6 +110,11 @@ namespace MyShop.ViewModel
         public async void UpdateDataSource()
         {
             Genres = await _bookRepository.GetGenres();
+            if (Genres == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                Genres = new List<Genre>();
+            }
             DisplayGenreRowsCollection.Clear();
 
             for (int i = 0; i < Genres.Count; i++)

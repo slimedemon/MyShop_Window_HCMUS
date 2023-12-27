@@ -16,6 +16,7 @@ using LiveChartsCore;
 using SkiaSharp;
 using LiveChartsCore.SkiaSharpView;
 using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
+using MyShop.Services;
 
 namespace MyShop.ViewModel
 {
@@ -98,6 +99,13 @@ namespace MyShop.ViewModel
             DateTime endDate = ListOfWeeks[SelectedIndex_EndDate].Item2;
 
             var task = await _statisticRepository.GetProductStatistic(startDate.Date, endDate.Date);
+            if (task == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                task = new List<Tuple<string, int>>();
+            }
+
             var series = new ColumnSeries<Tuple<string, int>>()
             {
                 Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },
@@ -124,6 +132,13 @@ namespace MyShop.ViewModel
         private async void Load_ListOfWeeks(RoutedEventArgs e)
         {
             var task = await _statisticRepository.GetListOfWeeks();
+            if (task == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                task = new List<Tuple<int, DateTime>>();
+            }
+
             ListOfWeeks.Clear();
 
             task.ForEach(taskItem =>

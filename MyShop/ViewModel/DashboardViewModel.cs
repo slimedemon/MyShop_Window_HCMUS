@@ -25,6 +25,7 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.Measure;
 using LiveChartsCore.Drawing;
 using System.Windows.Markup;
+using MyShop.Services;
 
 namespace MyShop.ViewModel
 {
@@ -88,11 +89,25 @@ namespace MyShop.ViewModel
 
 
             var monthlyRevenueTask = await _statisticRepository.GetMonthlyStatistic(startMonthlyDate.Date, DateTimeOffset.Now.Date);
+            if (monthlyRevenueTask == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                monthlyRevenueTask = new List<Tuple<DateTime, int>>();
+            }
+
             MonthlyRevenue = monthlyRevenueTask.Last().Item2.ToString("C", CultureInfo.GetCultureInfo("vi-VN"));
 
             //weekly revenue
             DateTime startWeeklyDate = DateTime.Parse(year_month_day);
             var getWeekTask = await _statisticRepository.GetListOfWeeks();
+            if (getWeekTask == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                getWeekTask = new List<Tuple<int, DateTime>>();
+            }
+
             startWeeklyDate = getWeekTask[getWeekTask.Count - 2].Item2;
 
             //daily number of sold books
@@ -103,6 +118,12 @@ namespace MyShop.ViewModel
 
             //top 5 best selling books of the month
             var top5MonthlyBook = await _statisticRepository.GetTop5ProductStatistic(startMonthlyDate.Date, DateTimeOffset.Now.Date);
+            if (top5MonthlyBook == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                top5MonthlyBook = new List<Tuple<string, int>>();
+            }
 
             if (top5MonthlyBook == null)
             {
@@ -152,6 +173,13 @@ namespace MyShop.ViewModel
         private async void updateBookQuantityList()
         {
             bookQuantityList = await _statisticRepository.GetProductQuantityStatistic();
+            if (bookQuantityList == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                bookQuantityList = new List<Tuple<string, int>>();
+            }
+
             bookQuantityList = bookQuantityList.OrderBy(x => x.Item2).Take(5).ToList(); ;
             for (int i = 0; i < bookQuantityList.Count(); i++) {
                 AllBookQuantity.Add(new BookQuantity(bookQuantityList[i].Item1, bookQuantityList[i].Item2, i + 1));

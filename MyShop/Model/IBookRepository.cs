@@ -21,9 +21,9 @@ namespace MyShop.Model
         Task<List<Genre>> GetGenres();
         Task<bool> EditBookQuantity(int id, int quantity);
         void Refresh(List<Book> books, List<Genre> genres);
-        //Task<List<Book>> ReadBookDataFromExcelFile(StorageFile file);
-        //Task<List<Genre>> ReadBookGenreFromExcelFile(StorageFile file);
-        //Task<List<Book>> ReadBookDataFromAccessFile(StorageFile file);
-        //Task<List<Genre>> ReadBookGenreFromAccessFile(StorageFile file);
+        Task<List<Book>> ReadBookDataFromExcelFile(StorageFile file);
+        Task<List<Genre>> ReadBookGenreFromExcelFile(StorageFile file);
+        Task<List<Book>> ReadBookDataFromAccessFile(StorageFile file);
+        Task<List<Genre>> ReadBookGenreFromAccessFile(StorageFile file);
     }
 }

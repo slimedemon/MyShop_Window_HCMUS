@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MyShop.Repository
 {
@@ -14,6 +15,8 @@ namespace MyShop.Repository
         public async Task<List<Tuple<DateTime, int>>> GetDailyStatistic(DateTime startDate, DateTime endDate)
         {
             var connection = GetConnection();
+            
+
             await Task.Run(() =>
             {
                 connection.Open();
@@ -48,8 +51,8 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
                     connection.Close();
+                    MessageBox.Show(ex.Message);
                     return null;
                 }
             }
@@ -94,8 +97,8 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
                     connection.Close();
+                    MessageBox.Show(ex.Message);
                     return null;
                 }
             }
@@ -142,7 +145,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return null;
                 }
@@ -190,7 +193,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return null;
                 }
@@ -238,7 +241,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return null;
                 }
@@ -289,7 +292,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return null;
                 }
@@ -338,7 +341,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return 0;
                 }
@@ -380,7 +383,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return 0;
                 }
@@ -432,7 +435,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return null;
                 }
@@ -479,7 +482,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return null;
                 }
@@ -530,7 +533,7 @@ namespace MyShop.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.Message);
                     connection.Close();
                     return null;
                 }

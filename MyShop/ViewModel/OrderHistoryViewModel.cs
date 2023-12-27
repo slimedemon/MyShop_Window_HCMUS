@@ -187,7 +187,9 @@ namespace MyShop.ViewModel
             if (task == null)
             {
                 await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
-                return;
+                
+                // create empty task to continue flow
+                task = new List<Bill>();
             }
 
             for (int i = 0; i < task.Count; i++)
@@ -196,10 +198,18 @@ namespace MyShop.ViewModel
                 if (temp == null)
                 {
                     await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
-                    return;
+                    // purpose: continue flow
+                    temp = new List<Order>();
                 }
 
                 Customer customer = await _customerRepository.GetById(task[i].CustomerId);
+                if(customer == null) 
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    // purpose: continue flow
+                    customer = new Customer();
+                }
+
                 List<BillDetailRow> billDetailRows = new List<BillDetailRow>();
 
                 for (int j = 0; j < temp.Count; j++)

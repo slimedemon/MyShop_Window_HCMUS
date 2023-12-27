@@ -23,6 +23,7 @@ using System.Globalization;
 using MyShop.Model;
 using Windows.ApplicationModel.Store;
 using LiveChartsCore.SkiaSharpView.Painting;
+using MyShop.Services;
 
 namespace MyShop.ViewModel
 {
@@ -90,6 +91,13 @@ namespace MyShop.ViewModel
         private async void DisplayChart()
         {
             var dailyStatistic = await _statisticRepository.GetDailyStatistic(StartDate.Date, EndDate.Date);
+            if (dailyStatistic == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                dailyStatistic = new List<Tuple<DateTime, int>>();
+            }
+
             var collection = new Collection<DateTimePoint>();
 
             dailyStatistic.ForEach(item =>

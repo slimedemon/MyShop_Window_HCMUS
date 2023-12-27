@@ -159,8 +159,22 @@ namespace MyShop.ViewModel
         public async void ExecuteGetAllCommand()
         {
             BooksList = await _bookRepository.GetAll();
+            if (BooksList == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                // purpose: continue flow;
+                BooksList = new List<Book>();
+            }
+
             BooksList.ForEach(item => ResultBooksList.Add(item));
             Genres = await _bookRepository.GetGenres();
+            if (Genres == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                // purpose: to continue flow;
+                Genres = new List<Genre>();
+            }
+
             Genres.Insert(0, new Genre() { Id = 0, Name = "All" }); // Default Genre => search all genres
             TotalItems = BooksList.Count;
             UpdateDataSource();
@@ -228,6 +242,7 @@ namespace MyShop.ViewModel
             }
             
             ResultBooksList = _bookRepository.Filter(BooksList, StartPrice, EndPrice, CurrentKeyword, GenreId);
+
             UpdateDataSource();
             TotalItems = ResultBooksList.Count;
             UpdatePagingInfo();

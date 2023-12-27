@@ -3,6 +3,7 @@ using MyShop.Model;
 using MyShop.Repository;
 using MyShop.Services;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,6 +76,13 @@ namespace MyShop.ViewModel
         public async void PageLoaded()
         {
             var task = await _bookRepository.GetAll();
+            if (task == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                // purpose: continue flow;
+                task = new List<Book>();
+            }
+
             task.ForEach(book => Books.Add(book));
         }
 
@@ -160,6 +168,12 @@ namespace MyShop.ViewModel
 
                 // add new customer
                 int customerId = await _customerRepository.Add(BindingCustomer);
+
+                if (customerId == -1)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
 
                 if (customerId < 1)
                 {

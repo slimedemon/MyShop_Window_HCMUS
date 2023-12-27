@@ -64,6 +64,7 @@ namespace MyShop.ViewModel
             if (message == null)
             {
                 await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                message = "Something is broken when system is retrieving data from database!";
                 return;
             }
 

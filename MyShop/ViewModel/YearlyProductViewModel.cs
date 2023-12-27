@@ -12,6 +12,7 @@ using LiveChartsCore;
 using SkiaSharp;
 using LiveChartsCore.SkiaSharpView;
 using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
+using MyShop.Services;
 
 namespace MyShop.ViewModel
 {
@@ -81,6 +82,12 @@ namespace MyShop.ViewModel
         private async void Initialize()
         {
             var task = await _statisticRepository.GetListOfWeeks();
+            if (task == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                task = new List<Tuple<int, DateTime>>();
+            }
+
             DateTime date;
             if (task.Count() > 0) date = task[0].Item2;
             else date = DateTime.Now;
@@ -97,6 +104,12 @@ namespace MyShop.ViewModel
         {
             NameBookDic.Clear();
             var task = await _statisticRepository.GetProductStatistic(SelectedStartDate.Date, SelectedEndDate.Date);
+            if (task == null) 
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                task = new List<Tuple<string, int>>();
+            }
 
             var series = new ColumnSeries<Tuple<string, int>>()
             {

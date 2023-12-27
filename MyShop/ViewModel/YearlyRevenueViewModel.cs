@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LiveChartsCore.SkiaSharpView;
 using System.Globalization;
+using MyShop.Services;
 
 namespace MyShop.ViewModel
 {
@@ -82,6 +83,13 @@ namespace MyShop.ViewModel
         private async void Initialize() 
         {
             var task = await _statisticRepository.GetListOfWeeks();
+            if (task == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                task = new List<Tuple<int, DateTime>>();
+            }
+
             DateTime date;
             if (task.Count() > 0) date = task[0].Item2;
             else date = DateTime.Now;
@@ -97,6 +105,13 @@ namespace MyShop.ViewModel
         private async void DisplayChart()
         {
             var task = await _statisticRepository.GetYearlyStatistic(SelectedStartDate.Date, SelectedEndDate.Date);
+            if (task == null)
+            { 
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                // purpose: continue flow
+                task = new List<Tuple<DateTime, int>>();
+            }
+
             var series = new LineSeries<Tuple<DateTime, int>>() 
             {
                 GeometryStroke = null,
