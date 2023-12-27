@@ -108,7 +108,14 @@ namespace MyShop.ViewModel
                 getWeekTask = new List<Tuple<int, DateTime>>();
             }
 
-            startWeeklyDate = getWeekTask[getWeekTask.Count - 2].Item2;
+            if (getWeekTask.Count - 2 >= 0)
+            {
+                startWeeklyDate = getWeekTask[getWeekTask.Count - 2].Item2;
+            }
+            else
+            {
+                startWeeklyDate = DateTime.Now;
+            }
 
             //daily number of sold books
             NumberOfSoldBooks = await _statisticRepository.GetCurrentMonthlyNumberOfSoldBookStatistic();

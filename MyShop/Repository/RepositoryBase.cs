@@ -39,12 +39,13 @@ namespace MyShop.Repository
 
         protected OleDbConnection GetOleSqlConnection(StorageFile file)
         {
+            if (file == null) throw new Exception("Not exist file!");
+
             var builder = new OleDbConnectionStringBuilder();
             var provider = GetAccessDatabaseEngineProvider();
             if (provider.Equals("Provider not determined")) throw new Exception("Provider not determined!");
             builder.Provider = provider;
-            builder.DataSource = file.Name;
-            if (file == null) throw new Exception("I file!");
+            builder.DataSource = file.Path;
             return new OleDbConnection(builder.ConnectionString);
         }
 

@@ -86,7 +86,7 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        int week = Convert.ToInt32(reader["week"]);
+                        int week = reader["week"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["week"]);
                         DateTime start_date = Convert.ToDateTime(reader["start_date"]);
                         Tuple<int, DateTime> record = new Tuple<int, DateTime>(week, start_date);
                         result.Add(record);
@@ -134,8 +134,8 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        DateTime date = Convert.ToDateTime(reader["date"]);
-                        int revenue = Convert.ToInt32(reader["revenue"]);
+                        DateTime date = reader["date"].Equals(DBNull.Value) ? DateTime.Now : Convert.ToDateTime(reader["date"]);
+                        int revenue = reader["revenue"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["revenue"]);
                         Tuple<DateTime, int> record = new Tuple<DateTime, int>(date, revenue);
                         result.Add(record);
                     }
@@ -182,8 +182,8 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        DateTime date = Convert.ToDateTime(reader["date"]);
-                        int revenue = Convert.ToInt32(reader["revenue"]);
+                        DateTime date = reader["date"].Equals(DBNull.Value) ? DateTime.Now : Convert.ToDateTime(reader["date"]);
+                        int revenue = reader["revenue"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["revenue"]);
                         Tuple<DateTime, int> record = new Tuple<DateTime, int>(date, revenue);
                         result.Add(record);
                     }
@@ -230,8 +230,8 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        DateTime date = Convert.ToDateTime(reader["date"]);
-                        int revenue = Convert.ToInt32(reader["revenue"]);
+                        DateTime date = reader["date"].Equals(DBNull.Value) ? DateTime.Now : Convert.ToDateTime(reader["date"]);
+                        int revenue = reader["revenue"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["revenue"]);
                         Tuple<DateTime, int> record = new Tuple<DateTime, int>(date, revenue);
                         result.Add(record);
                     }
@@ -282,7 +282,7 @@ namespace MyShop.Repository
                     while (reader.Read())
                     {
                         string title = Convert.ToString(reader["title"]);
-                        int quantity = Convert.ToInt32(reader["number"]);
+                        int quantity = reader["number"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["number"]);
                         Tuple<string, int> record = new Tuple<string, int>(title, quantity);
                         result.Add(record);
                     }
@@ -333,7 +333,7 @@ namespace MyShop.Repository
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        numberOfSoldBooks = Convert.ToInt32(reader["quantity"]);
+                        numberOfSoldBooks = reader["quantity"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["quantity"]);
                     }
                     reader.Close();
                     connection.Close();
@@ -375,7 +375,7 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        numberOfOrder = Convert.ToInt32(reader["NumberOfBooks"]);
+                        numberOfOrder = reader["NumberOfBooks"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["NumberOfBooks"]);
                     }
                     reader.Close();
                     connection.Close();
@@ -425,7 +425,7 @@ namespace MyShop.Repository
                     while (reader.Read())
                     {
                         string title = Convert.ToString(reader["title"]);
-                        int quantity = Convert.ToInt32(reader["quantity"]);
+                        int quantity = reader["quantity"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["quantity"]);
                         Tuple<string, int> record = new Tuple<string, int>(title, quantity);
                         result.Add(record);
                     }
@@ -472,7 +472,7 @@ namespace MyShop.Repository
                     while (reader.Read())
                     {
                         string title = Convert.ToString(reader["title"]);
-                        int quantity = Convert.ToInt32(reader["quantity"]);
+                        int quantity = reader["quantity"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["quantity"]);
                         Tuple<string, int> record = new Tuple<string, int>(title, quantity);
                         result.Add(record);
                     }
@@ -522,8 +522,8 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        DateTime date = Convert.ToDateTime(reader["date"]);
-                        int revenue = Convert.ToInt32(reader["revenue"]);
+                        DateTime date = reader["date"].Equals(DBNull.Value) ? DateTime.Now : Convert.ToDateTime(reader["date"]);
+                        int revenue = reader["revenue"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["revenue"]);
                         Tuple<DateTime, int> record = new Tuple<DateTime, int>(date, revenue);
                         result.Add(record);
                     }

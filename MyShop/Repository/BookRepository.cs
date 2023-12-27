@@ -37,10 +37,10 @@ namespace MyShop.Repository
                     string sql = "insert into BOOK (title,author,description,genre_id,price,quantity,published_date,image)" +
                         "values (@title,@author,@description,@genre_id,@price,@quantity,@published_date, @image)";
                     var command = new SqlCommand(sql, connection);
-                    command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title;
-                    command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author;
-                    command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description;
-                    command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image;
+                    command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title == book.Title;
+                    command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author ?? "";
+                    command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description ?? "";
+                    command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image ?? "";
                     command.Parameters.Add("@genre_id", SqlDbType.Int).Value = book.GenreId;
                     command.Parameters.Add("@price", SqlDbType.Int).Value = book.Price;
                     command.Parameters.Add("@quantity", SqlDbType.Int).Value = book.Quantity;
@@ -123,9 +123,9 @@ namespace MyShop.Repository
 
                     var command = new SqlCommand(sql, connection);
                     command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title;
-                    command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author;
-                    command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description;
-                    command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image;
+                    command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author ?? "";
+                    command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description ?? "";
+                    command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image ?? "";
                     command.Parameters.Add("@genre_id", SqlDbType.Int).Value = book.GenreId;
                     command.Parameters.Add("@price", SqlDbType.Int).Value = book.Price;
                     command.Parameters.Add("@quantity", SqlDbType.Int).Value = book.Quantity;
@@ -372,7 +372,6 @@ namespace MyShop.Repository
 
             try
             {
-
                 await Task.Run(() =>
                 {
                     connection.Open();
@@ -387,7 +386,7 @@ namespace MyShop.Repository
 
                     if (rowsAffected > 0) { isSuccessful = true; }
                     else { isSuccessful = false; }
-                }
+                }   
             }
             catch (Exception ex)
             {
@@ -533,9 +532,9 @@ namespace MyShop.Repository
                 foreach (Book book in books)
                 {
                     command.Parameters["@title"].Value = book.Title;
-                    command.Parameters["@author"].Value = book.Author;
+                    command.Parameters["@author"].Value = book.Author ?? "";
                     command.Parameters["@description"].Value = book.Description ?? "";
-                    command.Parameters["@image"].Value = book.Image;
+                    command.Parameters["@image"].Value = book.Image ?? "";
                     command.Parameters["@genre_id"].Value = book.GenreId;
                     command.Parameters["@price"].Value = book.Price;
                     command.Parameters["@quantity"].Value = book.Quantity;
@@ -570,7 +569,6 @@ namespace MyShop.Repository
                 {
                     message += "found sheet: " + excelWorksheet.Name + "\n";
                 }
-                await App.MainRoot.ShowDialog("DEBUG", message);
                 var worksheet = excelPackage.Workbook.Worksheets["BOOK"];
                 int rows = worksheet.Dimension.Rows;
                 int columns = worksheet.Dimension.Columns;

@@ -26,7 +26,7 @@
                HorizontalAlignment="Stretch" 
                VerticalAlignment="Stretch"
                Margin="10 30 10 10">
-            <ScrollView HorizontalAlignment="Stretch">
+            <ScrollView HorizontalAlignment="Stretch" VerticalScrollChainMode="Always">
                 <ListView 
                     x:Name="dataListView"
                     Margin="10,20,0,0"

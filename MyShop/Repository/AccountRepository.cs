@@ -325,7 +325,7 @@ namespace MyShop.Repository
                         string name = Convert.ToString(reader["name"]);
                         string phoneNumber = Convert.ToString(reader["phone"]);
                         string address = Convert.ToString(reader["address"]);
-                        int role_id = Convert.ToInt32(reader["role_id"]);
+                        int role_id = reader["role_id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["role_id"]);
 
                         account = new Account
                         {
@@ -380,7 +380,7 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        int id = Convert.ToInt32(reader["id"]);
+                        int id = reader["id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["id"]);
                         string name = Convert.ToString(reader["name"]);
                         string phoneNumber = Convert.ToString(reader["phone"]);
                         string address = Convert.ToString(reader["address"]);

@@ -53,20 +53,26 @@ namespace MyShop.ViewModel
 
         public async void ExecuteConfirmCommand()
         {
+            if (NewBook.Title == null || NewBook.Author == null || NewBook.GenreId == 0 || NewBook.PublishedDate == default(DateOnly) || NewBook.Quantity <= 0 || NewBook.Price <= 0)
+            {
+                await App.MainRoot.ShowDialog("Failed", "Title, Author, Genre, Published Date, Price and Quantity are required!!!");
+                return;
+            }
+
             if(NewBook.Image == null)
             {
-                NewBook.Image = "StoreLogo.png";
+                NewBook.Image = "Assets/bg_home.png";
             }
             var task = await _bookRepository.Add(NewBook);
             if (task)
             {
+                await App.MainRoot.ShowDialog("Success", "Book is added!");
                 ParentPageNavigation.ViewModel = new BooksViewModel();
             }
             else
             {
                 ErrorMessage = "* Task failed!";
             }
-            await App.MainRoot.ShowDialog("Success", "Book is added!");
         }
         public void ExecuteBackCommand()
         {

@@ -120,7 +120,7 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        int id = Convert.ToInt32(reader["id"]);
+                        int id = reader["quantity"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["id"]);
                         string name = Convert.ToString(reader["name"]);
                         string phone = Convert.ToString(reader["phone"]);
                         string address = Convert.ToString(reader["address"]);

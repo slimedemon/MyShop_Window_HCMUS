@@ -85,14 +85,15 @@
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch"
                 Margin="10">
-                <ScrollView HorizontalAlignment="Stretch">
+                <ScrollView HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" VerticalScrollChainMode="Always">
                     <GridView  
                         Margin="0,10,0,0"
                         x:Name="bookContentGridView"
-                        ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         ItemsSource="{Binding DisplayBookCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItem="{Binding SelectedBook, Mode=TwoWay}"
-                        HorizontalAlignment="Center">
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
                         <GridView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Width="200" Height="280">

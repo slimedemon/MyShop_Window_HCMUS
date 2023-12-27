@@ -136,8 +136,6 @@ namespace MyShop.ViewModel
             if (confirmed == true)
             {
                 var task = await _bookRepository.Remove(SelectedBook.Id);
-                ResultBooksList.Remove(SelectedBook);
-                SelectedBook = null;
                 if (task)
                 {
                     await App.MainRoot.ShowDialog("Success", "Book is removed!");
@@ -145,7 +143,11 @@ namespace MyShop.ViewModel
                 else
                 {
                     await App.MainRoot.ShowDialog("Failure", "Removal unsuccessful...");
+                    return;
                 }
+
+                ResultBooksList.Remove(SelectedBook);
+                SelectedBook = null;
             }
             UpdateDataSource();
             UpdatePagingInfo();

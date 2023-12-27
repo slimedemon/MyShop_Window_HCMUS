@@ -182,9 +182,9 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        int id = Convert.ToInt32(reader["id"]);
-                        int customerId = Convert.ToInt32(reader["customer_id"]);
-                        int totalPrice = Convert.ToInt32(reader["total_price"]);
+                        int id = reader["id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["id"]);
+                        int customerId = reader["customer_id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["customer_id"]);
+                        int totalPrice = reader["total_price"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["total_price"]);
 
                         object obj = reader["transaction_date"];
                         DateOnly transactionDate = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
@@ -237,8 +237,8 @@ namespace MyShop.Repository
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        int customerId = Convert.ToInt32(reader["customer_id"]);
-                        int totalPrice = Convert.ToInt32(reader["total_price"]);
+                        int customerId = reader["customer_id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["customer_id"]);
+                        int totalPrice = reader["total_price"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["total_price"]);
 
                         object obj = reader["transaction_date"];
                         DateOnly transactionDate = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
@@ -292,7 +292,7 @@ namespace MyShop.Repository
 
                     while (reader.Read())
                     {
-                        int id = Convert.ToInt32(reader["id"]);
+                        int id = reader["id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["id"]);
                         ids.Add(id);
                     }
                 }
@@ -336,10 +336,10 @@ namespace MyShop.Repository
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        int bookId = Convert.ToInt32(reader["book_id"]);
-                        int price = Convert.ToInt32(reader["price"]);
-                        int number = Convert.ToInt32(reader["number"]);
-                        int quantity = Convert.ToInt32(reader["quantity"]);
+                        int bookId = reader["book_id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["book_id"]);
+                        int price = reader["price"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["price"]);
+                        int number = reader["number"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["number"]);
+                        int quantity = reader["quantity"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["quantity"]);
                         string title = Convert.ToString(reader["title"]);
 
                         details.Add(new Order
@@ -392,7 +392,7 @@ namespace MyShop.Repository
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        int bookId = Convert.ToInt32(reader["book_id"]);
+                        int bookId = reader["book_id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["book_id"]);
                         bookIds.Add(bookId);
                     }
                 }
