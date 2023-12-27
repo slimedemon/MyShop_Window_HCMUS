@@ -136,15 +136,25 @@ namespace MyShop.ViewModel
                 _billDetailRowDic.TryGetValue(key, out billDetailRows);
                 for (int i = 0;i < billDetailRows.Count; i++)
                 {
-                    await _billRepository.RemoveBillDetail(key, billDetailRows[i].BookId);
+                    var resultFlag = await _billRepository.RemoveBillDetail(key, billDetailRows[i].BookId);
+                    if (!resultFlag)
+                    {
+                        await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                        return;
+                    }
                 }
 
                 _billDetailRowDic.Remove(key);
                 BillRowList.Remove(SelectedBillRow);
 
                 // remove from BILL
-                await _billRepository.Remove(key);
-
+                var task = await _billRepository.Remove(key);
+                if (!task) 
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
+                    
                 await App.MainRoot.ShowDialog("Success", "Order is removed!");
             }
         }
@@ -174,10 +184,21 @@ namespace MyShop.ViewModel
 
             // get all from date to date
             var task = await _billRepository.GetAll(DateFrom, DateTo);
+            if (task == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                return;
+            }
 
             for (int i = 0; i < task.Count; i++)
             {
                 List<Order> temp = await _billRepository.GetBillDetailById(task[i].Id);
+                if (temp == null)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
+
                 Customer customer = await _customerRepository.GetById(task[i].CustomerId);
                 List<BillDetailRow> billDetailRows = new List<BillDetailRow>();
 

@@ -79,7 +79,7 @@ namespace MyShop.ViewModel
                 var result = await _accountRepository.Add(Account);
                 if (!result)
                 {
-                    throw new Exception("Signup failed");
+                    await App.MainRoot.ShowDialog("Failed", "Sign up failed!");
                 }
 
                 // if success => notify

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyShop.ViewModel
@@ -115,6 +116,11 @@ namespace MyShop.ViewModel
 
             // Get all Orders
             var task3 = await _billRepository.GetBillDetailById(CurrentBill.Id);
+            if (task3 == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                return;
+            }
 
             //update current stock for all orders and restore quantity for each book before edit (when record is saved, stock is updated)
             for (int i = 0; i < task3.Count(); i++)
@@ -233,19 +239,36 @@ namespace MyShop.ViewModel
                 // add bill values + update total price in real-time + update quantity
                 ExecuteRefreshCommand();
                 CurrentBill.TotalPrice = CurrentTotalPrice;
-                await _billRepository.Edit(CurrentBill);
+                var task = await _billRepository.Edit(CurrentBill);
+
+                if (!task)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
 
                 // remove original bill detail
                 for (int i = 0; i < _originalOrders.Count; i++)
                 {
-                    await _billRepository.RemoveBillDetail(_originalOrders[i].BillId, _originalOrders[i].BookId);
+                    var resultFlag = await _billRepository.RemoveBillDetail(_originalOrders[i].BillId, _originalOrders[i].BookId);
+                    if (!resultFlag)
+                    {
+                        await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                        return;
+                    }
                 }
 
                 // add bill detail
                 for (int i = 0; i < Orders.Count; i++)
                 {
                     Orders[i].BillId = CurrentBill.Id;
-                    await _billRepository.AddBillDetail(Orders[i]);
+                    var resultFlag = await _billRepository.AddBillDetail(Orders[i]);
+                    if (!task)
+                    {
+                        await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                        return;
+                    }
+
                     await _bookRepository.EditBookQuantity(Orders[i].BookId, Orders[i].StockQuantity - Orders[i].Number);
                 }
 

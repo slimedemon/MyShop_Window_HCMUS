@@ -107,6 +107,7 @@ namespace MyShop.ViewModel
                 }
 
                 var task = await _accountRepository.UpdateProfile(Account);
+
                 if (task == true)
                 {
                     await App.MainRoot.ShowDialog("Success", "Personal Profile is updated successfully!");
@@ -167,7 +168,6 @@ namespace MyShop.ViewModel
                 else
                 {
                     throw new Exception("Personal Profile is updated successfully! Please check information or database connection again!");
-               
                 }
             }
             catch (Exception ex)

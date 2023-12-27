@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MyShop.Model;
 using MyShop.Repository;
+using MyShop.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -58,9 +59,13 @@ namespace MyShop.ViewModel
         private async void ExecuteLoginCommand()
         {
             ErrorMessage = String.Empty;
-            string message = await _accountRepository.AuthenticateAccount(
-                new System.Net.NetworkCredential(Account.Username, Account.Password));
+            string message = await _accountRepository.AuthenticateAccount(new System.Net.NetworkCredential(Account.Username, Account.Password));
 
+            if (message == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                return;
+            }
 
             if (message.Equals("TRUE"))
             {
@@ -68,6 +73,13 @@ namespace MyShop.ViewModel
                     new GenericIdentity(Account.Username), null);
                 string username = Account.Username;
                 var task = await _accountRepository.GetByUsername(username);
+
+                if (task == null)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
+
                 ParentPageNavigation.ViewModel = new HomeViewModel(task);
             }
             else

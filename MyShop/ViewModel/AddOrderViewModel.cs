@@ -174,6 +174,13 @@ namespace MyShop.ViewModel
                 ExecuteRefreshCommand();
                 NewBill.TotalPrice = CurrentTotalPrice;
                 int newId = await _billRepository.Add(NewBill);
+
+                if (newId == -1)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
+
                 NewBill.Id = newId;
 
                 if (NewBill.Id < 1)
@@ -182,13 +189,24 @@ namespace MyShop.ViewModel
                     return;
                 }
 
-                await _billRepository.Edit(NewBill);
+                var task = await _billRepository.Edit(NewBill);
+                if (!task)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
 
                 // add bill detail
                 for (int i = 0; i < Orders.Count; i++)
                 {
                     Orders[i].BillId = NewBill.Id;
-                    await _billRepository.AddBillDetail(Orders[i]);
+                    var resultFlag = await _billRepository.AddBillDetail(Orders[i]);
+                    if (!resultFlag)
+                    {
+                        await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                        return;
+                    }
+
                     await _bookRepository.EditBookQuantity(Orders[i].BookId, Orders[i].StockQuantity - Orders[i].Number);
                 }
 
