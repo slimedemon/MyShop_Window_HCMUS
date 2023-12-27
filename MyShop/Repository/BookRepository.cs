@@ -438,160 +438,160 @@ namespace MyShop.Repository
             }
         }
 
-        //public async Task<List<Book>> ReadBookDataFromExcelFile(StorageFile file)
-        //{
-        //    var _books = new List<Book>();
+        public async Task<List<Book>> ReadBookDataFromExcelFile(StorageFile file)
+        {
+            var _books = new List<Book>();
 
-        //    // If you use EPPlus in a noncommercial context
-        //    // according to the Polyform Noncommercial license:
-        //    OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+            // If you use EPPlus in a noncommercial context
+            // according to the Polyform Noncommercial license:
+            OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-        //    var stream = await file.OpenStreamForReadAsync();
-        //    var excelPackage = new OfficeOpenXml.ExcelPackage(stream);
+            var stream = await file.OpenStreamForReadAsync();
+            var excelPackage = new OfficeOpenXml.ExcelPackage(stream);
 
-        //    string message = file.Name + "\n";
-        //    foreach (var excelWorksheet in excelPackage.Workbook.Worksheets)
-        //    {
-        //        message += "found sheet: " + excelWorksheet.Name + "\n";
-        //    }
-        //    await App.MainRoot.ShowDialog("DEBUG", message);
-        //    var worksheet = excelPackage.Workbook.Worksheets["BOOK"];
-        //    int rows = worksheet.Dimension.Rows;
-        //    int columns = worksheet.Dimension.Columns;
+            string message = file.Name + "\n";
+            foreach (var excelWorksheet in excelPackage.Workbook.Worksheets)
+            {
+                message += "found sheet: " + excelWorksheet.Name + "\n";
+            }
+            await App.MainRoot.ShowDialog("DEBUG", message);
+            var worksheet = excelPackage.Workbook.Worksheets["BOOK"];
+            int rows = worksheet.Dimension.Rows;
+            int columns = worksheet.Dimension.Columns;
 
-        //    for (int row = 2; row <= rows; row++) // Assuming data starts from row 2
-        //    {
-        //        // Read data from Excel cells and create a data model
-        //        Book dataModel = new Book
-        //        {
-        //            Id = Convert.ToInt32(worksheet.Cells[row, 1].Value),
-        //            Title = worksheet.Cells[row, 2].Value?.ToString(),
-        //            Author = worksheet.Cells[row, 3].Value?.ToString(),
-        //            Image = worksheet.Cells[row, 4].Value?.ToString(),
-        //            GenreId = Convert.ToInt32(worksheet.Cells[row, 5].Value?.ToString()),
-        //            Description = worksheet.Cells[row, 6].Value?.ToString(),
-        //            PublishedDate = DateOnly.Parse(worksheet.Cells[row, 7].Value?.ToString()),
-        //            Price = Convert.ToInt32(worksheet.Cells[row, 8].Value),
-        //            Quantity = Convert.ToInt32(worksheet.Cells[row, 9].Value),
-        //            // Add more properties for other columns as needed
-        //        };
-        //        _books.Add(dataModel); // Add data model to the collection
-        //    }
-        //    return _books;
-        //}
+            for (int row = 2; row <= rows; row++) // Assuming data starts from row 2
+            {
+                // Read data from Excel cells and create a data model
+                Book dataModel = new Book
+                {
+                    Id = Convert.ToInt32(worksheet.Cells[row, 1].Value),
+                    Title = worksheet.Cells[row, 2].Value?.ToString(),
+                    Author = worksheet.Cells[row, 3].Value?.ToString(),
+                    Image = worksheet.Cells[row, 4].Value?.ToString(),
+                    GenreId = Convert.ToInt32(worksheet.Cells[row, 5].Value?.ToString()),
+                    Description = worksheet.Cells[row, 6].Value?.ToString(),
+                    PublishedDate = DateOnly.Parse(worksheet.Cells[row, 7].Value?.ToString()),
+                    Price = Convert.ToInt32(worksheet.Cells[row, 8].Value),
+                    Quantity = Convert.ToInt32(worksheet.Cells[row, 9].Value),
+                    // Add more properties for other columns as needed
+                };
+                _books.Add(dataModel); // Add data model to the collection
+            }
+            return _books;
+        }
 
-        //public async Task<List<Genre>> ReadBookGenreFromExcelFile(StorageFile file)
-        //{
-        //    var _genres = new List<Genre>();
-        //    // If you use EPPlus in a noncommercial context
-        //    // according to the Polyform Noncommercial license:
-        //    OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+        public async Task<List<Genre>> ReadBookGenreFromExcelFile(StorageFile file)
+        {
+            var _genres = new List<Genre>();
+            // If you use EPPlus in a noncommercial context
+            // according to the Polyform Noncommercial license:
+            OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-        //    using (var stream = await file.OpenStreamForReadAsync())
-        //    {
-        //        using (var excelPackage = new OfficeOpenXml.ExcelPackage(stream))
-        //        {
-        //            var worksheet = excelPackage.Workbook.Worksheets["GENRE"];
-        //            int rows = worksheet.Dimension.Rows;
-        //            int columns = worksheet.Dimension.Columns;
+            using (var stream = await file.OpenStreamForReadAsync())
+            {
+                using (var excelPackage = new OfficeOpenXml.ExcelPackage(stream))
+                {
+                    var worksheet = excelPackage.Workbook.Worksheets["GENRE"];
+                    int rows = worksheet.Dimension.Rows;
+                    int columns = worksheet.Dimension.Columns;
 
-        //            for (int row = 2; row <= rows; row++) // Assuming data starts from row 2
-        //            {
-        //                // Read data from Excel cells and create a data model
-        //                Genre dataModel = new Genre
-        //                {
-        //                    Id = Convert.ToInt32(worksheet.Cells[row, 1].Value),
-        //                    Name = worksheet.Cells[row, 2].Value?.ToString(),
-        //                    // Add more properties for other columns as needed
-        //                };
-        //                _genres.Add(dataModel); // Add data model to the collection
-        //            }
-        //        }
-        //    }
-        //    return _genres;
-        //}
+                    for (int row = 2; row <= rows; row++) // Assuming data starts from row 2
+                    {
+                        // Read data from Excel cells and create a data model
+                        Genre dataModel = new Genre
+                        {
+                            Id = Convert.ToInt32(worksheet.Cells[row, 1].Value),
+                            Name = worksheet.Cells[row, 2].Value?.ToString(),
+                            // Add more properties for other columns as needed
+                        };
+                        _genres.Add(dataModel); // Add data model to the collection
+                    }
+                }
+            }
+            return _genres;
+        }
 
-        //public async Task<List<Book>> ReadBookDataFromAccessFile(StorageFile file)
-        //{
-        //    var books = new List<Book>();
+        public async Task<List<Book>> ReadBookDataFromAccessFile(StorageFile file)
+        {
+            var books = new List<Book>();
 
-        //    // Set up the query to retrieve genre data from the file
-        //    var query = "SELECT id,title,author,description,genre_id,price,quantity,published_date,image FROM BOOK";
+            // Set up the query to retrieve genre data from the file
+            var query = "SELECT id,title,author,description,genre_id,price,quantity,published_date,image FROM BOOK";
 
-        //    // Open a connection to the Access file
-        //    using (var connection = GetOleSqlConnection(file))
-        //    {
-        //        await connection.OpenAsync();
+            // Open a connection to the Access file
+            using (var connection = GetOleSqlConnection(file))
+            {
+                await connection.OpenAsync();
 
-        //        // Create a command to execute the query
-        //        using (var command = new OleDbCommand(query, connection))
-        //        {
-        //            // Execute the query and get a reader to read the results
-        //            using (var reader = await command.ExecuteReaderAsync())
-        //            {
-        //                // Read the results into genre objects and add them to the collection
-        //                while (await reader.ReadAsync())
-        //                {
-        //                    object obj = reader["published_date"];
-        //                    DateOnly published_date = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
-        //                    var newBook = new Book
-        //                    {
-        //                        Id = Convert.ToInt32(reader["id"]),
-        //                        Title = reader["title"].ToString(),
-        //                        Author = reader["author"].ToString(),
-        //                        Description = reader["description"].ToString(),
-        //                        GenreId = Convert.ToInt32(reader["genre_id"]),
-        //                        Price = Convert.ToInt32(reader["price"]),
-        //                        Quantity = Convert.ToInt32(reader["quantity"]),
-        //                        PublishedDate = published_date,
-        //                        Image = reader["image"].ToString(),
-        //                        // Add more properties for other columns as needed
-        //                    };
-        //                    books.Add(newBook);
-        //                }
-        //            }
-        //        }
-        //    }
+                // Create a command to execute the query
+                using (var command = new OleDbCommand(query, connection))
+                {
+                    // Execute the query and get a reader to read the results
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        // Read the results into genre objects and add them to the collection
+                        while (await reader.ReadAsync())
+                        {
+                            object obj = reader["published_date"];
+                            DateOnly published_date = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
+                            var newBook = new Book
+                            {
+                                Id = Convert.ToInt32(reader["id"]),
+                                Title = reader["title"].ToString(),
+                                Author = reader["author"].ToString(),
+                                Description = reader["description"].ToString(),
+                                GenreId = Convert.ToInt32(reader["genre_id"]),
+                                Price = Convert.ToInt32(reader["price"]),
+                                Quantity = Convert.ToInt32(reader["quantity"]),
+                                PublishedDate = published_date,
+                                Image = reader["image"].ToString(),
+                                // Add more properties for other columns as needed
+                            };
+                            books.Add(newBook);
+                        }
+                    }
+                }
+            }
 
-        //    return books;
-        //}
+            return books;
+        }
 
-        //public async Task<List<Genre>> ReadBookGenreFromAccessFile(StorageFile file)
-        //{
-        //    var genres = new List<Genre>();
+        public async Task<List<Genre>> ReadBookGenreFromAccessFile(StorageFile file)
+        {
+            var genres = new List<Genre>();
 
 
-        //    // Set up the query to retrieve genre data from the file
-        //    var query = "SELECT id,name FROM GENRE";
+            // Set up the query to retrieve genre data from the file
+            var query = "SELECT id,name FROM GENRE";
 
-        //    // Open a connection to the Access file
-        //    using (var connection = GetOleSqlConnection(file))
-        //    {
-        //        await connection.OpenAsync();
+            // Open a connection to the Access file
+            using (var connection = GetOleSqlConnection(file))
+            {
+                await connection.OpenAsync();
 
-        //        // Create a command to execute the query
-        //        using (var command = new OleDbCommand(query, connection))
-        //        {
-        //            // Execute the query and get a reader to read the results
-        //            using (var reader = await command.ExecuteReaderAsync())
-        //            {
-        //                // Read the results into genre objects and add them to the collection
-        //                while (await reader.ReadAsync())
-        //                {
-        //                    var genre = new Genre
-        //                    {
-        //                        Id = Convert.ToInt32(reader["id"]),
-        //                        Name = reader["name"].ToString(),
-        //                        // Add more properties for other columns as needed
-        //                    };
-        //                    genres.Add(genre);
-        //                }
-        //            }
-        //        }
-        //    }
+                // Create a command to execute the query
+                using (var command = new OleDbCommand(query, connection))
+                {
+                    // Execute the query and get a reader to read the results
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        // Read the results into genre objects and add them to the collection
+                        while (await reader.ReadAsync())
+                        {
+                            var genre = new Genre
+                            {
+                                Id = Convert.ToInt32(reader["id"]),
+                                Name = reader["name"].ToString(),
+                                // Add more properties for other columns as needed
+                            };
+                            genres.Add(genre);
+                        }
+                    }
+                }
+            }
 
-        //    return genres;
-        //}
+            return genres;
+        }
 
     }
 }
