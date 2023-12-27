@@ -53,27 +53,15 @@ namespace MyShop.View
             }
         }
 
-        private void ShowImportGenreGroup(object sender, RoutedEventArgs e)
+        private void ShowImportGroup(object sender, RoutedEventArgs e)
         {
-            if (ImportGenreGroup.Visibility == Visibility.Collapsed)
+            if (ImportGroup.Visibility == Visibility.Collapsed)
             {
-                ImportGenreGroup.Visibility = Visibility.Visible;
+                ImportGroup.Visibility = Visibility.Visible;
             }
             else
             {
-                ImportGenreGroup.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void ShowImportBookGroup(object sender, RoutedEventArgs e)
-        {
-            if (ImportBookGroup.Visibility == Visibility.Collapsed)
-            {
-                ImportBookGroup.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ImportBookGroup.Visibility = Visibility.Collapsed;
+                ImportGroup.Visibility = Visibility.Collapsed;
             }
         }
     }

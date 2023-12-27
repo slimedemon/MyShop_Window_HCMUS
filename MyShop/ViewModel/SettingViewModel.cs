@@ -122,10 +122,30 @@ namespace MyShop.ViewModel
             if (file != null)
             {
                 //Read data from Access file
-                //var genres = await _bookRepository.ReadBookGenreFromAccessFile(file);
-                //var books = await _bookRepository.ReadBookDataFromAccessFile(file);
-                //_bookRepository.Refresh(books, genres);
-                //await App.MainRoot.ShowDialog("NOTIFICATION", "Restore successfully!");
+                var genres = await _bookRepository.ReadBookGenreFromAccessFile(file);
+                if (genres == null)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when genres are being imported!");
+                    return;
+                }
+
+                var books = await _bookRepository.ReadBookDataFromAccessFile(file);
+                if (books == null)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when books are being imported!");
+                    return;
+                }
+
+                try
+                {
+                    _bookRepository.Refresh(books, genres);
+                    await App.MainRoot.ShowDialog("NOTIFICATION", "Restore successfully!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system refreshes tables");
+                }
             }
         }
 
@@ -143,10 +163,30 @@ namespace MyShop.ViewModel
             if (file != null)
             {
                 //Read data from Excel file
-                //var genres = await _bookRepository.ReadBookGenreFromExcelFile(file);
-                //var books = await _bookRepository.ReadBookDataFromExcelFile(file);
-                //_bookRepository.Refresh(books, genres);
-                //await App.MainRoot.ShowDialog("NOTIFICATION", "Restore successfully!");
+                var genres = await _bookRepository.ReadBookGenreFromExcelFile(file);
+                if (genres == null)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when genres are being imported!");
+                    return;
+                }
+
+                var books = await _bookRepository.ReadBookDataFromExcelFile(file);
+                if (books == null)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when books are being imported!");
+                    return;
+                }
+
+                try
+                {
+                    _bookRepository.Refresh(books, genres);
+                    await App.MainRoot.ShowDialog("NOTIFICATION", "Restore successfully!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system refreshes tables");
+                }
             }
 
         }

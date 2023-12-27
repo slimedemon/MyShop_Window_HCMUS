@@ -38,8 +38,8 @@
             </ToggleSwitch>
         </StackPanel>
 
-        <HyperlinkButton Content="Do you want to import Genres?" Click="ShowImportGenreGroup"></HyperlinkButton>
-        <StackPanel Name="ImportGenreGroup" Margin="30 0 0 20" Visibility="Collapsed">
+        <HyperlinkButton Content="Do you want to restore original data by using Access/Excel file?" Click="ShowImportGroup"></HyperlinkButton>
+        <StackPanel Name="ImportGroup" Margin="30 0 0 20" Visibility="Collapsed">
             <TextBlock Text="Restore original data"/>
             <Button Content="Import" Margin="0,10,10,10" Width="100" Style="{StaticResource AccentButtonStyle}">
                 <Button.Flyout>
@@ -50,70 +50,5 @@
                 </Button.Flyout>
             </Button>
         </StackPanel>
-
-        <HyperlinkButton Content="Do you want to import Books?" Click="ShowImportBookGroup"></HyperlinkButton>
-        <StackPanel Name="ImportBookGroup" Margin="30 0 0 20" Visibility="Collapsed">
-            <TextBlock Text="Restore original data"/>
-            <Button Content="Import" Margin="0,10,10,10" Style="{StaticResource AccentButtonStyle}" Width="100">
-                <Button.Flyout>
-                    <MenuFlyout Placement="Right">
-                        <MenuFlyoutItem Text="Excel (.xls/.xlsx)" Command="{Binding ImportByExcelCommand}" Icon="PreviewLink"/>
-                        <MenuFlyoutItem Text="Access (.accdb)" Command="{Binding ImportByAccessCommand}" Icon="SwitchApps"/>
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-        </StackPanel>
     </StackPanel>
-
-    <!--<Grid Margin="20, 20, 20, 20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <Slider
-                Grid.Row="0"
-                Header="Configure no. of books per page"
-                AutomationProperties.Name="Book number per page Slider"
-                TickFrequency="5"
-                TickPlacement="BottomRight"
-                SnapsTo="Ticks"
-                Minimum="5"
-                Maximum="20"
-                Padding="20"
-                Value="{Binding ItemsPerPage, Mode=TwoWay}"/>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Padding="20">
-            <ToggleSwitch Header="Open last closed page" OffContent="Disabled" OnContent="Enabled" IsOn="False" />
-            <ProgressRing IsActive="{x:Bind thisViewModel.ToggleSwitchIsOn, Mode=OneWay}" Width="32"/>
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Padding="20">
-            <TextBlock Text="Restore original data"/>
-            <Button x:Name="importButton" 
-                    Content="Import"
-                    Margin="0,10,10,10">
-                <Button.Flyout>
-                    <MenuFlyout Placement="Right">
-                        <MenuFlyoutItem Text="Excel (.xls/.xlsx)" Command="{Binding ImportByExcelCommand}" Icon="PreviewLink"/>
-                        <MenuFlyoutItem Text="Access (.accdb)" Command="{Binding ImportByAccessCommand}" Icon="SwitchApps"/>
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-        </StackPanel>
-
-
-        <AppBarButton HorizontalAlignment="Right" 
-                      VerticalAlignment="Bottom" 
-                      Grid.Row="3" Grid.Column="1" 
-                      x:Name="saveButton" Icon="Save" Label="Save"
-                      Command="{Binding SaveSettingCommand}"/>
-    </Grid>-->
 </Page>
