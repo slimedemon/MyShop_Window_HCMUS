@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,12 +12,33 @@ namespace MyShop.ViewModel
 {
     public class ProductManagementViewModel : ViewModelBase
     {
-        public ProductManagementViewModel()
-        {
-            ChildPageNavigation = new PageNavigation(new BookManagementViewModel());
-        }
+
         private ICommand _itemInvokedCommand;
         public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<NavigationViewItemInvokedEventArgs>(OnItemInvoked));
+        public ProductManagementViewModel()
+        {
+            SaveCurrentPage();
+
+            ChildPageNavigation = new PageNavigation(new BookManagementViewModel());
+        }
+
+        private void SaveCurrentPage()
+        {
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "ProductManagementPage";
+            }
+            else
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "DashboardPage";
+            }
+
+            configuration.Save(ConfigurationSaveMode.Full);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
 
         private void OnItemInvoked(NavigationViewItemInvokedEventArgs args)
         {

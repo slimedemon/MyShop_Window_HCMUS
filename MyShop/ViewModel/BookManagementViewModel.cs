@@ -15,6 +15,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage;
 using System.IO;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Composition.SystemBackdrops;
 
 namespace MyShop.ViewModel
 {

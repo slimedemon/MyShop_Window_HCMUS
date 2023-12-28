@@ -21,7 +21,7 @@ namespace MyShop.Services
             {typeof(DashboardViewModel), typeof(DashboardPage)},
             {typeof(ViewModel.OrderManagementViewModel), typeof(View.OrderManagementPage)},
             {typeof(AccountViewModel), typeof(AccountPage)},
-            {typeof(SettingViewModel), typeof(SettingPage)},
+            {typeof(SettingsViewModel), typeof(SettingsPage)},
             {typeof(StatisticsViewModel), typeof(StatisticsPage)},
             {typeof(BookManagementViewModel), typeof(BookManagementPage)},
             {typeof(GenreManagementViewModel), typeof(GenreManagementPage)},

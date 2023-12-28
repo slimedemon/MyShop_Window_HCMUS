@@ -26,6 +26,7 @@ using LiveChartsCore.Measure;
 using LiveChartsCore.Drawing;
 using System.Windows.Markup;
 using MyShop.Services;
+using System.Configuration;
 
 namespace MyShop.ViewModel
 {
@@ -70,9 +71,28 @@ namespace MyShop.ViewModel
         [Obsolete]
         public DashboardViewModel()
         {
+            SaveCurrentPage();
+
             _statisticRepository = new StatisticRepository();
             AllBookQuantity = new ObservableCollection<BookQuantity>();
             Load_page = new RelayCommand<RoutedEventArgs>(Load_Dashboard);
+        }
+
+        private void SaveCurrentPage()
+        {
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "DashboardPage";
+            }
+            else
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "DashboardPage";
+            }
+
+            configuration.Save(ConfigurationSaveMode.Full);
+            ConfigurationManager.RefreshSection("appSettings");
         }
 
         [Obsolete]

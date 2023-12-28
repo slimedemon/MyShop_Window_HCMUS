@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using MyShop.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,22 +15,52 @@ namespace MyShop.ViewModel
     public class MainNavigationViewModel : ViewModelBase
     {
         private Account _account;
-
+        private ICommand _itemInvokedCommand;
+        public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<NavigationViewItemInvokedEventArgs>(OnItemInvoked));
 
         public MainNavigationViewModel(Account account)
         {
             Account = account;
-            ChildPageNavigation = new PageNavigation(new DashboardViewModel());
+            LoadCurrentPage();
         }
         public MainNavigationViewModel()
         {
             Account = null;
-            ChildPageNavigation = new PageNavigation(new DashboardViewModel());
+            LoadCurrentPage();
         }
 
-        private ICommand _itemInvokedCommand;
-        public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<NavigationViewItemInvokedEventArgs>(OnItemInvoked));
-
+        private void LoadCurrentPage()
+        {
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
+            {
+                var currentPage = ConfigurationManager.AppSettings["CurrentPage"];
+                if (currentPage.Equals("DashboardPage"))
+                {
+                    ChildPageNavigation = new PageNavigation(new DashboardViewModel());
+                }
+                else if (currentPage.Equals("StatisticsPage"))
+                {
+                    ChildPageNavigation = new PageNavigation(new StatisticsViewModel());
+                }
+                else if (currentPage.Equals("ProductManagementPage"))
+                {
+                    ChildPageNavigation = new PageNavigation(new ProductManagementViewModel());
+                }
+                else if (currentPage.Equals("AccountPage"))
+                {
+                    ChildPageNavigation = new PageNavigation(new AccountViewModel(Account));
+                }
+                else if (currentPage.Equals("SettingsPage"))
+                {
+                    ChildPageNavigation = new PageNavigation(new SettingsViewModel());
+                }
+            }
+            else 
+            {
+                ChildPageNavigation = new PageNavigation(new DashboardViewModel());
+            }
+        }
+        
         private void OnItemInvoked(NavigationViewItemInvokedEventArgs args)
         {
             // could also use a converter on the command parameter if you don't like
@@ -56,7 +87,7 @@ namespace MyShop.ViewModel
             }
             else if (args.InvokedItem.ToString().Equals("Settings"))
             {
-                ChildPageNavigation.ViewModel = new SettingViewModel();
+                ChildPageNavigation.ViewModel = new SettingsViewModel();
             }
 
         }

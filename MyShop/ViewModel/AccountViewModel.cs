@@ -6,6 +6,7 @@ using MyShop.Services;
 using MyShop.View;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -31,7 +32,6 @@ namespace MyShop.ViewModel
         public string Address { get; set; }
         public string NewPassword { get; set; }
         public string RetypePassword { get; set; }
-        public int MyProperty { get; set; }
         public Account Account { get => _account; set => _account = value; }
         public RelayCommand LogoutCommand { get => _logoutCommand; set => _logoutCommand = value; }
         public RelayCommand UpdateProfileCommand { get => _updateProfileCommand; set => _updateProfileCommand = value; }
@@ -39,6 +39,7 @@ namespace MyShop.ViewModel
 
         public AccountViewModel(Account account)
         {
+            SaveCurrentPage();
 
             Account = account;
             _backupAccount = new Account() 
@@ -60,6 +61,23 @@ namespace MyShop.ViewModel
             LogoutCommand = new RelayCommand(ExecuteLogoutCommand);
             UpdateProfileCommand = new RelayCommand(ExecuteUpdateProfileCommand);
             ChangePasswordCommand = new RelayCommand(ExecuteChangePasswordCommand);
+        }
+
+        private void SaveCurrentPage()
+        {
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "AccountPage";
+            }
+            else
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "DashboardPage";
+            }
+
+            configuration.Save(ConfigurationSaveMode.Full);
+            ConfigurationManager.RefreshSection("appSettings");
         }
 
         private async void ExecuteLogoutCommand()
@@ -163,7 +181,7 @@ namespace MyShop.ViewModel
                 if (task == true)
                 {
                     await App.MainRoot.ShowDialog("Success", "Personal Profile is updated successfully!");
-                    ParentPageNavigation.ViewModel = new LoginViewModel();
+                    ((RootPageViewModel)App.MainRoot.DataContext).ChildPageNavigation.ViewModel = new LoginViewModel();
                 }
                 else
                 {

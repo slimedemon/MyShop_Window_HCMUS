@@ -36,7 +36,7 @@
     <None Remove="View\OrderManagementPage.xaml" />
     <None Remove="View\ProductManagementPage.xaml" />
     <None Remove="View\RootPage.xaml" />
-    <None Remove="View\SettingPage.xaml" />
+    <None Remove="View\SettingsPage.xaml" />
     <None Remove="View\SignupPage.xaml" />
     <None Remove="View\StatisticsPage.xaml" />
     <None Remove="View\WeeklyProductStatisticPage.xaml" />
@@ -265,7 +265,7 @@
     <None Update="Styles\UIColors.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <Page Update="View\SettingPage.xaml">
+    <Page Update="View\SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="View\AccountPage.xaml">

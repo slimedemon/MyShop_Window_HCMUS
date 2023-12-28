@@ -38,7 +38,7 @@
             <StackPanel Grid.Row="1" Padding="20">
                 <TextBlock Text="Connection String: "></TextBlock>
                 <TextBox x:Name="connectionStringTextBox" 
-                         Text="{Binding ConnectionString, Mode=TwoWay}"
+                         Text="{Binding ConnectionString, Mode=OneWay}"
                          Margin="0 0 0 20" IsEnabled="False"/>
                 <TextBlock Text="Database Name: "></TextBlock>
                 <TextBlock Text="Server Address: "></TextBlock>
@@ -52,18 +52,18 @@
 
                 <TextBlock Text="SELECT CONNECTION" FontSize="15" FontWeight="Bold" Margin="0 0 0 0"></TextBlock>
                 <StackPanel>
-                    <RadioButton Content="Windows Authetication" Command="{Binding WindowAuthenticationCommand}" IsChecked="True"></RadioButton>
+                    <RadioButton Content="Windows Authetication" Command="{Binding WindowsAuthenticationCommand}" IsChecked="True"></RadioButton>
 
                     <RadioButton Content="Standard Security" Command="{Binding StandardSecurityCommand}"></RadioButton>
 
                     <StackPanel Margin="40 0 0 0">
                         <TextBox x:Name="usernameTextBox" 
                                  PlaceholderText="Username"
-                                 Text="{Binding DbUsername}"
+                                 Text="{Binding DbUsername, Mode=TwoWay}"
                                  Margin="0 5 0 0"/>
                         <PasswordBox x:Name="passwordTextBox"
                                  PlaceholderText="Password"
-                                 Password="{Binding DbPassword}"
+                                 Password="{Binding DbPassword, Mode=TwoWay}"
                                  Margin="0 20 0 0"/>
                         <CheckBox Name="revealModeCheckBox" Content="Show password" IsChecked="False" Margin="0 20 0 0"
                                   Checked="RevealModeCheckbox_Changed" Unchecked="RevealModeCheckbox_Changed"/>

@@ -13,9 +13,11 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace MyShop.ViewModel
 {
@@ -59,64 +61,93 @@ namespace MyShop.ViewModel
         private async void ExecuteLoginCommand()
         {
             ErrorMessage = String.Empty;
-            string message = await _accountRepository.Authenticate(new System.Net.NetworkCredential(Account.Username, Account.Password));
 
-            if (message == null)
+            try
             {
-                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
-                message = "Something is broken when system is retrieving data from database!";
-                return;
-            }
+                if (Account.Username == null || Account.Password == null)
+                {
+                    throw new Exception("Username and Password cannot be null");
+                }
 
-            if (message.Equals("TRUE"))
-            {
-                Thread.CurrentPrincipal = new GenericPrincipal(
-                    new GenericIdentity(Account.Username), null);
-                string username = Account.Username;
-                var task = await _accountRepository.GetByUsername(username);
+                // Check username
+                if (!Regex.IsMatch(Account.Username, @"^[a-zA-Z0-9_]+$"))
+                {
+                    throw new Exception("Username only contains letters: a-z, A-Z, 0-9 and _");
+                }
 
-                if (task == null)
+                // Check password
+                var hasNumber = new Regex(@"[0-9]+");
+                var hasUpperChar = new Regex(@"[A-Z]+");
+                var hasMinimum8Chars = new Regex(@".{8,}");
+                var isValidated = hasNumber.IsMatch(Account.Password) && hasUpperChar.IsMatch(Account.Password) && hasMinimum8Chars.IsMatch(Account.Password);
+                if (!isValidated)
+                {
+                    throw new Exception("Password must contain at least one number letter, one capital letter and length of the password must be more 8 letters");
+                }
+
+                string message = await _accountRepository.Authenticate(new System.Net.NetworkCredential(Account.Username, Account.Password));
+
+                if (message == null)
                 {
                     await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    message = "Something is broken when system is retrieving data from database!";
                     return;
                 }
 
-                ParentPageNavigation.ViewModel = new MainNavigationViewModel(task);
-            }
-            else
-            {
-                ErrorMessage = message;
-            }
-
-            if (IsRememberAccount)
-            {
-                //save to config for local login
-                var sysconfig = System.Configuration.ConfigurationManager.OpenExeConfiguration(
-                    ConfigurationUserLevel.None);
-                sysconfig.AppSettings.Settings["Username"].Value = Account.Username;
-
-                // Encrypt password
-                var passwordInBytes = Encoding.UTF8.GetBytes(Account.Password);
-                var entropy = new byte[20];
-                using (var rng = RandomNumberGenerator.Create())
+                if (message.Equals("TRUE"))
                 {
-                    rng.GetBytes(entropy);
+                    Thread.CurrentPrincipal = new GenericPrincipal(
+                        new GenericIdentity(Account.Username), null);
+                    string username = Account.Username;
+                    var task = await _accountRepository.GetByUsername(username);
+
+                    if (task == null)
+                    {
+                        await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                        return;
+                    }
+
+                    ParentPageNavigation.ViewModel = new MainNavigationViewModel(task);
+                }
+                else
+                {
+                    throw new Exception(message);
                 }
 
-                var cypherText = ProtectedData.Protect(
-                    passwordInBytes,
-                    entropy,
-                    DataProtectionScope.CurrentUser
-                );
+                if (IsRememberAccount)
+                {
+                    //save to config for local login
+                    var configuration = System.Configuration.ConfigurationManager.OpenExeConfiguration(
+                        ConfigurationUserLevel.None);
+                    configuration.AppSettings.Settings["Username"].Value = Account.Username;
 
-                var passwordIn64 = Convert.ToBase64String(cypherText);
-                var entropyIn64 = Convert.ToBase64String(entropy);
+                    // Encrypt password
+                    var passwordInBytes = Encoding.UTF8.GetBytes(Account.Password);
+                    var entropy = new byte[20];
+                    using (var rng = RandomNumberGenerator.Create())
+                    {
+                        rng.GetBytes(entropy);
+                    }
 
-                sysconfig.AppSettings.Settings["Password"].Value = passwordIn64;
-                sysconfig.AppSettings.Settings["Entropy"].Value = entropyIn64;
+                    var cypherText = ProtectedData.Protect(
+                        passwordInBytes,
+                        entropy,
+                        DataProtectionScope.CurrentUser
+                    );
 
-                sysconfig.Save(ConfigurationSaveMode.Full);
-                System.Configuration.ConfigurationManager.RefreshSection("appSettings");
+                    var passwordIn64 = Convert.ToBase64String(cypherText);
+                    var entropyIn64 = Convert.ToBase64String(entropy);
+
+                    configuration.AppSettings.Settings["Password"].Value = passwordIn64;
+                    configuration.AppSettings.Settings["Entropy"].Value = entropyIn64;
+
+                    configuration.Save(ConfigurationSaveMode.Full);
+                    System.Configuration.ConfigurationManager.RefreshSection("appSettings");
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
             }
         }
 

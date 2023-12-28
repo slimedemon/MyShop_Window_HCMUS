@@ -15,6 +15,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MyShop.ViewModel
 {
@@ -32,7 +33,11 @@ namespace MyShop.ViewModel
         public string DbUsername { get => _dbUsername; set => _dbUsername = value; }
         public string DbPassword { get => _dbPassword; set => _dbPassword = value; }
         public string CustomConnectionString { get; set; }
-        public string ConnectionString { get => _connectionString; set => _connectionString = value; }
+        public string ConnectionString 
+        { 
+            get => _connectionString; 
+            set => _connectionString = value; 
+        }
 
         public RelayCommand SaveCommand { get; set; }
         public RelayCommand BackCommand { get; set; }
@@ -43,7 +48,7 @@ namespace MyShop.ViewModel
 
         public DatabaseConfigurationViewModel()
         {
-            _type = "Trusted Connection";
+            _type = "Windows Authentication";
             SaveCommand = new RelayCommand(ExecuteSaveCommand);
             BackCommand = new RelayCommand(ExecuteBackCommand);
             WindowsAuthenticationCommand = new RelayCommand(ExecuteWindowsAuthenticationCommand);
@@ -60,7 +65,13 @@ namespace MyShop.ViewModel
             builder.TrustServerCertificate = true;
 
             // Create connection string
-            if (_type.Equals("Windows Authentication"))
+            if (_type == null || _type.Equals(""))
+            {
+                // Default = Windows Authentication
+                builder.IntegratedSecurity = true;
+                ConnectionString = builder.ConnectionString;
+            }
+            else if (_type.Equals("Windows Authentication"))
             {
                 builder.IntegratedSecurity = true;
                 ConnectionString = builder.ConnectionString;
@@ -68,8 +79,8 @@ namespace MyShop.ViewModel
             else if (_type.Equals("Standard Security"))
             {
 
-                builder.UserID = DbUsername;
-                builder.Password = DbPassword;
+                builder.UserID = DbUsername ?? "";
+                builder.Password = DbPassword ?? "";
                 ConnectionString = builder.ConnectionString;
             }
             else if (_type.Equals("Custom Connection String"))
@@ -77,7 +88,7 @@ namespace MyShop.ViewModel
                 ConnectionString = CustomConnectionString;
             }
 
-            var sysconfig = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
             // Encrypt password
             if (DbPassword != null)
@@ -97,22 +108,23 @@ namespace MyShop.ViewModel
 
                 var passwordIn64 = Convert.ToBase64String(cypherText);
                 var entropyIn64 = Convert.ToBase64String(entropy);
-                sysconfig.AppSettings.Settings["DbPassword"].Value = passwordIn64;
-                sysconfig.AppSettings.Settings["DbEntropy"].Value = entropyIn64;
+                configuration.AppSettings.Settings["DbPassword"].Value = passwordIn64;
+                configuration.AppSettings.Settings["DbEntropy"].Value = entropyIn64;
             }
 
-            if (DbUsername != null) sysconfig.AppSettings.Settings["DbUsername"].Value = DbUsername;
-            if (ServerAddress != null) sysconfig.AppSettings.Settings["ServerAddress"].Value = ServerAddress;
-            if (DatabaseName != null) sysconfig.AppSettings.Settings["DatabaseName"].Value = DatabaseName;
-            if (ConnectionString != null) sysconfig.AppSettings.Settings["ConnectionString"].Value = ConnectionString;
+            configuration.AppSettings.Settings["DbUsername"].Value = DbUsername ?? "";
+            configuration.AppSettings.Settings["ServerAddress"].Value = ServerAddress ?? "";
+            configuration.AppSettings.Settings["DatabaseName"].Value = DatabaseName ?? "";
+            configuration.AppSettings.Settings["ConnectionString"].Value = ConnectionString ?? "";
 
-            sysconfig.Save(ConfigurationSaveMode.Full);
-            System.Configuration.ConfigurationManager.RefreshSection("AppSettings");
+            configuration.AppSettings.SectionInformation.ForceSave = true;
+            configuration.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
 
             await App.MainRoot.ShowDialog("Success", "Database configuration is saved!");
         }
 
-        private async void ExecuteBackCommand()
+        private void ExecuteBackCommand()
         {
             ParentPageNavigation.ViewModel = new LoginViewModel();
         }
@@ -178,71 +190,5 @@ namespace MyShop.ViewModel
 
             CustomConnectionString = ConnectionString;
         }
-
-        //private string _dbUsername;
-        //private string _dbPassword;
-        //private string _errorMessage;
-
-        //private IAccountRepository _accountRepository;
-        //private RelayCommand _loginCommand;
-
-        //public string DbUsername { get => _dbUsername; set => _dbUsername = value; }
-        //public string DbPassword { get => _dbPassword; set => _dbPassword = value; }
-        //public string ErrorMessage { get => _errorMessage; set => _errorMessage = value; }
-        //public RelayCommand LoginCommand { get => _loginCommand; set => _loginCommand = value; }
-
-        //public LoginDatabaseViewModel()
-        //{
-        //    _accountRepository = new AccountRepository();
-        //    LoginCommand = new RelayCommand(ExecuteLoginCommand);
-        //}
-
-
-        //private async void ExecuteLoginCommand()
-        //{
-        //    ErrorMessage = String.Empty;
-        //    string message = await _accountRepository.AuthenticateDbAccount(
-        //        new System.Net.NetworkCredential(DbUsername, DbPassword));
-
-        //    if (message.Equals("TRUE"))
-        //    {
-        //        Thread.CurrentPrincipal = new GenericPrincipal(
-        //            new GenericIdentity(DbUsername), null);
-        //        ParentPageNavigation.ViewModel = new LoginViewModel();
-        //    }
-        //    else
-        //    {
-        //        ErrorMessage = message;
-        //        return;
-        //    }
-
-        //    //save to config for local login
-        //    var sysconfig = System.Configuration.ConfigurationManager.OpenExeConfiguration(
-        //        ConfigurationUserLevel.None);
-        //    sysconfig.AppSettings.Settings["dbUsername"].Value = DbUsername;
-
-        //    // Encrypt password
-        //    var passwordInBytes = Encoding.UTF8.GetBytes(DbPassword);
-        //    var entropy = new byte[20];
-        //    using (var rng = RandomNumberGenerator.Create())
-        //    {
-        //        rng.GetBytes(entropy);
-        //    }
-
-        //    var cypherText = ProtectedData.Protect(
-        //        passwordInBytes,
-        //        entropy,
-        //        DataProtectionScope.CurrentUser
-        //    );
-
-        //    var passwordIn64 = Convert.ToBase64String(cypherText);
-        //    var entropyIn64 = Convert.ToBase64String(entropy);
-
-        //    sysconfig.AppSettings.Settings["dbPassword"].Value = passwordIn64;
-        //    sysconfig.AppSettings.Settings["dbEntropy"].Value = entropyIn64;
-
-        //    sysconfig.Save(ConfigurationSaveMode.Full);
-        //    System.Configuration.ConfigurationManager.RefreshSection("appSettings");
-        //}
     }
 }

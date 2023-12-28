@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using MyShop.View;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,16 +13,34 @@ namespace MyShop.ViewModel
 {
     class StatisticsViewModel : ViewModelBase
     {
-        public StatisticsViewModel()
-        {
-            RevenueChildPageNavigation = new PageNavigation(new DailyRevenueStatisticViewModel());
-            ProductChildPageNavigation = new PageNavigation(new DailyProductStatisticViewModel());
-        }
-
         private ICommand _revenueItemInvokedCommand;
         private ICommand _productItemInvokedCommand;
         public ICommand RevenueItemInvokedCommand => _revenueItemInvokedCommand ?? (_revenueItemInvokedCommand = new RelayCommand<NavigationViewItemInvokedEventArgs>(OnRevenueItemInvoked));
         public ICommand ProductItemInvokedCommand => _productItemInvokedCommand ?? (_productItemInvokedCommand = new RelayCommand<NavigationViewItemInvokedEventArgs>(OnProductItemInvoked));
+        public StatisticsViewModel()
+        {
+            SaveCurrentPage();
+
+            RevenueChildPageNavigation = new PageNavigation(new DailyRevenueStatisticViewModel());
+            ProductChildPageNavigation = new PageNavigation(new DailyProductStatisticViewModel());
+        }
+
+        private void SaveCurrentPage()
+        {
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "StatisticsPage";
+            }
+            else
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "DashboardPage";
+            }
+
+            configuration.Save(ConfigurationSaveMode.Full);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
 
         private void OnRevenueItemInvoked(NavigationViewItemInvokedEventArgs args)
         {

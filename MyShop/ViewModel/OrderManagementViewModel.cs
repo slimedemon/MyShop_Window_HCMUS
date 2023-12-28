@@ -94,6 +94,8 @@ namespace MyShop.ViewModel
 
         // Constructor
         public OrderManagementViewModel() {
+            SaveCurrentPage();
+
             _billRepository = new BillRepository();
             _customerRepository = new CustomerRepository();
             _billDetailRowDic = new Dictionary<int, List<BillDetailRow>>();
@@ -111,6 +113,23 @@ namespace MyShop.ViewModel
             DeleteCommand = new RelayCommand(ExecuteDeleteOrderCommand);
             EditCommand = new RelayCommand(ExecuteEditOrderCommand);
             SearchCommand = new RelayCommand(ExecuteSearchCommand);
+        }
+
+        private void SaveCurrentPage()
+        {
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "OrderManagementPage";
+            }
+            else
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "DashboardPage";
+            }
+
+            configuration.Save(ConfigurationSaveMode.Full);
+            ConfigurationManager.RefreshSection("appSettings");
         }
 
         public void ExecuteCreateOrderCommand()

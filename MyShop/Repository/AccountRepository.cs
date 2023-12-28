@@ -144,19 +144,28 @@ namespace MyShop.Repository
                     command.Parameters.Add("@username", SqlDbType.NVarChar).Value = credential.UserName;
 
                     var reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        encryptedPasswordIn64 = Convert.ToString(reader["password"]);
-                        entropyIn64 = Convert.ToString(reader["entropy"]);
-                    }
 
-                    password = DecryptPassword(encryptedPasswordIn64, entropyIn64);
-
-                    if (password.Equals(credential.Password))
+                    if (reader.HasRows)
                     {
-                        isValid = true;
+
+                        while (reader.Read())
+                        {
+                            encryptedPasswordIn64 = Convert.ToString(reader["password"]);
+                            entropyIn64 = Convert.ToString(reader["entropy"]);
+                        }
+
+                        password = DecryptPassword(encryptedPasswordIn64, entropyIn64);
+
+                        if (password != null && password.Equals(credential.Password))
+                        {
+                            isValid = true;
+                        }
+                        else isValid = false;
                     }
-                    else isValid = false;
+                    else
+                    { 
+                        isValid = false;
+                    }
 
                     message = isValid ? "TRUE" : "* Invalid username or password!";
                 }

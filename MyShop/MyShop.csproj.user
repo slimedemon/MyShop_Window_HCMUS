@@ -17,7 +17,7 @@
     <None Update="Styles\UIColors.xaml">
       <SubType>Designer</SubType>
     </None>
-    <Page Update="View\SettingPage.xaml">
+    <Page Update="View\SettingsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\AccountPage.xaml">

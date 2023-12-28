@@ -17,7 +17,7 @@ using Windows.System.Preview;
 
 namespace MyShop.ViewModel
 {
-    public class SettingViewModel: ViewModelBase
+    public class SettingsViewModel: ViewModelBase
     {
         // Fields
         private bool _toggleSwitchIsOn;
@@ -53,14 +53,33 @@ namespace MyShop.ViewModel
         private RelayCommand _importByAccessCommand;
 
         // Constructor
-        public SettingViewModel()
+        public SettingsViewModel()
         {
+            SaveCurrentPage();
+
             ToggleSwitchIsOn = false;
             _bookRepository = new BookRepository();
             SaveSettingCommand = new RelayCommand(ExecuteSaveSettingCommand);
             PageLoaded();
             ImportByExcelCommand = new RelayCommand(ExecuteImportByExcelCommand);
             ImportByAccessCommand = new RelayCommand(ExecuteImportByAccessCommand);
+        }
+
+        private void SaveCurrentPage()
+        {
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "SettingsPage";
+            }
+            else
+            {
+                configuration.AppSettings.Settings["CurrentPage"].Value = "DashboardPage";
+            }
+
+            configuration.Save(ConfigurationSaveMode.Full);
+            ConfigurationManager.RefreshSection("appSettings");
         }
 
         private void PageLoaded()
