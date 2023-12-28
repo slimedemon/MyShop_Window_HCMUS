@@ -119,15 +119,15 @@ namespace MyShop.Repository
         }
 
         // return null => request failed.
-        public async Task<string> AuthenticateAccount(NetworkCredential credential)
+        public async Task<string> Authenticate(NetworkCredential credential)
         {
             string message = "";
             var connection = GetConnection();
 
             try
             {
-                bool isValidAccount = false;
-                string password, passwordIn64 = string.Empty, entropyIn64 = string.Empty;
+                bool isValid = false;
+                string password, encryptedPasswordIn64 = string.Empty, entropyIn64 = string.Empty;
                 await Task.Run(() =>
                 {
                     try
@@ -146,20 +146,19 @@ namespace MyShop.Repository
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        passwordIn64 = Convert.ToString(reader["password"]);
+                        encryptedPasswordIn64 = Convert.ToString(reader["password"]);
                         entropyIn64 = Convert.ToString(reader["entropy"]);
                     }
 
-                    password = DecryptPassword(passwordIn64, entropyIn64);
+                    password = DecryptPassword(encryptedPasswordIn64, entropyIn64);
 
                     if (password.Equals(credential.Password))
                     {
-                        isValidAccount = true;
+                        isValid = true;
                     }
-                    else isValidAccount = false;
+                    else isValid = false;
 
-                    message = isValidAccount ? "TRUE" : "* Invalid username or password!";
-
+                    message = isValid ? "TRUE" : "* Invalid username or password!";
                 }
             }
             catch (Exception ex)

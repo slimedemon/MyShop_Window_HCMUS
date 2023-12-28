@@ -293,7 +293,7 @@ namespace MyShop.ViewModel
                 await App.MainRoot.ShowDialog("Success", "Current bill is saved!");
 
                 // Back to parent page
-                ParentPageNavigation.ViewModel = new OrderHistoryViewModel();
+                ParentPageNavigation.ViewModel = new OrderManagementViewModel();
             }
             catch (Exception ex)
             {
@@ -311,7 +311,7 @@ namespace MyShop.ViewModel
                 await _bookRepository.EditBookQuantity(_originalOrders[i].BookId, temp.Quantity - _originalOrders[i].Number);
             }
 
-            ParentPageNavigation.ViewModel = new OrderHistoryViewModel();
+            ParentPageNavigation.ViewModel = new OrderManagementViewModel();
         }
     }
 }

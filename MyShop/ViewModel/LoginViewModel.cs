@@ -43,23 +43,23 @@ namespace MyShop.ViewModel
 
         private void ExecuteSignupCommand()
         {
-            ParentPageNavigation.ViewModel = new RegisterViewModel();
+            ParentPageNavigation.ViewModel = new SignupViewModel();
         }
 
         private void ExecuteConfigurationCommand()
         {
-            ParentPageNavigation.ViewModel = new LoginDatabaseViewModel();
+            ParentPageNavigation.ViewModel = new DatabaseConfigurationViewModel();
         }
 
         private void ExecuteResetCommand()
         {
-            ParentPageNavigation.ViewModel = new RegisterViewModel();
+            ParentPageNavigation.ViewModel = new SignupViewModel();
         }
 
         private async void ExecuteLoginCommand()
         {
             ErrorMessage = String.Empty;
-            string message = await _accountRepository.AuthenticateAccount(new System.Net.NetworkCredential(Account.Username, Account.Password));
+            string message = await _accountRepository.Authenticate(new System.Net.NetworkCredential(Account.Username, Account.Password));
 
             if (message == null)
             {
@@ -81,7 +81,7 @@ namespace MyShop.ViewModel
                     return;
                 }
 
-                ParentPageNavigation.ViewModel = new HomeViewModel(task);
+                ParentPageNavigation.ViewModel = new MainNavigationViewModel(task);
             }
             else
             {

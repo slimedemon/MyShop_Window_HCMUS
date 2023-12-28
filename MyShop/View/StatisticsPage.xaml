@@ -1,0 +1,84 @@
+<Page
+    x:Class="MyShop.View.StatisticsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MyShop.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core" xmlns:i="using:Microsoft.Xaml.Interactivity" 
+    xmlns:viewmodel="using:MyShop.ViewModel" 
+   
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=viewmodel:StatisticsViewModel}"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <viewmodel:StatisticsViewModel></viewmodel:StatisticsViewModel>
+    </Page.DataContext>
+
+    <Grid Margin="20, 20, 20, 20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <NavigationView x:Name="nvRevenuePage"
+                            PaneDisplayMode="Top"
+                            IsSettingsVisible="False"
+                            IsBackButtonVisible="Collapsed">
+
+                <i:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="ItemInvoked">
+                        <core:EventTriggerBehavior.Actions>
+                            <core:InvokeCommandAction Command="{Binding RevenueItemInvokedCommand}" />
+                        </core:EventTriggerBehavior.Actions>
+                    </core:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+
+
+                <NavigationView.MenuItems>
+                    <NavigationViewItem Content="Daily" x:Name="navItemDailyRevenue" Icon="CalendarDay" IsSelected="True"/>
+                    <NavigationViewItem Content="Weekly" x:Name="navItemWeeklyRevenue" Icon="CalendarWeek"/>
+                    <NavigationViewItem Content="Monthly" x:Name="navItemMonthlyRevenue" Icon="Calendar"/>
+                    <NavigationViewItem Content="Yearly" x:Name="navItemYearlyRevenue" Icon="ThreeBars" HorizontalAlignment="Right" />
+                </NavigationView.MenuItems>
+
+                <Frame x:Name="RevenuecontentFrame"
+                   Content="{Binding RevenueChildPageNavigation.ViewModel,Converter={StaticResource ViewModelToView}}"/>
+            </NavigationView>
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <NavigationView x:Name="nvProductPage"
+                            PaneDisplayMode="Top"
+                            IsSettingsVisible="False"
+                            IsBackButtonVisible="Collapsed">
+
+                <i:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="ItemInvoked">
+                        <core:EventTriggerBehavior.Actions>
+                            <core:InvokeCommandAction Command="{Binding ProductItemInvokedCommand}" />
+                        </core:EventTriggerBehavior.Actions>
+                    </core:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+
+
+                <NavigationView.MenuItems>
+                    <NavigationViewItem Content="Daily" x:Name="navItemDailyProduct" Icon="CalendarDay" IsSelected="True"/>
+                    <NavigationViewItem Content="Weekly" x:Name="navItemWeeklyProduct" Icon="CalendarWeek"/>
+                    <NavigationViewItem Content="Monthly" x:Name="navItemMonthlyProduct" Icon="Priority"/>
+                    <NavigationViewItem Content="Yearly" x:Name="navItemYearlyProduct" Icon="ThreeBars" HorizontalAlignment="Right" />
+                </NavigationView.MenuItems>
+
+                <Frame x:Name="ProductcontentFrame"
+                   Content="{Binding ProductChildPageNavigation.ViewModel,Converter={StaticResource ViewModelToView}}"/>
+            </NavigationView>
+
+        </Grid>
+
+    </Grid>
+</Page>

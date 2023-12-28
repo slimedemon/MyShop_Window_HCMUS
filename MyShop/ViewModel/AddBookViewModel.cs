@@ -67,7 +67,7 @@ namespace MyShop.ViewModel
             if (task)
             {
                 await App.MainRoot.ShowDialog("Success", "Book is added!");
-                ParentPageNavigation.ViewModel = new BooksViewModel();
+                ParentPageNavigation.ViewModel = new BookManagementViewModel();
             }
             else
             {
@@ -76,7 +76,7 @@ namespace MyShop.ViewModel
         }
         public void ExecuteBackCommand()
         {
-            ParentPageNavigation.ViewModel = new BooksViewModel();
+            ParentPageNavigation.ViewModel = new BookManagementViewModel();
         }
 
         public async void ExecuteBrowseCommand()

@@ -13,9 +13,9 @@
                 <ResourceDictionary Source="Themes/LightTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
-            <service:ViewModelToView x:Key="ViewModelToView"/>
+            <service:ViewModelToViewConverter x:Key="ViewModelToView"/>
             <service:RelativeToAbsoluteConverter x:Key="RelativeToAbsoluteConverter"/>
-            <service:FormatDate x:Key="FormatDate"/>
+            <service:FormatDateConverter x:Key="FormatDate"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

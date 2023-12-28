@@ -236,7 +236,7 @@ namespace MyShop.ViewModel
 
         public void ExecuteBackCommand()
         {
-            ParentPageNavigation.ViewModel = new OrderHistoryViewModel();
+            ParentPageNavigation.ViewModel = new OrderManagementViewModel();
         }
 
         // Constructor

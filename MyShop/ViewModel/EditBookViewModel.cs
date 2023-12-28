@@ -63,7 +63,7 @@ namespace MyShop.ViewModel
             var task = await _bookRepository.Edit(CurrentBook);
             if (task)
             {
-                ParentPageNavigation.ViewModel = new BooksViewModel();
+                ParentPageNavigation.ViewModel = new BookManagementViewModel();
             }
             else
             {
@@ -74,7 +74,7 @@ namespace MyShop.ViewModel
         }
         public void ExecuteBackCommand()
         {
-            ParentPageNavigation.ViewModel = new BooksViewModel();
+            ParentPageNavigation.ViewModel = new BookManagementViewModel();
         }
 
         public void ExecuteBrowseCommand()

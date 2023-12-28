@@ -26,7 +26,7 @@
     <Page Update="View\AddOrderPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\OrderHistoryPage.xaml">
+    <Page Update="View\OrderManagementPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\EditOrderPage.xaml">
@@ -41,40 +41,40 @@
     <Page Update="View\AddBookPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\BookTypePage.xaml">
+    <Page Update="View\GenreManagementPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\BooksPage.xaml">
+    <Page Update="View\BookManagementPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\BookPage.xaml">
+    <Page Update="View\ProductManagementPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\WeeklyProductPage.xaml">
+    <Page Update="View\WeeklyProductStatisticPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\WeeklyRevenuePage.xaml">
+    <Page Update="View\WeeklyRevenueStatisticPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\YearlyRevenuePage.xaml">
+    <Page Update="View\YearlyRevenueStatisticPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\YearlyProductPage.xaml">
+    <Page Update="View\YearlyProductStatisticPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\MonthlyRevenuePage.xaml">
+    <Page Update="View\MonthlyRevenueStatisticPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\MonthlyProductPage.xaml">
+    <Page Update="View\MonthlyProductStatisticPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\DailyRevenuePage.xaml">
+    <Page Update="View\DailyRevenueStatisticPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\DailyProductPage.xaml">
+    <Page Update="View\DailyProductStatisticPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\StatisticPage.xaml">
+    <Page Update="View\StatisticsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\LightTheme.xaml">
@@ -83,16 +83,16 @@
     <Page Update="View\DashboardPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\HomePage.xaml">
+    <Page Update="View\MainNavigationPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\RegisterPage.xaml">
+    <Page Update="View\SignupPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\RootPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\LoginDatabasePage.xaml">
+    <Page Update="View\DatabaseConfigurationPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\LoginPage.xaml">

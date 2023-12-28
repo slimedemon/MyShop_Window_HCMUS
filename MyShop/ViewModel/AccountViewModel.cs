@@ -12,7 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static MyShop.ViewModel.OrderHistoryViewModel;
+using static MyShop.ViewModel.OrderManagementViewModel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace MyShop.ViewModel
