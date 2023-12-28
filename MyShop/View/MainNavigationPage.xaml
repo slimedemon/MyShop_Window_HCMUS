@@ -9,9 +9,9 @@
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d" 
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="LoadCurrentPage">
     <Grid>
-        <NavigationView x:Name="nvHomePage"
+        <NavigationView x:Name="nvMain"
                         PaneDisplayMode="Left"
                         IsSettingsVisible="False"
                         IsBackButtonVisible="Collapsed">

@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.WinUI.UI.Controls;
 using Microsoft.UI.Xaml.Controls;
 using MyShop.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -45,6 +47,10 @@ namespace MyShop.ViewModel
                 else if (currentPage.Equals("ProductManagementPage"))
                 {
                     ChildPageNavigation = new PageNavigation(new ProductManagementViewModel());
+                }
+                else if (currentPage.Equals("OrderManagementPage"))
+                {
+                    ChildPageNavigation = new PageNavigation(new OrderManagementViewModel());
                 }
                 else if (currentPage.Equals("AccountPage"))
                 {
@@ -91,6 +97,7 @@ namespace MyShop.ViewModel
             }
 
         }
+
         public PageNavigation ChildPageNavigation { get; set; }
         public Account Account { get => _account; set => _account = value; }
     }

@@ -5,8 +5,11 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using MyShop.Model;
+using MyShop.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -26,6 +29,103 @@ namespace MyShop.View
         public MainNavigationPage()
         {
             this.InitializeComponent();
+        }
+
+        private void LoadCurrentPage(object sender, RoutedEventArgs e)
+        {
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
+            {
+                var currentPage = ConfigurationManager.AppSettings["CurrentPage"];
+
+              
+
+                if (currentPage.Equals("DashboardPage"))
+                {
+                    int index;
+                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    {
+                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Dashboard"))
+                        {
+                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            break;
+                        }
+                    }
+                }
+                else if (currentPage.Equals("StatisticsPage"))
+                {
+                    int index;
+                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    {
+                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Statistics"))
+                        {
+                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            break;
+                        }
+                    }
+                }
+                else if (currentPage.Equals("ProductManagementPage"))
+                {
+                    int index;
+                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    {
+                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Product Management"))
+                        {
+                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            break;
+                        }
+                    }
+                }        
+                else if (currentPage.Equals("OrderManagementPage"))
+                {
+                    int index;
+                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    {
+                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Order Management"))
+                        {
+                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            break;
+                        }
+                    }
+
+                }
+                else if (currentPage.Equals("AccountPage"))
+                {
+                    int index;
+                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    {
+                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Account"))
+                        {
+                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            break;
+                        }
+                    }
+                }
+                else if (currentPage.Equals("SettingsPage"))
+                {
+                    int index;
+                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    {
+                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Settings"))
+                        {
+                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                int index;
+                for (index = 0; index < nvMain.MenuItems.Count; index++)
+                {
+                    if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Dashboard"))
+                    {
+                        nvMain.SelectedItem = nvMain.MenuItems[index];
+                        break;
+                    }
+                }
+
+            }
         }
     }
 }
