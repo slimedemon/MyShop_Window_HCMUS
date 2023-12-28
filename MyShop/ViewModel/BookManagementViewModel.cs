@@ -49,8 +49,6 @@ namespace MyShop.ViewModel
         private RelayCommand _resetSearchCommand;
         private RelayCommand _resetPriceCommand;
         private RelayCommand _resetCategoryCommand;
-        private RelayCommand _importByExcelCommand;
-        private RelayCommand _importByAccessCommand;
         public BookManagementViewModel()
         {
             _bookRepository = new BookRepository();

@@ -19,7 +19,7 @@ namespace MyShop.Services
             {typeof(MainNavigationViewModel), typeof(MainNavigationPage)},
             {typeof(ProductManagementViewModel), typeof(ProductManagementPage)},
             {typeof(DashboardViewModel), typeof(DashboardPage)},
-            {typeof(ViewModel.OrderManagementViewModel), typeof(View.OrderManagementPage)},
+            {typeof(OrderManagementViewModel), typeof(OrderManagementPage)},
             {typeof(AccountViewModel), typeof(AccountPage)},
             {typeof(SettingsViewModel), typeof(SettingsPage)},
             {typeof(StatisticsViewModel), typeof(StatisticsPage)},
@@ -39,7 +39,8 @@ namespace MyShop.Services
             {typeof(EditOrderViewModel), typeof(EditOrderPage)},
             {typeof(DatabaseConfigurationViewModel), typeof(DatabaseConfigurationPage)},
             {typeof(SignupViewModel), typeof(SignupPage)},
-            
+            {typeof(RevenueStatisticsViewModel), typeof(RevenueStatisticsPage)},
+            {typeof(ProductStatisticsViewModel), typeof(ProductStatisticsPage)},  
             //add more page...
         };
         object IValueConverter.Convert(object value, Type targetType, object parameter, string language)

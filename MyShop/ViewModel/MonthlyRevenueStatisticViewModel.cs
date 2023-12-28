@@ -48,7 +48,7 @@ namespace MyShop.ViewModel
                     long v = (long) value;
                     if( v < DateTime.MinValue.Ticks || v > DateTime.MaxValue.Ticks) return "";
                     var date = (new DateTime(v));
-                    return $"{date.Month}.{date.Year}";
+                    return $"{date.ToString("MMM/yy")}";
                 }
             }
         };

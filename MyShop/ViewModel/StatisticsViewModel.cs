@@ -13,16 +13,14 @@ namespace MyShop.ViewModel
 {
     class StatisticsViewModel : ViewModelBase
     {
-        private ICommand _revenueItemInvokedCommand;
-        private ICommand _productItemInvokedCommand;
-        public ICommand RevenueItemInvokedCommand => _revenueItemInvokedCommand ?? (_revenueItemInvokedCommand = new RelayCommand<NavigationViewItemInvokedEventArgs>(OnRevenueItemInvoked));
-        public ICommand ProductItemInvokedCommand => _productItemInvokedCommand ?? (_productItemInvokedCommand = new RelayCommand<NavigationViewItemInvokedEventArgs>(OnProductItemInvoked));
+        private ICommand _itemInvokedCommand;
+        public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<NavigationViewItemInvokedEventArgs>(OnItemInvoked));
+        public PageNavigation ChildPageNavigation { get; set; }
+
         public StatisticsViewModel()
         {
             SaveCurrentPage();
-
-            RevenueChildPageNavigation = new PageNavigation(new DailyRevenueStatisticViewModel());
-            ProductChildPageNavigation = new PageNavigation(new DailyProductStatisticViewModel());
+            ChildPageNavigation = new PageNavigation(new RevenueStatisticsViewModel());
         }
 
         private void SaveCurrentPage()
@@ -42,47 +40,21 @@ namespace MyShop.ViewModel
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        private void OnRevenueItemInvoked(NavigationViewItemInvokedEventArgs args)
+        void OnItemInvoked(NavigationViewItemInvokedEventArgs eventArgs) 
         {
-            if (args.InvokedItem.ToString().Equals("Daily"))
+            if (eventArgs.InvokedItem.ToString().Equals("Revenue Statistics"))
             {
-                RevenueChildPageNavigation.ViewModel = new DailyRevenueStatisticViewModel();
+                ChildPageNavigation.ViewModel = new RevenueStatisticsViewModel();
             }
-            else if (args.InvokedItem.ToString().Equals("Weekly"))
+            else if (eventArgs.InvokedItem.ToString().Equals("Product Statistics"))
             {
-                RevenueChildPageNavigation.ViewModel = new WeeklyRevenueStatisticViewModel();
-            } 
-            else if (args.InvokedItem.ToString().Equals("Monthly"))
-            {
-                RevenueChildPageNavigation.ViewModel = new MonthlyRevenueStatisticViewModel();
+                ChildPageNavigation.ViewModel = new ProductStatisticsViewModel();
             }
-            else if (args.InvokedItem.ToString().Equals("Yearly"))
+            else if (eventArgs.InvokedItem.ToString().Equals("Best Seller Statistics"))
             {
-                RevenueChildPageNavigation.ViewModel = new YearlyRevenueStatisticViewModel();
-            }
-
-        }
-        private void OnProductItemInvoked(NavigationViewItemInvokedEventArgs args)
-        {
-            if (args.InvokedItem.ToString().Equals("Daily"))
-            {
-                ProductChildPageNavigation.ViewModel = new DailyProductStatisticViewModel();
-            }
-            else if (args.InvokedItem.ToString().Equals("Weekly"))
-            {
-                ProductChildPageNavigation.ViewModel = new WeeklyProductStatisticViewModel();
-            }
-            else if (args.InvokedItem.ToString().Equals("Monthly"))
-            {
-                ProductChildPageNavigation.ViewModel = new MonthlyProductStatisticViewModel();
-            }
-            else if (args.InvokedItem.ToString().Equals("Yearly"))
-            {
-                ProductChildPageNavigation.ViewModel = new YearlyProductStatisticViewModel();
+                //
             }
         }
-        public PageNavigation RevenueChildPageNavigation { get; set; }
-        public PageNavigation ProductChildPageNavigation { get; set; }
     }
 
 }

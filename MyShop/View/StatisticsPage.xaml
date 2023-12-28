@@ -16,69 +16,27 @@
     </Page.DataContext>
 
     <Grid Margin="20, 20, 20, 20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <NavigationView x:Name="nvStatisticsPage"
+                     PaneDisplayMode="Top"
+                     IsSettingsVisible="False"
+                     IsBackButtonVisible="Collapsed">
 
-        <Grid Grid.Row="0">
-            <NavigationView x:Name="nvRevenuePage"
-                            PaneDisplayMode="Top"
-                            IsSettingsVisible="False"
-                            IsBackButtonVisible="Collapsed">
+            <i:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemInvoked">
+                    <core:EventTriggerBehavior.Actions>
+                        <core:InvokeCommandAction Command="{Binding ItemInvokedCommand}" />
+                    </core:EventTriggerBehavior.Actions>
+                </core:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
 
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="ItemInvoked">
-                        <core:EventTriggerBehavior.Actions>
-                            <core:InvokeCommandAction Command="{Binding RevenueItemInvokedCommand}" />
-                        </core:EventTriggerBehavior.Actions>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Revenue Statistics" x:Name="navItemRevenueStatistics" Icon="Caption" HorizontalAlignment="Right" IsSelected="True"/>
+                <NavigationViewItem Content="Product Statistics" x:Name="navItemProductStatistics" Icon="AllApps"/>
+                <NavigationViewItem Content="Best Seller Statistic" x:Name="navItemBestSellerStatistic" Icon="Up"   />
+            </NavigationView.MenuItems>
 
 
-                <NavigationView.MenuItems>
-                    <NavigationViewItem Content="Daily" x:Name="navItemDailyRevenue" Icon="CalendarDay" IsSelected="True"/>
-                    <NavigationViewItem Content="Weekly" x:Name="navItemWeeklyRevenue" Icon="CalendarWeek"/>
-                    <NavigationViewItem Content="Monthly" x:Name="navItemMonthlyRevenue" Icon="Calendar"/>
-                    <NavigationViewItem Content="Yearly" x:Name="navItemYearlyRevenue" Icon="ThreeBars" HorizontalAlignment="Right" />
-                </NavigationView.MenuItems>
-
-                <Frame x:Name="RevenuecontentFrame"
-                   Content="{Binding RevenueChildPageNavigation.ViewModel,Converter={StaticResource ViewModelToView}}"/>
-            </NavigationView>
-
-        </Grid>
-
-        <Grid Grid.Row="1">
-            <NavigationView x:Name="nvProductPage"
-                            PaneDisplayMode="Top"
-                            IsSettingsVisible="False"
-                            IsBackButtonVisible="Collapsed">
-
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="ItemInvoked">
-                        <core:EventTriggerBehavior.Actions>
-                            <core:InvokeCommandAction Command="{Binding ProductItemInvokedCommand}" />
-                        </core:EventTriggerBehavior.Actions>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-
-
-                <NavigationView.MenuItems>
-                    <NavigationViewItem Content="Daily" x:Name="navItemDailyProduct" Icon="CalendarDay" IsSelected="True"/>
-                    <NavigationViewItem Content="Weekly" x:Name="navItemWeeklyProduct" Icon="CalendarWeek"/>
-                    <NavigationViewItem Content="Monthly" x:Name="navItemMonthlyProduct" Icon="Priority"/>
-                    <NavigationViewItem Content="Yearly" x:Name="navItemYearlyProduct" Icon="ThreeBars" HorizontalAlignment="Right" />
-                </NavigationView.MenuItems>
-
-                <Frame x:Name="ProductcontentFrame"
-                   Content="{Binding ProductChildPageNavigation.ViewModel,Converter={StaticResource ViewModelToView}}"/>
-            </NavigationView>
-
-        </Grid>
-
+            <Frame x:Name="contentFrame" Content="{Binding ChildPageNavigation.ViewModel,Converter={StaticResource ViewModelToView}}"/>
+        </NavigationView>
     </Grid>
 </Page>

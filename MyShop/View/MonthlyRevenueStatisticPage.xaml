@@ -17,58 +17,40 @@
     </Page.DataContext>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="7*"/>
-        </Grid.ColumnDefinitions>
-        <Border Grid.Column="0"        
-                BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
-                BorderThickness="1"
-                CornerRadius="10"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Margin="10">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="10" >Revenue Statistics</TextBlock>
-
-                <StackPanel Grid.Row="1" Padding="20" Orientation="Vertical" >
-                    <TextBlock Text="From" Padding="0,10,0,0"/>
-                    <Viewbox HorizontalAlignment="Stretch"  Stretch="Fill">
-                        <DatePicker  FontSize="20" DayFormat="{}{day.integer} {dayofweek.abbreviated}" DayVisible="False" Date="{Binding StartDate, Mode=TwoWay}">
-                            <i:Interaction.Behaviors>
-                                <core:EventTriggerBehavior EventName="DateChanged">
-                                    <core:EventTriggerBehavior.Actions>
-                                        <core:InvokeCommandAction Command="{Binding StartDateChangeCommand}" />
-                                    </core:EventTriggerBehavior.Actions>
-                                </core:EventTriggerBehavior>
-                            </i:Interaction.Behaviors>
-                        </DatePicker>   
-                    </Viewbox>
-                    
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
 
-                    <TextBlock Text="To" Padding="0,20,0,0"/>
-                    <Viewbox HorizontalAlignment="Stretch"  Stretch="Fill">
-                        <DatePicker FontSize="20" DayFormat="{}{day.integer} {dayofweek.abbreviated}" DayVisible="False" Date="{Binding EndDate, Mode=TwoWay}">
-                            <i:Interaction.Behaviors>
-                                <core:EventTriggerBehavior EventName="DateChanged">
-                                    <core:EventTriggerBehavior.Actions>
-                                        <core:InvokeCommandAction Command="{Binding EndDateChangeCommand}" />
-                                    </core:EventTriggerBehavior.Actions>
-                                </core:EventTriggerBehavior>
-                            </i:Interaction.Behaviors>
-                        </DatePicker>
-                    </Viewbox>
-                </StackPanel>
-            </Grid>
-        </Border>
+        <StackPanel Grid.Row="0" Margin="20" Orientation="Horizontal" >
+            <Viewbox  Width="200" Margin="0 0 20 0" Stretch="Fill">
+                <DatePicker  FontSize="20" DayFormat="{}{day.integer} {dayofweek.abbreviated}" Header="From" DayVisible="False" Date="{Binding StartDate, Mode=TwoWay}">
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="DateChanged">
+                            <core:EventTriggerBehavior.Actions>
+                                <core:InvokeCommandAction Command="{Binding StartDateChangeCommand}" />
+                            </core:EventTriggerBehavior.Actions>
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </DatePicker>
+            </Viewbox>
 
-        <Border Grid.Column="1"     
+            <Viewbox  Width="200" Margin="0 0 20 0" Stretch="Fill">
+                <DatePicker FontSize="20" DayFormat="{}{day.integer} {dayofweek.abbreviated}" Header="To" DayVisible="False" Date="{Binding EndDate, Mode=TwoWay}">
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="DateChanged">
+                            <core:EventTriggerBehavior.Actions>
+                                <core:InvokeCommandAction Command="{Binding EndDateChangeCommand}" />
+                            </core:EventTriggerBehavior.Actions>
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </DatePicker>
+            </Viewbox>
+        </StackPanel>
+
+
+        <Border Grid.Row="1"     
                 BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 CornerRadius="10"
