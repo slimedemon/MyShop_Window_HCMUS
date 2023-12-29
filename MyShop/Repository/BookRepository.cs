@@ -37,7 +37,7 @@ namespace MyShop.Repository
                     string sql = "insert into BOOK (title,author,description,genre_id,price,quantity,published_date,image)" +
                         "values (@title,@author,@description,@genre_id,@price,@quantity,@published_date, @image)";
                     var command = new SqlCommand(sql, connection);
-                    command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title == book.Title;
+                    command.Parameters.Add("@title", SqlDbType.NVarChar).Value = book.Title;
                     command.Parameters.Add("@author", SqlDbType.NVarChar).Value = book.Author ?? "";
                     command.Parameters.Add("@description", SqlDbType.NVarChar).Value = book.Description ?? "";
                     command.Parameters.Add("@image", SqlDbType.NVarChar).Value = book.Image ?? "";
@@ -216,7 +216,7 @@ namespace MyShop.Repository
 
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
-                    string sql = "select id,title,image,author,description,genre_id,price,quantity,published_date from BOOK";
+                    string sql = "select id,title,image,author,description,genre_id,price,quantity,published_date from BOOK order by id desc";
                     var command = new SqlCommand(sql, connection);
                     var reader = command.ExecuteReader();
 

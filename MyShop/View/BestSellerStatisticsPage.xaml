@@ -8,9 +8,73 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core" xmlns:i="using:Microsoft.Xaml.Interactivity" 
     mc:Ignorable="d"
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI" xmlns:viewmodel="using:MyShop.ViewModel" 
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.DataContext>
+        <viewmodel:BestSellerStatisticsViewModel></viewmodel:BestSellerStatisticsViewModel>
+    </Page.DataContext>
+
+    <i:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:EventTriggerBehavior.Actions>
+                <core:InvokeCommandAction Command="{Binding Load_page}" />
+            </core:EventTriggerBehavior.Actions>
+        </core:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
     <Grid>
-     
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Row="0" Grid.Column="0"          
+                        BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Margin="10">
+            <lvc:CartesianChart 
+                Series="{Binding TopWeeklyBestSellerSeries}"
+                XAxes="{Binding XAxes}"
+                YAxes="{Binding YAxes}"
+                TooltipPosition="Center">
+            </lvc:CartesianChart>
+        </Border>
+        
+        <Border Grid.Row="0" Grid.Column="1"          
+                        BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Margin="10">
+            <lvc:PieChart 
+                Series="{Binding TopMonthlyBestSellerSeries}"
+                Title="{Binding TopMonthlyBestSellerTitle}">
+            </lvc:PieChart>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"          
+                        BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Margin="10">
+            <lvc:CartesianChart 
+                Series="{Binding TopYearlyBestSellerSeries}"
+                ZoomMode="X"
+                XAxes="{Binding YearlyXAxes}"
+                YAxes="{Binding YearlyYAxes}">
+            </lvc:CartesianChart>
+        </Border>
     </Grid>
 </Page>

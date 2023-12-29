@@ -32,7 +32,7 @@
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Revenue Statistics" x:Name="navItemRevenueStatistics" Icon="Caption" HorizontalAlignment="Right" IsSelected="True"/>
                 <NavigationViewItem Content="Product Statistics" x:Name="navItemProductStatistics" Icon="AllApps"/>
-                <NavigationViewItem Content="Best Seller Statistic" x:Name="navItemBestSellerStatistic" Icon="Up"   />
+                <NavigationViewItem Content="Best Seller Statistics" x:Name="navItemBestSellerStatistic" Icon="Up"   />
             </NavigationView.MenuItems>
 
 

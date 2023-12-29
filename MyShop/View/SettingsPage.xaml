@@ -22,7 +22,7 @@
         <StackPanel Name="ItemPerPageGroup" Orientation="Vertical" Margin="30 0 0 20" Visibility="Collapsed">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Items per page: " VerticalAlignment="Center"></TextBlock>
-                <NumberBox Width="350" Minimum="5" Maximum="40" Margin="20 0 0 0" Value="{Binding ItemsPerPage}"></NumberBox>
+                <NumberBox Width="350" Minimum="5" Maximum="40" Margin="20 0 0 0" Value="{Binding ItemsPerPage, Mode=TwoWay}"></NumberBox>
             </StackPanel>
             <Button Content="Save" HorizontalAlignment="Center" Margin="0 20 0 0" Width="100" Style="{StaticResource AccentButtonStyle}" Command="{Binding SaveSettingCommand}"></Button>
         </StackPanel>

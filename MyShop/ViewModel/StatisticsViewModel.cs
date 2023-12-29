@@ -52,7 +52,7 @@ namespace MyShop.ViewModel
             }
             else if (eventArgs.InvokedItem.ToString().Equals("Best Seller Statistics"))
             {
-                //
+                ChildPageNavigation.ViewModel = new BestSellerStatisticsViewModel();
             }
         }
     }

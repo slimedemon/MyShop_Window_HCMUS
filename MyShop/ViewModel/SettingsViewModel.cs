@@ -98,9 +98,11 @@ namespace MyShop.ViewModel
         {
             try
             {
-                var sysconfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                sysconfig.AppSettings.Settings["ItemsPerPage"].Value = ItemsPerPage.ToString();
-                sysconfig.Save(ConfigurationSaveMode.Full);
+                var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                configuration.AppSettings.Settings["ItemsPerPage"].Value = ItemsPerPage.ToString();
+
+                configuration.AppSettings.SectionInformation.ForceSave = true;
+                configuration.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings");
 
                 await App.MainRoot.ShowDialog("Success", "Your changes have been successfully saved and applied.");
@@ -116,9 +118,11 @@ namespace MyShop.ViewModel
         {
             try
             {
-                var sysconfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                sysconfig.AppSettings.Settings["RememberPage"].Value = ToggleSwitchIsOn.ToString();
-                sysconfig.Save(ConfigurationSaveMode.Full);
+                var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                configuration.AppSettings.Settings["RememberPage"].Value = ToggleSwitchIsOn.ToString();
+
+                configuration.AppSettings.SectionInformation.ForceSave = true;
+                configuration.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings");
             }
             catch (Exception ex)

@@ -75,7 +75,7 @@ namespace MyShop.ViewModel
 
             _statisticRepository = new StatisticRepository();
             AllBookQuantity = new ObservableCollection<BookQuantity>();
-            Load_page = new RelayCommand<RoutedEventArgs>(Load_Dashboard);
+            Load_page = new RelayCommand(Load_Dashboard);
         }
 
         private void SaveCurrentPage()
@@ -95,8 +95,7 @@ namespace MyShop.ViewModel
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        [Obsolete]
-        private async void Load_Dashboard(RoutedEventArgs e)
+        private async void Load_Dashboard()
         {
             //monthly revenue
             char seperator = '/';

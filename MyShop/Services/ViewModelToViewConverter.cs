@@ -40,7 +40,8 @@ namespace MyShop.Services
             {typeof(DatabaseConfigurationViewModel), typeof(DatabaseConfigurationPage)},
             {typeof(SignupViewModel), typeof(SignupPage)},
             {typeof(RevenueStatisticsViewModel), typeof(RevenueStatisticsPage)},
-            {typeof(ProductStatisticsViewModel), typeof(ProductStatisticsPage)},  
+            {typeof(ProductStatisticsViewModel), typeof(ProductStatisticsPage)},
+            {typeof(BestSellerStatisticsViewModel), typeof(BestSellerStatisticsPage)}
             //add more page...
         };
         object IValueConverter.Convert(object value, Type targetType, object parameter, string language)
