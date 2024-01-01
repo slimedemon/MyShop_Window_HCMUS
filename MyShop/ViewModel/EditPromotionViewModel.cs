@@ -86,7 +86,12 @@ namespace MyShop.ViewModel
                    BookId = task2[i].BookId,
                     BookName = task2[i].BookName,
                 });
-                BookInPromotions[i].No = i + 1;
+                BookInPromotions.Add(new BookInPromotion
+                {
+                    No = i + 1,
+                    BookId = task2[i].BookId,
+                    BookName = task2[i].BookName,
+                });
             }
 
         }
@@ -146,6 +151,12 @@ namespace MyShop.ViewModel
                 if (CurrentPromotion.Discount <= 0 || CurrentPromotion.Discount > 100)
                 {
                     await App.MainRoot.ShowDialog("Invalid discount", "Please check discount again!");
+                    return;
+                }
+
+                if (CurrentPromotion.StartDate == null || CurrentPromotion.EndDate == null || CurrentPromotion.StartDate > CurrentPromotion.EndDate)
+                {
+                    await App.MainRoot.ShowDialog("Invalid dates", "Please check dates again!");
                     return;
                 }
 
