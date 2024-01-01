@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="MyShop.View.EditPromotionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MyShop.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="using:MyShop.ViewModel" 
+    xmlns:dxcr="http://schemas.devexpress.com/winfx/2008/xaml/charts/rangecontrolclient"
+    d:DataContext="{d:DesignInstance Type=viewmodel:AddPromotionViewModel}"
+    xmlns:services="using:MyShop.Services"
+    xmlns:ctWinUI ="using:CommunityToolkit.WinUI.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <services:TimeConverter x:Key="timeConverter"/>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <viewmodel:AddPromotionViewModel/>
+    </Page.DataContext>
+
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent"/>
+                <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="Transparent"/>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Create a new promotion" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
+
+        <!--Input book information for bill-->
+        <Border
+          Grid.Row="1" Grid.Column="0"
+          BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
+          BorderThickness="1"
+          Padding="10" 
+          Margin="20 20 0 20"
+          CornerRadius="10"
+          HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <!-- search box-->
+                <ComboBox Grid.Row="0" 
+                        PlaceholderText="Type a book name" 
+                        HorizontalAlignment="Left" 
+                        ItemsSource="{Binding Books}"
+                        DisplayMemberPath="Title"
+                        SelectedValue="{Binding SelectedBook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Width="250" 
+                        Margin="0 0 0 20"/>
+                <!--<AutoSuggestBox Grid.Row="0" PlaceholderText="Type a book name" HorizontalAlignment="Left" QueryIcon="Find" Width="250" Margin="0 0 0 20" ItemsSource="{Binding Books}" DisplayMemberPath="Title" TextMemberPath="Title"/>-->
+
+                <!-- small controls -->
+
+
+                <ctWinUI:WrapPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 0 0 20">
+                    <Button Content="Add" Margin="0 0 20 0" Width="100" VerticalAlignment="Center" Command="{Binding AddCommand}"/>
+                    <Button Content="Remove" Width="100" VerticalAlignment="Center" Command="{Binding RemoveCommand}"/>
+                </ctWinUI:WrapPanel>
+
+                <!-- info box and control box-->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <!--info box-->
+                    <ctWinUI:DataGrid Grid.Row="1" x:Name="DataGrid" VerticalAlignment="Stretch"
+                                    AutoGenerateColumns="False"
+                                    CanUserSortColumns="True"
+                                    IsReadOnly="True" AllowFocusOnInteraction="False" AllowDrop="False" AllowFocusWhenDisabled="False"
+                                    BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0"
+                                    SelectedItem="{Binding SelectedBookInPromotion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{Binding BookInPromotions}">
+                        <ctWinUI:DataGrid.Columns>
+                            <ctWinUI:DataGridTextColumn Header="#" Tag="#" Width="1*" Binding="{Binding No}"/>
+                            <ctWinUI:DataGridTextColumn Header="Book" Tag="Book" Width="3*" Binding="{Binding BookName}"/>
+                        </ctWinUI:DataGrid.Columns>
+                    </ctWinUI:DataGrid>
+
+                    <!--control box-->
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!--Input general information for promotion-->
+        <Border
+              Grid.Row="1" Grid.Column="1"
+              BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
+              BorderThickness="1"
+              Padding="10" 
+              Margin="20"
+              CornerRadius="10"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Top">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Customer information" FontWeight="Bold" FontSize="15" Margin="0 0 0 20"/>
+                <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock Text="Name: " VerticalAlignment="Center"></TextBlock>
+                    <TextBox PlaceholderText="Name" Margin="5 0 20 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding CurrentPromotion.Name, Mode=TwoWay}"/>
+                    <TextBlock Text="Discount (%): " VerticalAlignment="Center"></TextBlock>
+                    <NumberBox PlaceholderText="Discount (%)" Margin="5 0 20 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Minimum="1" Maximum="100" Value="{Binding CurrentPromotion.Discount, Mode=TwoWay}"/>
+                    <CalendarDatePicker Grid.Column="1" PlaceholderText="Pick a date" Header="Filter Promotions From Date"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                      Date="{Binding CurrentPromotion.StartDate, Converter={StaticResource timeConverter}, Mode=TwoWay}" 
+                                      DateFormat = "{}{dayofweek.full}, {month.full} {day.integer}, {year.full}"/>
+
+                    <CalendarDatePicker Grid.Column="2" PlaceholderText="Pick a date" Header="To Date" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                      Date="{Binding CurrentPromotion.EndDate, Converter={StaticResource timeConverter}, Mode=TwoWay}" 
+                                      DateFormat = "{}{dayofweek.full}, {month.full} {day.integer}, {year.full}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <Button Content="Back" Margin="20 10 20 20" Padding="20 5" Width="100" Command="{Binding BackCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
+            <Button Content="Save" Margin="20 10 20 20" Padding="20 5" Width="100" Command="{Binding ConfirmCommand}" Style="{StaticResource AccentButtonStyle}"></Button>
+        </StackPanel>
+    </Grid>
+</Page>

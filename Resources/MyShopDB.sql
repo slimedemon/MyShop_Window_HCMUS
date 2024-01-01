@@ -71,6 +71,7 @@ go
 
 create table PROMOTION (
 	id int identity(1,1),
+	name nvarchar(200),
 	discount int null, -- unit: %
 	start_date date null,
 	end_date date null,

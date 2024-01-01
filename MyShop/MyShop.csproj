@@ -20,6 +20,7 @@
     <None Remove="View\AccountPage.xaml" />
     <None Remove="View\AddBookPage.xaml" />
     <None Remove="View\AddOrderPage.xaml" />
+    <None Remove="View\AddPromotionPage.xaml" />
     <None Remove="View\BestSellerStatisticsPage.xaml" />
     <None Remove="View\BookManagementPage.xaml" />
     <None Remove="View\ContentDialogContent.xaml" />
@@ -29,6 +30,7 @@
     <None Remove="View\DatabaseConfigurationPage.xaml" />
     <None Remove="View\EditBookPage.xaml" />
     <None Remove="View\EditOrderPage.xaml" />
+    <None Remove="View\EditPromotionPage.xaml" />
     <None Remove="View\GenreManagementPage.xaml" />
     <None Remove="View\LoginPage.xaml" />
     <None Remove="View\MainNavigationPage.xaml" />
@@ -37,6 +39,7 @@
     <None Remove="View\OrderManagementPage.xaml" />
     <None Remove="View\ProductManagementPage.xaml" />
     <None Remove="View\ProductStatisticsPage.xaml" />
+    <None Remove="View\PromotionManagementPage.xaml" />
     <None Remove="View\RevenueStatisticsPage.xaml" />
     <None Remove="View\RootPage.xaml" />
     <None Remove="View\SettingsPage.xaml" />
@@ -268,6 +271,15 @@
     <None Update="Styles\UIColors.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Update="View\EditPromotionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\AddPromotionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="View\PromotionManagementPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="View\BestSellerStatisticsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

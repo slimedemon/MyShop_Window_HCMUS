@@ -165,6 +165,10 @@ namespace MyShop.ViewModel
 
                 _billDetailRowDic.Remove(key);
                 BillRowList.Remove(SelectedBillRow);
+                for (int i = 0; i < BillRowList.Count; i++)
+                {
+                    BillRowList[i].No = i + 1;
+                }
 
                 // remove from BILL
                 var task = await _billRepository.Remove(key);

@@ -328,8 +328,7 @@ namespace MyShop.Repository
 
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
-                    string sql = "select db.book_id, db.number, book.title, book.price, book.quantity from DETAILED_BILL as db join BOOK as b on db.book_id=b.id " +
-                        "join BOOK as book on db.book_id = book.id " +
+                    string sql = "select db.book_id, db.number, b.title, b.price, b.quantity from DETAILED_BILL as db join BOOK as b on db.book_id=b.id " +
                         "where db.bill_id=@bill_id";
                     var command = new SqlCommand(sql, connection);
                     command.Parameters.Add("@bill_id", SqlDbType.Int).Value = billId;

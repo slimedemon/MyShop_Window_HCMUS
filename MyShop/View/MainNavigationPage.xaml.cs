@@ -88,6 +88,19 @@ namespace MyShop.View
                     }
 
                 }
+                else if (currentPage.Equals("PromotionManagementPage"))
+                {
+                    int index;
+                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    {
+                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Promotion Management"))
+                        {
+                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            break;
+                        }
+                    }
+
+                }
                 else if (currentPage.Equals("AccountPage"))
                 {
                     int index;

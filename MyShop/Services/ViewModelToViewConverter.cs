@@ -41,7 +41,10 @@ namespace MyShop.Services
             {typeof(SignupViewModel), typeof(SignupPage)},
             {typeof(RevenueStatisticsViewModel), typeof(RevenueStatisticsPage)},
             {typeof(ProductStatisticsViewModel), typeof(ProductStatisticsPage)},
-            {typeof(BestSellerStatisticsViewModel), typeof(BestSellerStatisticsPage)}
+            {typeof(BestSellerStatisticsViewModel), typeof(BestSellerStatisticsPage)},
+            {typeof(PromotionManagementViewModel), typeof(PromotionManagementPage)},
+            {typeof(AddPromotionViewModel), typeof(AddPromotionPage)},
+            {typeof(EditPromotionViewModel), typeof(EditPromotionPage) }
             //add more page...
         };
         object IValueConverter.Convert(object value, Type targetType, object parameter, string language)

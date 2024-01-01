@@ -140,6 +140,7 @@ namespace MyShop.ViewModel
             for (int i = 0; i < Orders.Count; i++)
             {
                 CurrentTotalPrice += Orders[i].TotalPrice();
+                Orders[i].No = i + 1;
             }
 
         }
@@ -195,20 +196,20 @@ namespace MyShop.ViewModel
                     return;
                 }
 
-                NewBill.Id = newId;
-
-                if (NewBill.Id < 1)
+                if (newId < 1)
                 {
                     await App.MainRoot.ShowDialog("Add new bill failed", "Please check information of bill!");
                     return;
                 }
 
-                var task = await _billRepository.Edit(NewBill);
-                if (!task)
-                {
-                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
-                    return;
-                }
+                NewBill.Id = newId;
+
+                //var task = await _billRepository.Edit(NewBill);
+                //if (!task)
+                //{
+                //    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                //    return;
+                //}
 
                 // add bill detail
                 for (int i = 0; i < Orders.Count; i++)

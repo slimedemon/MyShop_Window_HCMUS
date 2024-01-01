@@ -52,6 +52,10 @@ namespace MyShop.ViewModel
                 {
                     ChildPageNavigation = new PageNavigation(new OrderManagementViewModel());
                 }
+                else if (currentPage.Equals("PromotionManagementPage"))
+                {
+                    ChildPageNavigation = new PageNavigation(new PromotionManagementViewModel());
+                }
                 else if (currentPage.Equals("AccountPage"))
                 {
                     ChildPageNavigation = new PageNavigation(new AccountViewModel(Account));
@@ -86,6 +90,10 @@ namespace MyShop.ViewModel
             else if (args.InvokedItem.ToString().Equals("Order Management"))
             {
                 ChildPageNavigation.ViewModel = new OrderManagementViewModel();
+            } 
+            else if (args.InvokedItem.ToString().Equals("Promotion Management"))
+            {
+                ChildPageNavigation.ViewModel = new PromotionManagementViewModel();
             }
             else if (args.InvokedItem.ToString().Equals("Account"))
             {
