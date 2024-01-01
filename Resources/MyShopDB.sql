@@ -118,7 +118,7 @@ begin
 
 	declare @weekTable table(weekID INT, startDateOfWeek DATE)
 
-	while @currentWeekOffSet < @maxWeek
+	while @currentWeekOffSet <= @maxWeek
 	begin
 		insert into @weekTable(weekID, startDateOfWeek) values(@currentWeekOffSet, DATEADD(DAY, @currentWeekOffSet*7, @startDate))
 		set @currentWeekOffSet = @currentWeekOffSet + 1;
@@ -172,7 +172,7 @@ begin
 	set @exec_date = @start_date_start_month
 	set @flag_date = @exec_date
 
-	while @exec_date < @start_date_end_month
+	while @exec_date <= @start_date_end_month
 	begin
 		set @flag_date = @exec_date
 		set @exec_date = DATEADD(MONTH, 1, @flag_date)
@@ -203,7 +203,7 @@ begin
 	set @exec_date = @start_date_start_week
 	set @flag_date = @exec_date
 	
-	while @exec_date < @start_date_end_week
+	while @exec_date <= @start_date_end_week
 	begin
 		set @flag_date = @exec_date
 		set @exec_date = DATEADD(DAY, 7, @flag_date)
@@ -234,7 +234,7 @@ begin
 	set @flag_date = @exec_date
 	set @total_revenue_a_year = 0
 
-	while @exec_date < @start_date_end_year
+	while @exec_date <= @start_date_end_year
 	begin
 		set @flag_date = @exec_date
 		set @exec_date = DATEADD(YEAR, 1, @exec_date)

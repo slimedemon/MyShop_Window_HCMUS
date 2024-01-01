@@ -115,6 +115,11 @@ namespace MyShop.ViewModel
                 monthlyRevenueTask = new List<Tuple<DateTime, int>>();
             }
 
+            if (monthlyRevenueTask.Count == 0)
+            {
+                monthlyRevenueTask.Add(new Tuple<DateTime, int> ( DateTime.Now, 0));
+            }
+
             MonthlyRevenue = monthlyRevenueTask.Last().Item2.ToString("C", CultureInfo.GetCultureInfo("vi-VN"));
 
             //weekly revenue
