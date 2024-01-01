@@ -236,6 +236,7 @@ namespace MyShop.ViewModel
                 {
                     No = i + 1,
                     Id = task[i].Id,
+                    Name = task[i].Name,
                     Discount = task[i].Discount,
                     StartDate = task[i].StartDate,
                     EndDate = task[i].EndDate,

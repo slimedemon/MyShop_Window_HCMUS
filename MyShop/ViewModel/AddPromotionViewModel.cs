@@ -194,7 +194,7 @@ namespace MyShop.ViewModel
             {
                 Id = 0,
                 Name = "",
-                Discount = 0,
+                Discount = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now),
             };
