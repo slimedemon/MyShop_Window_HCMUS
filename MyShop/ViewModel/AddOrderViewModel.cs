@@ -206,6 +206,11 @@ namespace MyShop.ViewModel
                 CurrentTotalPrice += (int)(Orders[i].TotalPrice()* (100 - Orders[i].Discount) / 100);
                 Orders[i].No = i + 1;
             }
+
+            for (int i = 0; i < Orders.Count; i++)
+            {
+                Orders[i].No = i + 1;
+            }
         }
 
         public async void ExecuteConfirmCommand()
