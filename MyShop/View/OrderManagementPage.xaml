@@ -29,11 +29,11 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"></ColumnDefinition>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
@@ -98,7 +98,7 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="1" Grid.Column="1" 
+        <Border Grid.Row="2" Grid.Column="0" 
                 BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                 BorderThickness="1"
                 CornerRadius="10"
@@ -146,12 +146,16 @@
                         <ctWinUI:DataGridTextColumn Header="Price"
                                                     Binding="{Binding Price}"
                                                     Tag="Price" Width="3*"/>
+                        
+                        <ctWinUI:DataGridTextColumn Header="Promotion"
+                                                    Binding="{Binding PromotionName}"
+                                                    Tag="Promotion" Width="3*"/>
                     </ctWinUI:DataGrid.Columns>
                 </ctWinUI:DataGrid>
             </Grid>
         </Border>
 
-        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical">
+        <StackPanel Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Orientation="Vertical">
             <AppBarButton Icon="Add" Label="Add" Command="{Binding AddCommand}"/>
             <AppBarButton Icon="Delete" Label="Delete" Command="{Binding DeleteCommand}"/>
             <AppBarButton Icon="Edit" Label="Update" Command="{Binding EditCommand}"/>

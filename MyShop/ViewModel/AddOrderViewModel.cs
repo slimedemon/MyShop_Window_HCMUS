@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Windows.Gaming.Input.Custom;
+using Windows.UI.WebUI;
 
 namespace MyShop.ViewModel
 {
@@ -17,17 +19,17 @@ namespace MyShop.ViewModel
         private IBillRepository _billRepository;
         private IBookRepository _bookRepository;
         private ICustomerRepository _customerRepository;
+        private IPromotionRepository _promotionRepository;
 
         private Bill _newBill;
-
         private ObservableCollection<Book> _books;
-
         private Customer _bindingCustomer;
         private Order _bindingOrder;
         private Order _selectedOrder;
 
         private int _currentTotalPrice;
         private Book _selectedBook;
+        private Promotion _selectedPromotion;
 
         //-> Commands
         private RelayCommand _backCommand;
@@ -35,7 +37,6 @@ namespace MyShop.ViewModel
         private RelayCommand _addCommand;
         private RelayCommand _removeCommand;
         private RelayCommand _refreshCommand;
-        //
 
         // getter, setter
         public RelayCommand BackCommand { get => _backCommand; set => _backCommand = value; }
@@ -43,7 +44,6 @@ namespace MyShop.ViewModel
         public RelayCommand AddCommand { get => _addCommand; set => _addCommand = value; }
         public RelayCommand RemoveCommand { get => _removeCommand; set => _removeCommand = value; }
         public RelayCommand RefreshCommand { get => _refreshCommand; set => _refreshCommand = value; }
-        
 
         public Bill NewBill { get => _newBill; set => _newBill = value; }
         public ObservableCollection<Book> Books { get => _books; set => _books = value; }
@@ -51,12 +51,34 @@ namespace MyShop.ViewModel
         public Order BindingOrder { get => _bindingOrder; set => _bindingOrder = value; }
         public Order SelectedOrder { get => _selectedOrder; set => _selectedOrder = value; }
         public Customer BindingCustomer { get => _bindingCustomer; set => _bindingCustomer = value; }
+        public Promotion SelectedPromotion { get => _selectedPromotion; set => _selectedPromotion = value; }
+        public List<Promotion> Promotions { get; set; }
+        public ObservableCollection<Promotion> DisplayPromotion { get; set; }
+        public Dictionary<int, List<BookPromotion>> PromotionDic { get; set; }
 
         public Book SelectedBook
         {
             get => _selectedBook;
             set
             {
+                DisplayPromotion.Clear();
+                for (int i = 0; i < Promotions.Count; i++)
+                {
+                    if (!PromotionDic.TryGetValue(Promotions[i].Id, out var bookPromotions))
+                    {
+                        bookPromotions = new List<BookPromotion>();
+                    }
+
+                    for (int j = 0; j < bookPromotions.Count; j++)
+                    {
+                        if (bookPromotions[j].BookId == value.Id)
+                        {
+                            DisplayPromotion.Add(Promotions[i]);
+                            break;
+                        }
+                    }
+                }
+
                 _selectedBook = value;
                 OnPropertyChanged(nameof(SelectedBook));
             }
@@ -75,15 +97,43 @@ namespace MyShop.ViewModel
 
         public async void PageLoaded()
         {
-            var task = await _bookRepository.GetAll();
-            if (task == null)
+            var task1 = await _bookRepository.GetAll();
+            if (task1 == null)
             {
                 await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
                 // purpose: continue flow;
-                task = new List<Book>();
+                task1 = new List<Book>();
             }
 
-            task.ForEach(book => Books.Add(book));
+            task1.ForEach(book => Books.Add(book));
+
+            var task2 = await _promotionRepository.GetAllPromotions(DateOnly.MinValue, DateOnly.MaxValue);
+            if (task2 == null)
+            {
+                await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                // purpose: continue flow;
+                task2 = new List<Promotion>();
+            }
+
+            for (int i = 0; i < task2.Count; i++)
+            {
+                PromotionDic.Clear();
+                DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+                if (task2[i].StartDate <= currentDate && task2[i].EndDate >= currentDate)
+                {
+                    Promotions.Add(task2[i]);
+
+                    var bookPromotions = await _promotionRepository.GetAllBookPromotionsByPromotionId(task2[i].Id);
+                    if (bookPromotions == null)
+                    {
+                        await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from the database!");
+                        // purpose: continue flow;
+                        bookPromotions = new List<BookPromotion>();
+                    }
+
+                    PromotionDic.Add(task2[i].Id, bookPromotions);
+                }
+            }
         }
 
         // Edit bill details
@@ -106,6 +156,7 @@ namespace MyShop.ViewModel
             }
             else
             {
+
                 var newOrder = new Order()
                 {
                     No = Orders.Count + 1,
@@ -113,8 +164,21 @@ namespace MyShop.ViewModel
                     BookName = SelectedBook.Title,
                     Number = BindingOrder.Number,
                     Price = SelectedBook.Price,
-                    StockQuantity = SelectedBook.Quantity
+                    StockQuantity = SelectedBook.Quantity,
                 };
+
+                if (SelectedPromotion == null)
+                {
+                    newOrder.PromotionId = 0;
+                    newOrder.PromotionName = "";
+                    newOrder.Discount = 0;
+                }
+                else
+                {
+                    newOrder.PromotionId = SelectedPromotion.Id;
+                    newOrder.PromotionName = SelectedPromotion.Name;
+                    newOrder.Discount = SelectedPromotion.Discount;
+                }
 
                 Orders.Add(newOrder);
                 ExecuteRefreshCommand();
@@ -139,10 +203,9 @@ namespace MyShop.ViewModel
 
             for (int i = 0; i < Orders.Count; i++)
             {
-                CurrentTotalPrice += Orders[i].TotalPrice();
+                CurrentTotalPrice += (int)(Orders[i].TotalPrice()* (100 - Orders[i].Discount) / 100);
                 Orders[i].No = i + 1;
             }
-
         }
 
         public async void ExecuteConfirmCommand()
@@ -246,7 +309,10 @@ namespace MyShop.ViewModel
             _billRepository = new BillRepository();
             _bookRepository = new BookRepository();
             _customerRepository = new CustomerRepository();
+            _promotionRepository = new PromotionRepository();
             BindingCustomer = new Customer();
+            PromotionDic = new Dictionary<int, List<BookPromotion>>();
+            DisplayPromotion = new ObservableCollection<Promotion>();
             BindingOrder = new Order()
             {
                 Number = 1,
@@ -262,6 +328,7 @@ namespace MyShop.ViewModel
 
             Books = new ObservableCollection<Book>();
             Orders = new ObservableCollection<Order>();
+            Promotions = new List<Promotion>();
             CurrentTotalPrice = 0;
 
             PageLoaded();

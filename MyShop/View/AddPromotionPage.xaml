@@ -119,7 +119,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="Customer information" FontWeight="Bold" FontSize="15" Margin="0 0 0 20"/>
+                <TextBlock Grid.Row="0" Text="Promotion Details" FontWeight="Bold" FontSize="15" Margin="0 0 0 20"/>
                 <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                     <TextBlock Text="Name: " VerticalAlignment="Center"></TextBlock>
                     <TextBox PlaceholderText="Name" Margin="5 0 20 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding NewPromotion.Name, Mode=TwoWay}"/>

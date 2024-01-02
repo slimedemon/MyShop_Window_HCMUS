@@ -328,7 +328,8 @@ namespace MyShop.Repository
 
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
-                    string sql = "select db.book_id, db.number, b.title, b.price, b.quantity from DETAILED_BILL as db join BOOK as b on db.book_id=b.id " +
+                    string sql = "select db.book_id,db.number,b.title,b.price,b.quantity,db.promotion_id,p.name,p.discount from DETAILED_BILL as db join BOOK as b on db.book_id=b.id " +
+                        "left join Promotion as p on db.promotion_id = p.id " +
                         "where db.bill_id=@bill_id";
                     var command = new SqlCommand(sql, connection);
                     command.Parameters.Add("@bill_id", SqlDbType.Int).Value = billId;
@@ -340,6 +341,9 @@ namespace MyShop.Repository
                         int number = reader["number"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["number"]);
                         int quantity = reader["quantity"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["quantity"]);
                         string title = Convert.ToString(reader["title"]);
+                        int promotionId = reader["promotion_id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["promotion_id"]);
+                        string promotionName= Convert.ToString(reader["name"]);
+                        int discount = reader["discount"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["discount"]);
 
                         details.Add(new Order
                         {
@@ -348,7 +352,10 @@ namespace MyShop.Repository
                             Price = price,
                             Number = number,
                             StockQuantity = quantity,
-                            BookName = title
+                            BookName = title,
+                            PromotionId = promotionId,
+                            PromotionName = promotionName,
+                            Discount = discount
                         });
                     }
                 }
@@ -428,13 +435,14 @@ namespace MyShop.Repository
 
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
-                    string sql = "insert into DETAILED_BILL (bill_id,book_id,price,number) " + // revise this
-                        "values (@bill_id,@book_id,@price,@number)";
+                    string sql = "insert into DETAILED_BILL (bill_id,book_id,price,number,promotion_id) " + // revise this
+                        "values (@bill_id,@book_id,@price,@number,@promotion_id)";
                     var command = new SqlCommand(sql, connection);
                     command.Parameters.Add("@bill_id", SqlDbType.Int).Value = billDetail.BillId;
                     command.Parameters.Add("@book_id", SqlDbType.Int).Value = billDetail.BookId;
                     command.Parameters.Add("@price", SqlDbType.Int).Value = billDetail.Price;
                     command.Parameters.Add("@number", SqlDbType.Int).Value = billDetail.Number;
+                    command.Parameters.Add("@promotion_id", SqlDbType.Int).Value = billDetail.PromotionId <= 0 ? DBNull.Value: billDetail.PromotionId;
                     int rowsAffected = command.ExecuteNonQuery();
 
                     if (rowsAffected > 0) { isSuccessful = true; }
@@ -472,13 +480,14 @@ namespace MyShop.Repository
 
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
-                    string sql = "update DETAILED_BILL set price=@price,number=@number " +
+                    string sql = "update DETAILED_BILL set price=@price,number=@number,promotion_id=@promotion_id " +
                         "where bill_id = @bill_id and book_id = @book_id";
                     var command = new SqlCommand(sql, connection);
                     command.Parameters.Add("@bill_id", SqlDbType.Int).Value = billDetail.BillId;
                     command.Parameters.Add("@book_id", SqlDbType.Int).Value = billDetail.BookId;
                     command.Parameters.Add("@price", SqlDbType.Int).Value = billDetail.Price;
                     command.Parameters.Add("@number", SqlDbType.Int).Value = billDetail.Number;
+                    command.Parameters.Add("@promotion_id", SqlDbType.Int).Value = billDetail.PromotionId <= 0 ? DBNull.Value : billDetail.PromotionId;
                     int rowsAffected = command.ExecuteNonQuery();
 
                     if (rowsAffected > 0) { isSuccessful = true; }

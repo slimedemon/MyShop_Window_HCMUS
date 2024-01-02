@@ -65,14 +65,20 @@
                 <!--<AutoSuggestBox Grid.Row="0" PlaceholderText="Type a book name" HorizontalAlignment="Left" QueryIcon="Find" Width="250" Margin="0 0 0 20" ItemsSource="{Binding Books}" DisplayMemberPath="Title" TextMemberPath="Title"/>-->
 
                 <!-- small controls -->
-                <ctWinUI:WrapPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 0 0 20">
-                    <TextBlock Text="Number: " VerticalAlignment="Center"></TextBlock>
-                    <NumberBox PlaceholderText="Number" Margin="5 0 20 0" Width="80" VerticalAlignment="Center" Minimum="1" Maximum="{Binding SelectedBook.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="{Binding BindingOrder.Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Text="Discount (%): " VerticalAlignment="Center"></TextBlock>
-                    <TextBox PlaceholderText="Discount (%)" Margin="5 0 20 0" Width="100" VerticalAlignment="Center" />
-                    <Button Content="Add" Margin="0 0 20 0" Width="100" VerticalAlignment="Center" Command="{Binding AddCommand}"/>
-                    <Button Content="Remove" Width="100" VerticalAlignment="Center" Command="{Binding RemoveCommand}"/>
-                </ctWinUI:WrapPanel>
+                <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0 0 0 20">
+                    <ctWinUI:WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 0 0 20">
+                        <TextBlock Text="Number: " VerticalAlignment="Center"></TextBlock>
+                        <NumberBox PlaceholderText="Number" Margin="5 0 20 0" Width="80" VerticalAlignment="Center" Minimum="1" Maximum="{Binding SelectedBook.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="{Binding BindingOrder.Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Promotion: " VerticalAlignment="Center"></TextBlock>
+                        <ComboBox PlaceholderText="Select promotion" Margin="5 0 20 0" Width="200" VerticalAlignment="Center" ItemsSource="{Binding DisplayPromotion}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedPromotion, Mode=TwoWay}"/>
+                        <TextBlock VerticalAlignment="Center">Discount (%): <Run Text="{Binding SelectedPromotion.Discount}"></Run></TextBlock>
+                    </ctWinUI:WrapPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <Button Content="Add" Margin="0 0 20 0" Width="100" VerticalAlignment="Center" Command="{Binding AddCommand}"/>
+                        <Button Content="Remove" Width="100" VerticalAlignment="Center" Command="{Binding RemoveCommand}"/>
+                    </StackPanel>
+                </StackPanel>
 
                 <!-- info box and control box-->
                 <Grid Grid.Row="2">
@@ -92,11 +98,14 @@
                         <ctWinUI:DataGrid.Columns>
                             <ctWinUI:DataGridTextColumn Header="#" Tag="#" Width="1*" Binding="{Binding No}"/>
 
-                            <ctWinUI:DataGridTextColumn Header="Book" Tag="Book" Width="2*" Binding="{Binding BookName}"/>
+                            <ctWinUI:DataGridTextColumn Header="Book" Tag="Book" Width="3*" Binding="{Binding BookName}"/>
 
-                            <ctWinUI:DataGridTextColumn Header="Number" Tag="Number" Width="1*" Binding="{Binding Number}"/>
+                            <ctWinUI:DataGridTextColumn Header="Number" Tag="Number" Width="2*" Binding="{Binding Number}"/>
 
-                            <ctWinUI:DataGridTextColumn Header="Price" Tag="Price" Width="1*" Binding="{Binding Price}"/>
+                            <ctWinUI:DataGridTextColumn Header="Price" Tag="Price" Width="2*" Binding="{Binding Price}"/>
+                            
+                            <ctWinUI:DataGridTextColumn Header="Promotion" Tag="Promotion" Width="3*" Binding="{Binding PromotionName}"/>
+                            
                         </ctWinUI:DataGrid.Columns>
                     </ctWinUI:DataGrid>
 

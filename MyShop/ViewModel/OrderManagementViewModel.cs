@@ -245,6 +245,9 @@ namespace MyShop.ViewModel
                         BookName = temp[j].BookName,
                         Number = temp[j].Number,
                         Price = temp[j].Price,
+                        PromotionId = temp[j].PromotionId,
+                        PromotionName = temp[j].PromotionName,
+                        Discount = temp[j].Discount
                     });                    
                 }
 
@@ -295,6 +298,9 @@ namespace MyShop.ViewModel
             public int Price { get; set; }
             public int BookId { get; set; }
             public int BillId { get; set; }
+            public int PromotionId { get; set; }
+            public string PromotionName { get; set; }
+            public int Discount { get; set; }
 
             public event PropertyChangedEventHandler PropertyChanged;
         }

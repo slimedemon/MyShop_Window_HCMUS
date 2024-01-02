@@ -17,6 +17,9 @@ namespace MyShop.Model
         public int Price { get; set; }
         public int Number { get; set; }
         public int StockQuantity { get; set; }
+        public string PromotionName { get; set; }
+        public int PromotionId { get; set; }
+        public int Discount { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

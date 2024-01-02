@@ -49,7 +49,7 @@ create table DETAILED_BILL(
 	book_id int not null,
 	number int null,
 	price int null,
-
+	promotion_id int null,
 	primary key (bill_id, book_id)
 )
 go
@@ -100,6 +100,7 @@ go
 alter table BILL add foreign key (customer_id) references CUSTOMER
 alter table DETAILED_BILL add foreign key (bill_id) references BILL
 alter table DETAILED_BILL add foreign key (book_id) references BOOK
+alter table DETAILED_BILL add foreign key (promotion_id) references PROMOTION
 alter table BOOK add foreign key (genre_id) references GENRE
 alter table BOOK_PROMOTION add foreign key (book_id) references BOOK
 alter table	BOOK_PROMOTION add foreign key (promotion_id) references PROMOTION

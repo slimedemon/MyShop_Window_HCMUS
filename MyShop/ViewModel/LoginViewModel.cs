@@ -164,9 +164,7 @@ namespace MyShop.ViewModel
                 byte[] cypherTextInBytes = Convert.FromBase64String(passwordIn64);
 
                 byte[] passwordInBytes = ProtectedData.Unprotect(cypherTextInBytes,
-                    entropyInBytes,
-                    DataProtectionScope.CurrentUser
-                );
+                    entropyInBytes, DataProtectionScope.CurrentUser);
 
                 string password = Encoding.UTF8.GetString(passwordInBytes);
 
