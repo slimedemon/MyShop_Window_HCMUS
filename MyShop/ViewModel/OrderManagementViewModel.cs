@@ -35,6 +35,7 @@ namespace MyShop.ViewModel
         private BillRow _selectedBillRow;
         private ObservableCollection<BillRow> _billRowList;
         private ObservableCollection<BillDetailRow> _selectedBillDetailRowList;
+        private string _customerName;
 
         //-> Commands
         public ICommand AddCommand { get; }
@@ -44,6 +45,7 @@ namespace MyShop.ViewModel
         public int TotalItems { get => _totalItems; set => _totalItems = value; }
         public ObservableCollection<BillRow> BillRowList { get => _billRowList; set => _billRowList = value; }
         public ObservableCollection<BillDetailRow> SelectedBillDetailList { get => _selectedBillDetailRowList; set => _selectedBillDetailRowList = value; }
+        public string CustomerName { get; set; }
 
         // getter, setter
         public DateOnly DateFrom
@@ -78,9 +80,10 @@ namespace MyShop.ViewModel
 
                 if (value == null)
                 {
+                    CustomerName = "";
                     return;
                 }
-
+                CustomerName = value.CustomerName;
                 List<BillDetailRow> billDetailRows;
                 _billDetailRowDic.TryGetValue(value.BillId, out billDetailRows);
                 billDetailRows.ForEach(row =>
@@ -203,7 +206,6 @@ namespace MyShop.ViewModel
         {
             BillRowList.Clear();
             _billDetailRowDic.Clear();
-            SelectedBillRow = null;
             TotalItems = 0;
 
             // get all from date to date

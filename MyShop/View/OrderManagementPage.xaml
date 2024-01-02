@@ -116,7 +116,7 @@
                 <TextBlock Grid.Row="0" Text="Bill Detail Of Selected Bill" FontSize="20" FontWeight="Bold" Margin="0 0 0 20"></TextBlock>
 
                 <TextBlock Foreground="Blue" Grid.Row="1" Margin="0 0 0 10">
-                    Customer: <Run Text="{Binding SelectedBillRow.CustomerName}" Foreground="Blue"></Run>
+                    Customer: <Run Text="{Binding CustomerName, TargetNullValue=''}" Foreground="Blue"></Run>
                 </TextBlock>
 
 
