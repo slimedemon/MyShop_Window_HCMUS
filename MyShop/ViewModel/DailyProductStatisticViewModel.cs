@@ -38,7 +38,7 @@ namespace MyShop.ViewModel
             {
                 Name = "",
                 NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
+                MinStep = 1,
                 LabelsPaint = new SolidColorPaint
                 {
                     Color = SKColors.Blue,

@@ -8,7 +8,7 @@ namespace MyShop.Model
 {
     public interface IPromotionRepository
     {
-        Task<int> Add(Promotion promotion);
+        Task<int> AddPromotion(Promotion promotion);
         Task<bool> RemovePromotion(int id);
         Task<bool> EditPromotion(Promotion promotion);
         Task<List<Promotion>> GetAllPromotions(DateOnly? dateFrom, DateOnly? dateTo);

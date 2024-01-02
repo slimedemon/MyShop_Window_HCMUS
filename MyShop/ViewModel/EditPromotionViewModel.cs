@@ -69,7 +69,7 @@ namespace MyShop.ViewModel
 
             task.ForEach(book => Books.Add(book));
 
-            // Get all Orders and copy to original BookInPromotions.
+            // Get all promotions and copy to original BookInPromotions.
             var task2 = await _promotionRepository.GetAllBookPromotionsByPromotionId(CurrentPromotion.Id);
             if (task2 == null)
             {
@@ -101,12 +101,12 @@ namespace MyShop.ViewModel
         {
             if (SelectedBook == null)
             {
-                await App.MainRoot.ShowDialog("No selected book", "Please select the book you would like to add to the order!");
+                await App.MainRoot.ShowDialog("No selected book", "Please select the book which you would like to apply for!");
                 return;
             }
             if (BookInPromotions.Select(x => x.BookId).ToList().Contains(SelectedBook.Id))
             {
-                await App.MainRoot.ShowDialog("Duplicate book", "This book already exists in the order!");
+                await App.MainRoot.ShowDialog("Duplicate book", "This book already exists in the table!");
                 return;
             }
             else
@@ -127,7 +127,7 @@ namespace MyShop.ViewModel
             // - total_price
             if (SelectedBookInPromotion == null)
             {
-                await App.MainRoot.ShowDialog("No selected selected order", "Please select the order which you would like to delete!");
+                await App.MainRoot.ShowDialog("No selected selected item", "Please select the item which you would like to delete!");
                 return;
             }
             BookInPromotions.Remove(SelectedBookInPromotion);
@@ -162,7 +162,7 @@ namespace MyShop.ViewModel
 
                 if (BookInPromotions.Count() < 1)
                 {
-                    await App.MainRoot.ShowDialog("There is no any order", "Please add at least one order!");
+                    await App.MainRoot.ShowDialog("There is no any item", "Please add at least one item!");
                     return;
                 }
 

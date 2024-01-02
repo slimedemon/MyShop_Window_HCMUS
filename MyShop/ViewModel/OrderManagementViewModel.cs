@@ -203,6 +203,7 @@ namespace MyShop.ViewModel
         {
             BillRowList.Clear();
             _billDetailRowDic.Clear();
+            SelectedBillRow = null;
             TotalItems = 0;
 
             // get all from date to date

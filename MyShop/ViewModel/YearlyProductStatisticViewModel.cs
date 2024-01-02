@@ -13,6 +13,7 @@ using SkiaSharp;
 using LiveChartsCore.SkiaSharpView;
 using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 using MyShop.Services;
+using System.Collections.ObjectModel;
 
 namespace MyShop.ViewModel
 {
@@ -31,7 +32,7 @@ namespace MyShop.ViewModel
 
         private StatisticRepository _statisticRepository;
 
-        public List<ISeries> YearlyProductSeries { get; set; }
+        public ObservableCollection<ISeries> YearlyProductSeries { get; set; }
         static public Dictionary<int, String> NameBookDic;
 
         public Axis[] XAxes { get; set; } =
@@ -40,7 +41,7 @@ namespace MyShop.ViewModel
             {
                 Name = "",
                 NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-
+                MinStep = 1,
                 LabelsPaint = new SolidColorPaint
                 {
                     Color = SKColors.Blue,
@@ -70,7 +71,7 @@ namespace MyShop.ViewModel
         public YearlyProductStatisticViewModel()
         {
             NameBookDic = new Dictionary<int, String>();
-            YearlyProductSeries = new List<ISeries>();
+            YearlyProductSeries = new ObservableCollection<ISeries>();
             _statisticRepository = new StatisticRepository();
 
             Initialize();

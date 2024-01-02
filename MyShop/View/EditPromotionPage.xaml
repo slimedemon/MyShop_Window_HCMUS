@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="using:MyShop.ViewModel" 
     xmlns:dxcr="http://schemas.devexpress.com/winfx/2008/xaml/charts/rangecontrolclient"
-    d:DataContext="{d:DesignInstance Type=viewmodel:AddPromotionViewModel}"
+    d:DataContext="{d:DesignInstance Type=viewmodel:EditPromotionViewModel}"
     xmlns:services="using:MyShop.Services"
     xmlns:ctWinUI ="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
@@ -17,10 +17,6 @@
     <Page.Resources>
         <services:TimeConverter x:Key="timeConverter"/>
     </Page.Resources>
-
-    <Page.DataContext>
-        <viewmodel:AddPromotionViewModel/>
-    </Page.DataContext>
 
     <Grid>
         <Grid.Resources>

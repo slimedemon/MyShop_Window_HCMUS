@@ -13,7 +13,7 @@ namespace MyShop.Repository
 {
     public class PromotionRepository : RepositoryBase, IPromotionRepository
     {
-        public async Task<int> Add(Promotion promotion)
+        public async Task<int> AddPromotion(Promotion promotion)
         {
             int id = 0;
             var connection = GetConnection();
@@ -188,8 +188,8 @@ namespace MyShop.Repository
                         object obj1 = reader["start_date"];
                         DateOnly startDate = obj1 == null || obj1 == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj1));
 
-                        object obj2 = reader["start_date"];
-                        DateOnly endDate = obj1 == null || obj1 == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj1));
+                        object obj2 = reader["end_date"];
+                        DateOnly endDate = obj2 == null || obj2 == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj2));
 
                         promotionList.Add(new Promotion
                         {
@@ -247,8 +247,8 @@ namespace MyShop.Repository
                         object obj1 = reader["start_date"];
                         DateOnly startDate = obj1 == null || obj1 == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj1));
 
-                        object obj2 = reader["start_date"];
-                        DateOnly endDate = obj1 == null || obj1 == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj1));
+                        object obj2 = reader["end_date"];
+                        DateOnly endDate = obj2 == null || obj2 == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj2));
 
                         newPromotion = new Promotion
                         {

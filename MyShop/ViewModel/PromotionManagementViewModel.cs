@@ -96,8 +96,8 @@ namespace MyShop.ViewModel
 
             //Initial paging info
             {
-                DateFrom = DateOnly.MinValue;
-                DateTo = DateOnly.MaxValue;
+                DateFrom = DateOnly.FromDateTime(DateTime.Now.AddDays(-30));
+                DateTo = DateOnly.FromDateTime(DateTime.Now.AddDays(30));
             }
             ExecuteGetAllCommand();
 

@@ -265,9 +265,9 @@ namespace MyShop.Repository
             if (connection != null && connection.State == ConnectionState.Open)
             {
                 string sql = "SELECT Book.title, ISNULL(SUM(Detailed_bill.number), 0) AS number " +
-                             "FROM Book" +
-                             " LEFT JOIN Detailed_bill ON Book.id = Detailed_bill.book_id " +
-                             "LEFT JOIN Bill ON Bill.id = Detailed_bill.bill_id AND Bill.transaction_date BETWEEN @startDate AND @endDate " +
+                             "FROM Book " +
+                             "JOIN Detailed_bill ON Book.id = Detailed_bill.book_id " +
+                             "JOIN Bill ON Bill.id = Detailed_bill.bill_id AND Bill.transaction_date BETWEEN @startDate AND @endDate " +
                              "GROUP BY Book.title";
 
                 var command = new SqlCommand(sql, connection);
