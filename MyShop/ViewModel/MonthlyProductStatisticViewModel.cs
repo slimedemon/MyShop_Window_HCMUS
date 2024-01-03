@@ -46,7 +46,7 @@ namespace MyShop.ViewModel
                     FontFamily = "Times New Roman",
                     SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
                 },
-                Labeler = (value) => { String name = null; if(NameBookDic.TryGetValue((int)value,out name)) return name; return "No name"; }
+                Labeler = (value) => { String name = null; if(NameBookDic.TryGetValue((int)value,out name)) return name; return ""; }
             }
         };
 

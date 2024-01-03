@@ -201,7 +201,7 @@ namespace MyShop.ViewModel
                     }
                 }
 
-                await App.MainRoot.ShowDialog("Success", "New promotion is added!");
+                await App.MainRoot.ShowDialog("Success", "The promotion is updated!");
                 ExecuteBackCommand();
             }
             catch (Exception ex)

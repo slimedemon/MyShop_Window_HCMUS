@@ -56,7 +56,7 @@ namespace MyShop.ViewModel
                     String name = null;
                     if(NameBookDic.TryGetValue((int)value,out name)) 
                         return name; 
-                    return "No name"; 
+                    return ""; 
                 }
             }
         };

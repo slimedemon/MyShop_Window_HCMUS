@@ -130,11 +130,11 @@ namespace MyShop.View
                 else if (currentPage.Equals("SettingsPage"))
                 {
                     int index;
-                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    for (index = 0; index < nvMain.FooterMenuItems.Count; index++)
                     {
-                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Settings"))
+                        if (((NavigationViewItem)nvMain.FooterMenuItems[index]).Content.Equals("Settings"))
                         {
-                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            nvMain.SelectedItem = nvMain.FooterMenuItems[index];
                             break;
                         }
                     }
