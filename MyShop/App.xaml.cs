@@ -52,6 +52,7 @@ namespace MyShop
             IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(m_window);
             var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
             var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+            appWindow.SetIcon(@"Images/book-shop.ico");
             appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1600, Height = 900 });
 
             // move to center screen

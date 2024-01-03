@@ -32,8 +32,8 @@
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Daily" x:Name="navItemDailyProduct" Icon="CalendarDay" IsSelected="True"/>
                 <NavigationViewItem Content="Weekly" x:Name="navItemWeeklyProduct" Icon="CalendarWeek"/>
-                <NavigationViewItem Content="Monthly" x:Name="navItemMonthlyProduct" Icon="Priority"/>
-                <NavigationViewItem Content="Yearly" x:Name="navItemYearlyProduct" Icon="ThreeBars" HorizontalAlignment="Right" />
+                <NavigationViewItem Content="Monthly" x:Name="navItemMonthlyProduct" Icon="Calendar"/>
+                <NavigationViewItem Content="Yearly" x:Name="navItemYearlyProduct" Icon="ThreeBars"/>
             </NavigationView.MenuItems>
 
             <Frame x:Name="ProductcontentFrame" Content="{Binding ProductChildPageNavigation.ViewModel,Converter={StaticResource ViewModelToView}}"/>

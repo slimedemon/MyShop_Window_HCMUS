@@ -142,7 +142,7 @@ namespace MyShop.ViewModel
             {
                 int key = SelectedPromotionRow.Id;
 
-                // remove from DETAILTED_BILL
+                // remove from BOOK_PROMOTION
                 List<BookPromotionRow> bookPromotionRows;
                 _bookPromotionRowDic.TryGetValue(key, out bookPromotionRows);
                 for (int i = 0; i < bookPromotionRows.Count; i++)
@@ -155,20 +155,20 @@ namespace MyShop.ViewModel
                     }
                 }
 
+                // remove from PROMOTION
+                var task = await _promotionRepository.RemovePromotion(key);
+                if (!task)
+                {
+                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
+                    return;
+                }
+
                 _bookPromotionRowDic.Remove(key);
                 PromotionRowList.Remove(SelectedPromotionRow);
 
                 for (int i = 0; i < PromotionRowList.Count; i++)
                 {
                     PromotionRowList[i].No = i + 1;
-                }
-
-                // remove from BILL
-                var task = await _promotionRepository.RemovePromotion(key);
-                if (!task)
-                {
-                    await App.MainRoot.ShowDialog("Error", "Something is broken when system is retrieving data from database!");
-                    return;
                 }
 
                 await App.MainRoot.ShowDialog("Success", "Promotion is removed!");
