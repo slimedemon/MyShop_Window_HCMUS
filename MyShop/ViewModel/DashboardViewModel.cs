@@ -53,7 +53,7 @@ namespace MyShop.ViewModel
 
         private IStatisticRepository _statisticRepository;
         public IEnumerable<ISeries> TopMonthlyBestSellerSeries { get; set; }
-        public ISeries[] MonthRevenuesOfYearSeries { get; set; }
+        public ObservableCollection<ISeries> MonthRevenuesOfYearSeries { get; set; }
         public string MonthlyRevenue { get; set; }
         public int NumberOfSoldBooks { get; set; }
         public int NumberOfBooks { get; set; }
@@ -68,6 +68,41 @@ namespace MyShop.ViewModel
                 Paint = new SolidColorPaint(SKColors.DarkSlateGray)
             };
 
+        public Axis[] XAxes { get; set; } =
+      {
+            new Axis
+            {
+                Name = "Monthly revenue of this year",
+                NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
+                MinStep = 1,
+                LabelsPaint = new SolidColorPaint
+                {
+                    Color = SKColors.Blue,
+                    FontFamily = "Times New Roman",
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraLight, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                },
+                Labeler = (value) => { return (value + 1).ToString(); }
+            }
+        };
+
+        public Axis[] YAxes { get; set; } =
+       {
+            new Axis
+            {
+                MinLimit = 0,
+                Name = "Revenue (VND)",
+                NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
+                LabelsPaint = new SolidColorPaint
+                {
+                    Color = SKColors.Blue,
+                    FontFamily = "Times New Roman",
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                },
+
+                Labeler = (value) => value.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))
+            }
+        };
+
         [Obsolete]
         public DashboardViewModel()
         {
@@ -75,6 +110,7 @@ namespace MyShop.ViewModel
 
             _statisticRepository = new StatisticRepository();
             AllBookQuantity = new ObservableCollection<BookQuantity>();
+            MonthRevenuesOfYearSeries = new ObservableCollection<ISeries>();
             Load_page = new RelayCommand(Load_Dashboard);
         }
 
@@ -183,22 +219,34 @@ namespace MyShop.ViewModel
                 }
             }
 
-            Collection<ObservablePoint> collection = new Collection<ObservablePoint>();
-            monthRevenues.ForEach(item =>
-            {
-                collection.Add(new ObservablePoint(item.Item1.Month, item.Item2));
-            });
+            //var collection = new Collection<DateTimePoint>();
+            //monthRevenues.ForEach(item =>
+            //{
+            //    collection.Add(new DateTimePoint(item.Item1, item.Item2));
+            //});
 
-            MonthRevenuesOfYearSeries = new ISeries[] {
-                 new LineSeries<ObservablePoint>
-                    {
-                        Values = collection
-                    }
+            var series = new ColumnSeries<Tuple<DateTime, int>>()
+            {
+                Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 2 },
+                Values = monthRevenues,
+
+                Fill = new SolidColorPaint(SKColors.Blue),
+                Mapping = (taskItem, point) =>
+                {
+                    point.PrimaryValue = (int)taskItem.Item2;
+                    point.SecondaryValue = point.Context.Index;
+                },
+                TooltipLabelFormatter = (point) => $"{(new DateTime(DateTime.Now.Year,point.Context.Index + 1, 1)).ToShortDateString()} revenue: {point.PrimaryValue.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))}"
             };
+
+            MonthRevenuesOfYearSeries.Clear();
+            MonthRevenuesOfYearSeries.Add(series);
 
             //books running out of stock
             updateBookQuantityList();
         }
+
+     
 
 
         private async void updateBookQuantityList()

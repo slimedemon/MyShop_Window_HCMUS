@@ -31,12 +31,13 @@ namespace MyShop.ViewModel
         public ObservableCollection<ISeries> MonthlyRevenueSeries { get; set; }
 
         public Axis[] XAxes { get; set; } =
-       {
+        {
             new Axis
             {
                 Name = "Date",
                 MinStep = TimeSpan.TicksPerDay*30,
-
+                MinLimit = DateTime.Now.AddMonths(-12).Ticks,
+                MaxLimit = DateTime.Now.AddMonths(12).Ticks,
                 LabelsPaint = new SolidColorPaint
                 {
                     Color = SKColors.Blue,
@@ -48,28 +49,28 @@ namespace MyShop.ViewModel
                     long v = (long) value;
                     if( v < DateTime.MinValue.Ticks || v > DateTime.MaxValue.Ticks) return "";
                     var date = (new DateTime(v));
-                    return $"{date.ToString("MMM/yy")}";
+                    return $"{date.ToString("MMM/yyyy")}";
                 }
             }
         };
 
         public Axis[] YAxes { get; set; } =
         {
-        new Axis
-        {
-            Name = "Revenue (VND)",
-            NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
-            MinLimit=0,
-            LabelsPaint = new SolidColorPaint
+            new Axis
             {
-                Color = SKColors.Blue,
-                FontFamily = "Times New Roman",
-                SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
-            },
+                Name = "Revenue (VND)",
+                NamePadding = new LiveChartsCore.Drawing.Padding(0, 15),
+                MinLimit=0,
+                LabelsPaint = new SolidColorPaint
+                {
+                    Color = SKColors.Blue,
+                    FontFamily = "Times New Roman",
+                    SKFontStyle = new SKFontStyle(SKFontStyleWeight.ExtraBold, SKFontStyleWidth.Normal, SKFontStyleSlant.Italic)
+                },
 
-            Labeler = (value) => value.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))
-        }
-    };
+                Labeler = (value) => value.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))
+            }
+        };
 
         DateTime SelectedStartDate;
         DateTime SelectedEndDate;
@@ -107,7 +108,7 @@ namespace MyShop.ViewModel
                 Mapping = (taskItem, point) =>
                 {
                     point.PrimaryValue = (int)taskItem.Item2;
-                    point.SecondaryValue = taskItem.Item1.Ticks;
+                    point.SecondaryValue = (long)taskItem.Item1.Ticks;
                 },
                 TooltipLabelFormatter = point => $"{point.Model.Item1.ToShortDateString()} revenue: {point.PrimaryValue.ToString("C", CultureInfo.GetCultureInfo("vi-VN"))}"
             };

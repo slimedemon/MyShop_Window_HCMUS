@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Collections;
 using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
+using System.Collections.ObjectModel;
 
 namespace MyShop.ViewModel
 {
@@ -30,7 +31,7 @@ namespace MyShop.ViewModel
        
         static public Dictionary<int, string> NameBookDic;
 
-        public List<ISeries> DailyProductSeries { get; set; } 
+        public ObservableCollection<ISeries> DailyProductSeries { get; set; } 
 
         public Axis[] XAxes { get; set; } =
         {
@@ -67,7 +68,7 @@ namespace MyShop.ViewModel
 
         public DailyProductStatisticViewModel()
         {
-            DailyProductSeries = new List<ISeries>();
+            DailyProductSeries = new ObservableCollection<ISeries>();
             NameBookDic = new Dictionary<int, string>();
             var date = DateTime.Now;
             StartDate = new DateTimeOffset(new DateTime(date.Year, date.Month, 1, 0, 0, 0, DateTimeKind.Utc));

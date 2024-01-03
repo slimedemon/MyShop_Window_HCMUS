@@ -201,7 +201,7 @@
                 <Grid
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                    <lvc:CartesianChart Series="{Binding MonthRevenuesOfYearSeries}"/>
+                    <lvc:CartesianChart Series="{Binding MonthRevenuesOfYearSeries}" XAxes="{Binding XAxes}" YAxes="{Binding YAxes}"/>
                 </Grid>
             </Border>
         </Grid>
