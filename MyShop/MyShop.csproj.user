@@ -1,6 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup />
+  <PropertyGroup>
+    <_LastSelectedProfileId>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Properties\PublishProfiles\win10-x64.pubxml</_LastSelectedProfileId>
+    <Source>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Images\book-shop.png</Source>
+    <SmallTileSource>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Images\book-shop.png</SmallTileSource>
+    <MediumTileSource>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Images\book-shop.png</MediumTileSource>
+    <WideTileSource>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Images\book-shop.png</WideTileSource>
+    <LargeTileSource>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Images\book-shop.png</LargeTileSource>
+    <AppIconSource>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Images\book-shop.png</AppIconSource>
+    <SplashScreenSource>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Images\book-shop.png</SplashScreenSource>
+    <PackageLogoSource>E:\University\ThirdYear\HK1\Window\DoAn\MyShop\MyShop_Window_HCMUS\MyShop\Images\book-shop.png</PackageLogoSource>
+    <UapAppxPackageBuildMode>SideloadOnly</UapAppxPackageBuildMode>
+    <AppxShowAllApps>False</AppxShowAllApps>
+    <AppxBuildConfigurationSelection>x86|x64</AppxBuildConfigurationSelection>
+    <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
+  </PropertyGroup>
   <ItemGroup>
     <None Update="App.xaml">
       <SubType>Designer</SubType>
@@ -8,9 +22,9 @@
     <None Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </None>
-    <None Update="Package.appxmanifest">
+    <AppxManifest Update="Package.appxmanifest">
       <SubType>Designer</SubType>
-    </None>
+    </AppxManifest>
     <None Update="Styles\ButtonStyles.xaml">
       <SubType>Designer</SubType>
     </None>
