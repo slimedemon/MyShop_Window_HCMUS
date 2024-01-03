@@ -10,7 +10,7 @@ namespace MyShop.Model
         Task<bool> Edit(Bill bill);
         Task<bool> Remove(int id);
         Task<Bill> GetById(int id);
-
+        Task<Bill> GetByCustomerId(int customerId);
         Task<List<Bill>> GetAll(DateOnly? dateFrom, DateOnly? dateTo);
         Task<List<int>> GetEmptyBillId();
         Task<List<Order>> GetBillDetailById(int billId);

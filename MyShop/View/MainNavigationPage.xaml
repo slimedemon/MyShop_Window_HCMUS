@@ -30,6 +30,7 @@
                 <NavigationViewItem Content="Product Management" Icon="Library" />
                 <NavigationViewItem Content="Order Management" Icon="Tag" />
                 <NavigationViewItem Content="Promotion Management" Icon="Attach" />
+                <NavigationViewItem Content="Customer Management" Icon="Character" />
                 <NavigationViewItem Content="Account" Icon="Contact" />
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>

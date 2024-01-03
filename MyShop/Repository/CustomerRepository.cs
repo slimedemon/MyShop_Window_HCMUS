@@ -100,7 +100,7 @@ namespace MyShop.Repository
             return isSuccessful;
         }
 
-        public async Task<List<Customer>> GetAll()
+        public async Task<List<Customer>> GetAll(DateOnly? dateFrom, DateOnly? dateTo)
         {
             List<Customer> customers = new List<Customer>();
             var connection = GetConnection();
@@ -114,13 +114,18 @@ namespace MyShop.Repository
 
                 if (connection != null && connection.State == ConnectionState.Open)
                 {
-                    string sql = "select id,name,phone,address from CUSTOMER";
+                    string sql = "select c.id,c.name,c.phone,c.address from CUSTOMER as c " +
+                        "join BILL as b on b.customer_id = c.id where b.transaction_date between @date_from and @date_to " +
+                        "group by c.id, c.name, c.phone, c.address";
                     var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@date_from", SqlDbType.Date).Value = dateFrom;
+                    command.Parameters.Add("@date_to", SqlDbType.Date).Value = dateTo;
+
                     var reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        int id = reader["quantity"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["id"]);
+                        int id = reader["id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["id"]);
                         string name = Convert.ToString(reader["name"]);
                         string phone = Convert.ToString(reader["phone"]);
                         string address = Convert.ToString(reader["address"]);

@@ -24,6 +24,7 @@
     <None Remove="View\BestSellerStatisticsPage.xaml" />
     <None Remove="View\BookManagementPage.xaml" />
     <None Remove="View\ContentDialogContent.xaml" />
+    <None Remove="View\CustomerManagementPage.xaml" />
     <None Remove="View\DailyProductStatisticPage.xaml" />
     <None Remove="View\DailyRevenueStatisticPage.xaml" />
     <None Remove="View\DashboardPage.xaml" />
@@ -271,6 +272,9 @@
     <None Update="Styles\UIColors.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Update="View\CustomerManagementPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="View\EditPromotionPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

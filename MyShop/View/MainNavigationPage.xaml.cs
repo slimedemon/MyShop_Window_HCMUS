@@ -26,11 +26,12 @@ namespace MyShop.View
     /// </summary>
     public sealed partial class MainNavigationPage : Page
     {
+        public static NavigationView NVMain { get; set; }
         public MainNavigationPage()
         {
             this.InitializeComponent();
+            NVMain = nvMain;
         }
-
         private void LoadCurrentPage(object sender, RoutedEventArgs e)
         {
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["RememberPage"]))
@@ -94,6 +95,19 @@ namespace MyShop.View
                     for (index = 0; index < nvMain.MenuItems.Count; index++)
                     {
                         if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Promotion Management"))
+                        {
+                            nvMain.SelectedItem = nvMain.MenuItems[index];
+                            break;
+                        }
+                    }
+
+                } 
+                else if (currentPage.Equals("CustomerManagementPage"))
+                {
+                    int index;
+                    for (index = 0; index < nvMain.MenuItems.Count; index++)
+                    {
+                        if (((NavigationViewItem)nvMain.MenuItems[index]).Content.Equals("Customer Management"))
                         {
                             nvMain.SelectedItem = nvMain.MenuItems[index];
                             break;

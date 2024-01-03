@@ -12,7 +12,7 @@ namespace MyShop.Model
     {
         Task<int> Add(Customer customer);
         Task<bool> Edit(Customer customer);
-        Task<List<Customer>> GetAll();
+        Task<List<Customer>> GetAll(DateOnly? dateFrom, DateOnly? dateTo);
         Task<Customer> GetById(int id);
         Task<bool> Remove(int id);
     }

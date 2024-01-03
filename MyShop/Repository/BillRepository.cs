@@ -108,7 +108,6 @@ namespace MyShop.Repository
 
             try
             {
-
                 await Task.Run(() =>
                 {
                     try
@@ -258,9 +257,63 @@ namespace MyShop.Repository
                 MessageBox.Show(ex.Message);
                 newBill = null;
             }
-            finally 
+            finally
             {
-                connection?.Close(); 
+                connection?.Close();
+            }
+
+            return newBill;
+        }
+
+        public async Task<Bill> GetByCustomerId(int customerId)
+        {
+            Bill newBill = null;
+            var connection = GetConnection();
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        connection.Open();
+                    }
+                    catch (Exception ex) { }
+                }).ConfigureAwait(false);
+
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    string sql = "select id,customer_id,total_price,transaction_date from BILL " +
+                        "where customer_id=@customer_id";
+                    var command = new SqlCommand(sql, connection);
+                    command.Parameters.Add("@customer_id", SqlDbType.Int).Value = customerId;
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int id = reader["id"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["id"]);
+                        int totalPrice = reader["total_price"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(reader["total_price"]);
+
+                        object obj = reader["transaction_date"];
+                        DateOnly transactionDate = obj == null || obj == DBNull.Value ? default(DateOnly) : DateOnly.FromDateTime(Convert.ToDateTime(obj));
+
+                        newBill = new Bill
+                        {
+                            Id = id,
+                            CustomerId = customerId,
+                            TotalPrice = totalPrice,
+                            TransactionDate = transactionDate
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                newBill = null;
+            }
+            finally
+            {
+                connection?.Close();
             }
 
             return newBill;
