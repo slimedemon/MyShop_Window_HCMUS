@@ -69,7 +69,7 @@ namespace MyShop.ViewModel
             };
 
         public Axis[] XAxes { get; set; } =
-      {
+        {
             new Axis
             {
                 Name = "Monthly revenue of this year",
@@ -218,12 +218,6 @@ namespace MyShop.ViewModel
                     monthRevenues.Add(new Tuple<DateTime, int>(new DateTime(DateTime.Now.Year, i, 1, 0, 0, 0), 0));
                 }
             }
-
-            //var collection = new Collection<DateTimePoint>();
-            //monthRevenues.ForEach(item =>
-            //{
-            //    collection.Add(new DateTimePoint(item.Item1, item.Item2));
-            //});
 
             var series = new ColumnSeries<Tuple<DateTime, int>>()
             {

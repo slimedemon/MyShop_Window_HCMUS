@@ -73,7 +73,11 @@
                     <TextBlock Text="Address" VerticalAlignment="Center"/>
                     <TextBox Text="{Binding Address, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0 0 0 20"/>
 
-                    <Button Content="Update your profile" HorizontalAlignment="Right" Margin="0 0 20 0" Style="{StaticResource AccentButtonStyle}" Command="{Binding UpdateProfileCommand}"></Button>
+                    <Button Content="Update your profile" HorizontalAlignment="Right" Margin="0 0 20 0" 
+                            Style="{StaticResource AccentButtonStyle}" 
+                            Command="{Binding UpdateProfileCommand}">
+                    </Button>
+                    
                 </StackPanel>
             </Border>
 

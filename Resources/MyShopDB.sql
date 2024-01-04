@@ -329,6 +329,7 @@ INSERT [dbo].[CUSTOMER] ([id], [name], [phone], [address]) VALUES (66, N'Nguyễ
 INSERT [dbo].[CUSTOMER] ([id], [name], [phone], [address]) VALUES (67, N'Phan Văn I2', NULL, NULL)
 INSERT [dbo].[CUSTOMER] ([id], [name], [phone], [address]) VALUES (68, N'Nguyễn Thị K2', NULL, NULL)
 INSERT [dbo].[CUSTOMER] ([id], [name], [phone], [address]) VALUES (69, N'Trần Văn L2', NULL, NULL)
+INSERT [dbo].[CUSTOMER] ([id], [name], [phone], [address]) VALUES (70, N'Trần Văn M2', NULL, NULL)
 INSERT [dbo].[CUSTOMER] ([id], [name], [phone], [address]) VALUES (71, N'Phạm Văn N2', NULL, NULL)
 INSERT [dbo].[CUSTOMER] ([id], [name], [phone], [address]) VALUES (72, N'Nguyễn Thị O2', NULL, NULL)
 INSERT [dbo].[CUSTOMER] ([id], [name], [phone], [address]) VALUES (73, N'Trần Văn P2', NULL, NULL)

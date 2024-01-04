@@ -37,7 +37,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Create a new promotion" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Edit the promotion" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
 
         <!--Input book information for bill-->
         <Border
