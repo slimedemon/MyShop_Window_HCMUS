@@ -189,6 +189,7 @@
                 </Border>
             </Grid>
 
+            <!--Line chart of the revenue of this month-->
             <Border Grid.Column="1"
                     BorderBrush="{StaticResource SecondGrayColor}" Background="{StaticResource PrimaryGrayColor}"
                     BorderThickness="1"
