@@ -7,49 +7,28 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;ARM64</Platforms>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-     
-	<PublishProfile>win10-$(Platform).pubxml</PublishProfile>
+     <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <ApplicationIcon>Assets\book-shop.ico</ApplicationIcon>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
-    
-	  <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
     <AppInstallerUri>D:\ProgramFiles\TestMyShop</AppInstallerUri>
     <HoursBetweenUpdateChecks>720</HoursBetweenUpdateChecks>
+    <PackageCertificateThumbprint>EDC8E6A7EA99BBD5BE3E0BACEF64EC14C7907662</PackageCertificateThumbprint>
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
 
-	  <WindowsPackageType>None</WindowsPackageType>
-	  <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-	  <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-
   </PropertyGroup>
-	
-    <Target Name="RemoveFoldersWithMuiFiles" AfterTargets="Build">
-	    <ItemGroup>
-		    <RemovingFiles Include="$(OutDir)*\*.mui" Exclude="$(OutDir)en-us\*.mui" />
-		    <RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" />
-	    </ItemGroup>
-	    <RemoveDir Directories="@(RemovingFolders)" />
-    </Target>
-	
-  <ItemGroup>
-    <Compile Remove="BundleArtifacts\**" />
-    <EmbeddedResource Remove="BundleArtifacts\**" />
-    <None Remove="BundleArtifacts\**" />
-    <Page Remove="BundleArtifacts\**" />
-  </ItemGroup>
   <ItemGroup>
     <Content Remove="Assets\logo_bookit.png" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\bg_home.png" />
-    <None Remove="book-shop.ico" />
     <None Remove="Images\book-shop.ico" />
     <None Remove="Images\book-shop.png" />
     <None Remove="Images\LockScreenLogo.scale-200.png" />
@@ -436,6 +415,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BundleArtifacts\" />
+  </ItemGroup>
 
   <!-- 
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution 
@@ -445,11 +427,5 @@
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
-  <ItemGroup>
-    <PRIResource Remove="BundleArtifacts\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="book-shop.ico" />
-  </ItemGroup>
 
 </Project>
