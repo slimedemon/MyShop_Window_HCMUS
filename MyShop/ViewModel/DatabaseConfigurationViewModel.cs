@@ -59,69 +59,76 @@ namespace MyShop.ViewModel
 
         private async void ExecuteSaveCommand()
         {
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = ServerAddress;
-            builder.InitialCatalog = DatabaseName;
-            builder.TrustServerCertificate = true;
+            try
+            {
+                var builder = new SqlConnectionStringBuilder();
+                builder.DataSource = ServerAddress;
+                builder.InitialCatalog = DatabaseName;
+                builder.TrustServerCertificate = true;
 
-            // Create connection string
-            if (_type == null || _type.Equals(""))
-            {
-                // Default = Windows Authentication
-                builder.IntegratedSecurity = true;
-                ConnectionString = builder.ConnectionString;
-            }
-            else if (_type.Equals("Windows Authentication"))
-            {
-                builder.IntegratedSecurity = true;
-                ConnectionString = builder.ConnectionString;
-            }
-            else if (_type.Equals("Standard Security"))
-            {
-
-                builder.UserID = DbUsername ?? "";
-                builder.Password = DbPassword ?? "";
-                ConnectionString = builder.ConnectionString;
-            }
-            else if (_type.Equals("Custom Connection String"))
-            {
-                ConnectionString = CustomConnectionString;
-            }
-
-            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
-            // Encrypt password
-            if (DbPassword != null)
-            {
-                var passwordInBytes = Encoding.UTF8.GetBytes(DbPassword);
-                var entropy = new byte[20];
-                using (var rng = RandomNumberGenerator.Create())
+                // Create connection string
+                if (_type == null || _type.Equals(""))
                 {
-                    rng.GetBytes(entropy);
+                    // Default = Windows Authentication
+                    builder.IntegratedSecurity = true;
+                    ConnectionString = builder.ConnectionString;
+                }
+                else if (_type.Equals("Windows Authentication"))
+                {
+                    builder.IntegratedSecurity = true;
+                    ConnectionString = builder.ConnectionString;
+                }
+                else if (_type.Equals("Standard Security"))
+                {
+
+                    builder.UserID = DbUsername ?? "";
+                    builder.Password = DbPassword ?? "";
+                    ConnectionString = builder.ConnectionString;
+                }
+                else if (_type.Equals("Custom Connection String"))
+                {
+                    ConnectionString = CustomConnectionString;
                 }
 
-                var cypherText = ProtectedData.Protect(
-                    passwordInBytes,
-                    entropy,
-                    DataProtectionScope.CurrentUser
-                );
+                var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                var passwordIn64 = Convert.ToBase64String(cypherText);
-                var entropyIn64 = Convert.ToBase64String(entropy);
-                configuration.AppSettings.Settings["DbPassword"].Value = passwordIn64;
-                configuration.AppSettings.Settings["DbEntropy"].Value = entropyIn64;
+                // Encrypt password
+                if (DbPassword != null)
+                {
+                    var passwordInBytes = Encoding.UTF8.GetBytes(DbPassword);
+                    var entropy = new byte[20];
+                    using (var rng = RandomNumberGenerator.Create())
+                    {
+                        rng.GetBytes(entropy);
+                    }
+
+                    var cypherText = ProtectedData.Protect(
+                        passwordInBytes,
+                        entropy,
+                        DataProtectionScope.CurrentUser
+                    );
+
+                    var passwordIn64 = Convert.ToBase64String(cypherText);
+                    var entropyIn64 = Convert.ToBase64String(entropy);
+                    configuration.AppSettings.Settings["DbPassword"].Value = passwordIn64;
+                    configuration.AppSettings.Settings["DbEntropy"].Value = entropyIn64;
+                }
+
+                configuration.AppSettings.Settings["DbUsername"].Value = DbUsername ?? "";
+                configuration.AppSettings.Settings["ServerAddress"].Value = ServerAddress ?? "";
+                configuration.AppSettings.Settings["DatabaseName"].Value = DatabaseName ?? "";
+                configuration.AppSettings.Settings["ConnectionString"].Value = ConnectionString ?? "";
+
+                configuration.AppSettings.SectionInformation.ForceSave = true;
+                configuration.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+
+                await App.MainRoot.ShowDialog("Success", "Database configuration is saved!");
             }
-
-            configuration.AppSettings.Settings["DbUsername"].Value = DbUsername ?? "";
-            configuration.AppSettings.Settings["ServerAddress"].Value = ServerAddress ?? "";
-            configuration.AppSettings.Settings["DatabaseName"].Value = DatabaseName ?? "";
-            configuration.AppSettings.Settings["ConnectionString"].Value = ConnectionString ?? "";
-
-            configuration.AppSettings.SectionInformation.ForceSave = true;
-            configuration.Save(ConfigurationSaveMode.Modified);
-            ConfigurationManager.RefreshSection("appSettings");
-
-            await App.MainRoot.ShowDialog("Success", "Database configuration is saved!");
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void ExecuteBackCommand()

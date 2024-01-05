@@ -80,6 +80,7 @@ namespace MyShop.ViewModel
                 if (!result)
                 {
                     await App.MainRoot.ShowDialog("Failed", "Sign up failed!");
+                    return;
                 }
 
                 // if success => notify

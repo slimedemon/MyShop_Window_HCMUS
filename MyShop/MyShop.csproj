@@ -22,6 +22,7 @@
     <HoursBetweenUpdateChecks>720</HoursBetweenUpdateChecks>
     <PackageCertificateThumbprint>EDC8E6A7EA99BBD5BE3E0BACEF64EC14C7907662</PackageCertificateThumbprint>
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <UserSecretsId>e71732f9-bb7c-4d5c-a7cc-bfe6852cfa07</UserSecretsId>
 
   </PropertyGroup>
   <ItemGroup>
