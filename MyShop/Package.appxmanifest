@@ -9,14 +9,14 @@
 
   <Identity
     Name="69995850-1675-4ef4-acb6-a4527b202ab9"
-    Publisher="CN=LTWindow_MyShop"
+    Publisher="CN=Infinity Team"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="69995850-1675-4ef4-acb6-a4527b202ab9" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>MyShop (Package)</DisplayName>
-    <PublisherDisplayName>admin</PublisherDisplayName>
+    <PublisherDisplayName>Infinity Team</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
