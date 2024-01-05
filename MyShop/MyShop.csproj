@@ -17,11 +17,11 @@
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
-    <AppxBundle>Always</AppxBundle>
+    <AppxBundle>Auto</AppxBundle>
     <AppInstallerUri>D:\ProgramFiles\TestMyShop</AppInstallerUri>
     <HoursBetweenUpdateChecks>720</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>EDC8E6A7EA99BBD5BE3E0BACEF64EC14C7907662</PackageCertificateThumbprint>
-    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>76DE6F53889036903A29846E74477D42CD305F2F</PackageCertificateThumbprint>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
 
   </PropertyGroup>
   <ItemGroup>
@@ -303,6 +303,9 @@
     <Content Update="Assets\bg_home.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Update="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\book-shop.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
