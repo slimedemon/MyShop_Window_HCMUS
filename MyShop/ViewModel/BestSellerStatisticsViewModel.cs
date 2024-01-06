@@ -45,12 +45,18 @@ namespace MyShop.ViewModel
             new Axis {
                         SeparatorsPaint = new SolidColorPaint(new SKColor(220, 220, 220)),
                         Name="Top 5 best selling books of the week",
-                        NameTextSize=15},
+                        NameTextSize=15
+            },
 
         };
 
         [ObservableProperty]
-        private Axis[] _yAxes = { new Axis { IsVisible = false } };
+        private Axis[] _yAxes = { 
+            new Axis 
+            { 
+                IsVisible = false,
+            }
+        };
 
         public LabelVisual TopMonthlyBestSellerTitle { get; set; } =
             new LabelVisual

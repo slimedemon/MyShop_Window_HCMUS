@@ -204,8 +204,9 @@ namespace MyShop.ViewModel
 
         public void UpdatePagingInfo()
         {
-            TotalPages = TotalItems / ItemsPerPage +
-                  (TotalItems % ItemsPerPage == 0 ? 0 : 1);
+            var temp = TotalItems / ItemsPerPage + (TotalItems % ItemsPerPage == 0 ? 0 : 1);
+            TotalPages = temp == 0 ? 1 : temp; // temp == 0 => only have an empty page.
+            
             PaginationMessage = $"{DisplayBooksList.Count}/{TotalItems} books";
         }
 

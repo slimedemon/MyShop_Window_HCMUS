@@ -7,15 +7,37 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;ARM64</Platforms>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-    <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
+     <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <ApplicationIcon>Assets\book-shop.ico</ApplicationIcon>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Auto</AppxBundle>
+    <AppInstallerUri>D:\ProgramFiles\TestMyShop</AppInstallerUri>
+    <HoursBetweenUpdateChecks>720</HoursBetweenUpdateChecks>
+    <PackageCertificateThumbprint>76DE6F53889036903A29846E74477D42CD305F2F</PackageCertificateThumbprint>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
+
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\logo_bookit.png" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\bg_home.png" />
+    <None Remove="Images\book-shop.ico" />
+    <None Remove="Images\book-shop.png" />
+    <None Remove="Images\LockScreenLogo.scale-200.png" />
+    <None Remove="Images\SplashScreen.scale-200.png" />
+    <None Remove="Images\Square150x150Logo.scale-200.png" />
+    <None Remove="Images\Square44x44Logo.scale-200.png" />
+    <None Remove="Images\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <None Remove="Images\Wide310x150Logo.scale-200.png" />
+    <None Remove="Package.appxmanifest" />
     <None Remove="Themes\LightTheme.xaml" />
     <None Remove="View\AccountPage.xaml" />
     <None Remove="View\AddBookPage.xaml" />
@@ -55,6 +77,9 @@
     <Page Remove="Styles\ButtonStyles.xaml" />
     <Page Remove="Styles\UIColors.xaml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\book-shop.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\SplashScreen.scale-200.png">
@@ -78,6 +103,15 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\book-shop.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\LockScreenLogo.scale-200.png" />
+    <Content Include="Images\SplashScreen.scale-200.png" />
+    <Content Include="Images\Square150x150Logo.scale-200.png" />
+    <Content Include="Images\Square44x44Logo.scale-200.png" />
+    <Content Include="Images\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Images\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -122,6 +156,9 @@
     </Content>
     <Content Update="Assets\bel_canto.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\book-shop.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Update="Assets\Brave_New_World.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -266,6 +303,12 @@
     <Content Update="Assets\bg_home.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Update="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\book-shop.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Styles\ButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
@@ -375,6 +418,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BundleArtifacts\" />
+  </ItemGroup>
 
   <!-- 
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution 
@@ -384,4 +430,5 @@
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
+
 </Project>
